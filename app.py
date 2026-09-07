@@ -6,10 +6,30 @@ app = Flask(__name__)
 DB = "expenses.db"
 
 
+def init_db():
+    conn = sqlite3.connect(DB)
+
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS expenses (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            amount REAL NOT NULL,
+            category TEXT NOT NULL,
+            note TEXT,
+            date TEXT NOT NULL
+        )
+    """)
+
+    conn.commit()
+    conn.close()
+
+
 def get_db():
     conn = sqlite3.connect(DB)
     conn.row_factory = sqlite3.Row
     return conn
+
+
+init_db()
 
 
 @app.route("/")
@@ -19,6 +39,7 @@ def home():
 
 @app.route("/api/expenses", methods=["GET"])
 def get_expenses():
+
     conn = get_db()
 
     expenses = conn.execute(
@@ -34,6 +55,7 @@ def get_expenses():
 
 @app.route("/api/expenses", methods=["POST"])
 def add_expense():
+
     data = request.get_json()
 
     amount = data.get("amount")
@@ -44,7 +66,7 @@ def add_expense():
     if not amount or not category or not date:
         return jsonify({
             "success": False,
-            "error": "Missing required information"
+            "error": "Please fill all required fields."
         }), 400
 
     conn = get_db()
@@ -72,6 +94,7 @@ def add_expense():
 
 @app.route("/api/expenses/<int:expense_id>", methods=["DELETE"])
 def delete_expense(expense_id):
+
     conn = get_db()
 
     conn.execute(
@@ -89,6 +112,7 @@ def delete_expense(expense_id):
 
 @app.route("/api/health")
 def health():
+
     return jsonify({
         "success": True,
         "message": "Smart Expense Tracker is running"
