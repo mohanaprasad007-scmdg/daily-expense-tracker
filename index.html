@@ -1,1 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Smart Expense Tracker</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:linear-gradient(135deg,#07111f,#102d46,#07111f);
+    color:white;
+    min-height:100vh;
+}
+
+.container{
+    width:92%;
+    max-width:1200px;
+    margin:auto;
+    padding:30px 0 60px;
+}
+
+header{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.logo{
+    font-size:50px;
+}
+
+h1{
+    font-size:clamp(30px,5vw,48px);
+    margin:8px 0;
+}
+
+.subtitle{
+    color:#aebed0;
+}
+
+.dashboard{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+    margin-bottom:20px;
+}
+
+.card{
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:22px;
+    padding:22px;
+    backdrop-filter:blur(15px);
+    box-shadow:0 20px 50px rgba(0,0,0,.25);
+}
+
+.stat small{
+    color:#aebed0;
+}
+
+.stat h2{
+    margin-top:10px;
+    font-size:27px;
+}
+
+.main{
+    display:grid;
+    grid-template-columns:360px 1fr;
+    gap:20px;
+}
+
+h3{
+    margin-bottom:18px;
+}
+
+label{
+    display:block;
+    color:#c9d5e1;
+    font-size:14px;
+    margin:15px 0 7px;
+}
+
+input,select{
+    width:100%;
+    padding:13px;
+    border-radius:11px;
+    border:1px solid rgba(255,255,255,.15);
+    background:rgba(0,0,0,.25);
+    color:white;
+    outline:none;
+}
+
+option{
+    color:black;
+}
+
+button{
+    cursor:pointer;
+    border:0;
+    border-radius:11px;
+    font-weight:bold;
+}
+
+.add{
+    width:100%;
+    padding:14px;
+    margin-top:20px;
+    color:white;
+    background:linear-gradient(135deg,#1677ff,#4d9cff);
+}
+
+.toolbar{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.toolbar input{
+    max-width:210px;
+}
+
+.expense{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    padding:15px 0;
+    border-bottom:1px solid rgba(255,255,255,.1);
+}
+
+.left{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.icon{
+    font-size:27px;
+}
+
+.name{
+    font-weight:bold;
+}
+
+.date{
+    color:#91a5b8;
+    font-size:12px;
+    margin-top:4px;
+}
+
+.amount{
+    font-weight:bold;
+    white-space:nowrap;
+}
+
+.delete{
+    margin-left:8px;
+    padding:7px 9px;
+    background:rgba(255,70,70,.15);
+    color:#ffaaaa;
+}
+
+.budget{
+    margin-top:20px;
+}
+
+.progress{
+    height:12px;
+    background:rgba(255,255,255,.1);
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:12px;
+}
+
+.progress-bar{
+    height:100%;
+    width:0%;
+    background:#38d39f;
+    transition:.4s;
+}
+
+.empty{
+    text-align:center;
+    color:#91a5b8;
+    padding:40px 10px;
+}
+
+.ai{
+    margin-top:20px;
+    text-align:center;
+}
+
+.ai p{
+    color:#aebed0;
+    margin-bottom:15px;
+}
+
+.ai button{
+    padding:12px 20px;
+    background:linear-gradient(135deg,#8b5cf6,#ec4899);
+    color:white;
+}
+
+#aiResult{
+    margin-top:18px;
+    padding:18px;
+    border-radius:15px;
+    background:rgba(0,0,0,.2);
+    color:#dbe7f3;
+    line-height:1.6;
+}
+
+footer{
+    text-align:center;
+    margin-top:30px;
+    color:#71849a;
+    font-size:13px;
+}
+
+@media(max-width:900px){
+    .dashboard{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .main{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:600px){
+    .dashboard{
+        grid-template-columns:1fr;
+    }
+
+    .toolbar{
+        flex-direction:column;
+    }
+
+    .toolbar input{
+        max-width:none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+<div class="logo">💰</div>
+<h1>Smart Expense Tracker</h1>
+<p class="subtitle">
+Track • Analyse • Budget • Save
+</p>
+</header>
+
+<!-- DASHBOARD -->
+
+<section class="dashboard">
+
+<div class="card stat">
+<small>Today's Spending</small>
+<h2 id="today">₹0.00</h2>
+</div>
+
+<div class="card stat">
+<small>This Month</small>
+<h2 id="month">₹0.00</h2>
+</div>
+
+<div class="card stat">
+<small>Total Spending</small>
+<h2 id="total">₹0.00</h2>
+</div>
+
+<div class="card stat">
+<small>Transactions</small>
+<h2 id="count">0</h2>
+</div>
+
+</section>
+
+
+<div class="main">
+
+<!-- ADD EXPENSE -->
+
+<section class="card">
+
+<h3>➕ Add Expense</h3>
+
+<form id="expenseForm">
+
+<label>Amount (₹)</label>
+
+<input
+id="amount"
+type="number"
+min="0.01"
+step="0.01"
+placeholder="Example: 250"
+required
+>
+
+
+<label>Category</label>
+
+<select id="category">
+
+<option>🍛 Food</option>
+<option>🚌 Travel</option>
+<option>🛍️ Shopping</option>
+<option>📚 Education</option>
+<option>🏠 Bills</option>
+<option>🎬 Entertainment</option>
+<option>💊 Health</option>
+<option>💻 Technology</option>
+<option>📦 Other</option>
+
+</select>
+
+
+<label>Date</label>
+
+<input
+id="date"
+type="date"
+required
+>
+
+
+<label>Description</label>
+
+<input
+id="note"
+type="text"
+maxlength="100"
+placeholder="What did you spend on?"
+>
+
+
+<button class="add" type="submit">
+Add Expense
+</button>
+
+</form>
+
+
+<!-- BUDGET -->
+
+<div class="budget">
+
+<h3>🎯 Monthly Budget</h3>
+
+<input
+id="budgetInput"
+type="number"
+placeholder="Set budget in ₹"
+>
+
+<button
+class="add"
+onclick="setBudget()">
+Set Budget
+</button>
+
+<div class="progress">
+<div
+id="progressBar"
+class="progress-bar">
+</div>
+</div>
+
+<p
+id="budgetText"
+style="margin-top:10px;color:#aebed0;">
+No budget set
+</p>
+
+</div>
+
+</section>
+
+
+<!-- HISTORY -->
+
+<section class="card">
+
+<div class="toolbar">
+
+<h3>📋 Expense History</h3>
+
+<input
+id="search"
+type="search"
+placeholder="Search expenses..."
+>
+
+</div>
+
+<div id="expenseList"></div>
+
+</section>
+
+</div>
+
+
+<!-- AI -->
+
+<section class="card ai">
+
+<h3>🤖 AI Expense Advisor</h3>
+
+<p>
+Analyse your spending and get smart saving suggestions.
+</p>
+
+<button onclick="analyseExpenses()">
+Analyse My Spending ✨
+</button>
+
+<div id="aiResult">
+Your AI financial insight will appear here.
+</div>
+
+</section>
+
+
+<footer>
+Smart Expense Tracker • Manage your money smarter.
+</footer>
+
+</div>
+
+
+<script>
+
+let expenses =
+JSON.parse(localStorage.getItem("expenses") || "[]");
+
+let budget =
+Number(localStorage.getItem("budget") || 0);
+
+
+const $ = id =>
+document.getElementById(id);
+
+
+$("date").value =
+new Date().toISOString().slice(0,10);
+
+
+function money(value){
+
+return "₹" +
+Number(value).toLocaleString(
+"en-IN",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+}
+);
+
+}
+
+
+function save(){
+
+localStorage.setItem(
+"expenses",
+JSON.stringify(expenses)
+);
+
+}
+
+
+function escapeHTML(text){
+
+return String(text).replace(
+/[&<>"']/g,
+function(c){
+
+return {
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#039;"
+}[c];
+
+});
+
+}
+
+
+function render(){
+
+let query =
+$("search").value.toLowerCase();
+
+let filtered =
+expenses.filter(e =>
+(e.note + " " + e.category)
+.toLowerCase()
+.includes(query)
+);
+
+filtered.sort(
+(a,b) =>
+b.date.localeCompare(a.date)
+);
+
+
+if(filtered.length === 0){
+
+$("expenseList").innerHTML =
+'<div class="empty">No expenses found.<br>Add your first expense above.</div>';
+
+}else{
+
+$("expenseList").innerHTML =
+filtered.map(e => `
+
+<div class="expense">
+
+<div class="left">
+
+<div class="icon">
+${e.category.split(" ")[0]}
+</div>
+
+<div>
+
+<div class="name">
+${escapeHTML(
+e.note ||
+e.category.substring(3)
+)}
+</div>
+
+<div class="date">
+${e.date} •
+${escapeHTML(e.category)}
+</div>
+
+</div>
+
+</div>
+
+<div class="amount">
+
+${money(e.amount)}
+
+<button
+class="delete"
+onclick="deleteExpense('${e.id}')">
+✕
+</button>
+
+</div>
+
+</div>
+
+`).join("");
+
+}
+
+
+updateDashboard();
+
+}
+
+
+function updateDashboard(){
+
+let today =
+new Date()
+.toISOString()
+.slice(0,10);
+
+let month =
+today.slice(0,7);
+
+
+let todayTotal =
+expenses
+.filter(e => e.date === today)
+.reduce(
+(sum,e) =>
+sum + Number(e.amount),0
+);
+
+
+let monthTotal =
+expenses
+.filter(e =>
+e.date.startsWith(month)
+)
+.reduce(
+(sum,e) =>
+sum + Number(e.amount),0
+);
+
+
+let total =
+expenses.reduce(
+(sum,e) =>
+sum + Number(e.amount),0
+);
+
+
+$("today").textContent =
+money(todayTotal);
+
+$("month").textContent =
+money(monthTotal);
+
+$("total").textContent =
+money(total);
+
+$("count").textContent =
+expenses.length;
+
+
+updateBudget(monthTotal);
+
+}
+
+
+function deleteExpense(id){
+
+expenses =
+expenses.filter(
+e => e.id !== id
+);
+
+save();
+
+render();
+
+}
+
+
+$("expenseForm")
+.addEventListener(
+"submit",
+function(event){
+
+event.preventDefault();
+
+
+expenses.push({
+
+id:Date.now().toString(),
+
+amount:$("amount").value,
+
+category:$("category").value,
+
+date:$("date").value,
+
+note:$("note").value
+
+});
+
+
+save();
+
+this.reset();
+
+$("date").value =
+new Date()
+.toISOString()
+.slice(0,10);
+
+render();
+
+});
+
+
+$("search")
+.addEventListener(
+"input",
+render
+);
+
+
+function setBudget(){
+
+budget =
+Number(
+$("budgetInput").value
+);
+
+if(budget <= 0){
+
+alert("Please enter a valid budget.");
+
+return;
+
+}
+
+localStorage.setItem(
+"budget",
+budget
+);
+
+updateDashboard();
+
+}
+
+
+function updateBudget(monthTotal){
+
+if(!budget){
+
+$("budgetText").textContent =
+"No budget set";
+
+$("progressBar").style.width =
+"0%";
+
+return;
+
+}
+
+
+let percentage =
+Math.min(
+(monthTotal / budget) * 100,
+100
+);
+
+
+$("progressBar").style.width =
+percentage + "%";
+
+
+let remaining =
+budget - monthTotal;
+
+
+if(remaining >= 0){
+
+$("budgetText").textContent =
+money(remaining) +
+" remaining this month";
+
+}else{
+
+$("budgetText").textContent =
+money(Math.abs(remaining)) +
+" over budget";
+
+}
+
+}
+
+
+function analyseExpenses(){
+
+if(expenses.length === 0){
+
+$("aiResult").textContent =
+"Add some expenses first, then I can analyse your spending.";
+
+return;
+
+}
+
+
+let totals = {};
+
+
+expenses.forEach(e => {
+
+totals[e.category] =
+(totals[e.category] || 0)
++ Number(e.amount);
+
+});
+
+
+let highest =
+Object.entries(totals)
+.sort((a,b) => b[1] - a[1])[0];
+
+
+let total =
+expenses.reduce(
+(s,e) => s + Number(e.amount),0
+);
+
+
+$("aiResult").innerHTML = `
+
+<b>📊 Spending Analysis</b><br><br>
+
+You have recorded
+<b>${expenses.length}</b>
+transactions totalling
+<b>${money(total)}</b>.<br><br>
+
+Your highest spending category is
+<b>${escapeHTML(highest[0])}</b>
+with
+<b>${money(highest[1])}</b>.<br><br>
+
+💡 Consider setting a monthly budget
+and reviewing your highest spending
+category regularly.
+
+`;
+
+}
+
+
+if(budget){
+
+$("budgetInput").value =
+budget;
+
+}
+
+render();
+
+</script>
+
+</body>
+                     </html>
