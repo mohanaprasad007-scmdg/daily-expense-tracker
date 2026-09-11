@@ -1,16 +1,14 @@
 from flask import Flask, send_from_directory, jsonify, request
 import sqlite3
+import os
 
 app = Flask(__name__)
-
 DB = "expenses.db"
-
 
 def init_db():
     conn = sqlite3.connect(DB)
-
     conn.execute("""
-        CREATE TABLE IF NOT EXISTS expenses (
+        CREATE TABLE IF NOT EXISTS expenses(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             amount REAL NOT NULL,
             category TEXT NOT NULL,
@@ -18,106 +16,139 @@ def init_db():
             date TEXT NOT NULL
         )
     """)
-
     conn.commit()
     conn.close()
-
 
 def get_db():
     conn = sqlite3.connect(DB)
     conn.row_factory = sqlite3.Row
     return conn
 
-
 init_db()
-
 
 @app.route("/")
 def home():
     return send_from_directory(".", "index.html")
 
+@app.route("/analytics.html")
+def analytics():
+    return send_from_directory(".", "analytics.html")
 
-@app.route("/api/expenses", methods=["GET"])
-def get_expenses():
-
+@app.route("/api/expenses")
+def expenses():
     conn = get_db()
-
-    expenses = conn.execute(
-        "SELECT * FROM expenses ORDER BY date DESC, id DESC"
+    data = conn.execute(
+        "SELECT * FROM expenses ORDER BY date DESC,id DESC"
     ).fetchall()
-
     conn.close()
-
-    return jsonify([
-        dict(expense) for expense in expenses
-    ])
-
+    return jsonify([dict(x) for x in data])
 
 @app.route("/api/expenses", methods=["POST"])
-def add_expense():
+def add():
+    d = request.get_json()
 
-    data = request.get_json()
+    if not d.get("amount") or not d.get("category") or not d.get("date"):
+        return jsonify({"success":False,"error":"Fill required fields"}),400
 
-    amount = data.get("amount")
-    category = data.get("category")
-    note = data.get("note", "")
-    date = data.get("date")
+    conn = get_db()
+    cur = conn.execute(
+        "INSERT INTO expenses(amount,category,note,date) VALUES(?,?,?,?)",
+        (d["amount"],d["category"],d.get("note",""),d["date"])
+    )
+    conn.commit()
+    conn.close()
 
-    if not amount or not category or not date:
+    return jsonify({"success":True,"id":cur.lastrowid})
+
+@app.route("/api/expenses/<int:eid>", methods=["DELETE"])
+def delete(eid):
+    conn = get_db()
+    conn.execute("DELETE FROM expenses WHERE id=?", (eid,))
+    conn.commit()
+    conn.close()
+    return jsonify({"success":True})
+
+@app.route("/api/ai", methods=["POST"])
+def ai():
+
+    data = request.get_json() or {}
+    question = data.get("question","").strip()
+
+    conn = get_db()
+    rows = conn.execute(
+        "SELECT amount,category,note,date FROM expenses"
+    ).fetchall()
+    conn.close()
+
+    expenses = [dict(x) for x in rows]
+
+    total = sum(float(x["amount"]) for x in expenses)
+    count = len(expenses)
+
+    categories = {}
+
+    for x in expenses:
+        c = x["category"]
+        categories[c] = categories.get(c,0) + float(x["amount"])
+
+    top = max(categories,key=categories.get) if categories else "None"
+
+    api_key = os.getenv("OPENAI_API_KEY")
+
+    if not api_key:
         return jsonify({
-            "success": False,
-            "error": "Please fill all required fields."
-        }), 400
+            "answer":
+            f"📊 You have {count} transactions totaling ₹{total:,.2f}. "
+            f"Your highest spending category is {top}. "
+            f"Add an OPENAI_API_KEY in Render Environment Variables "
+            f"to enable full AI answers."
+        })
 
-    conn = get_db()
+    try:
+        from openai import OpenAI
 
-    cursor = conn.execute(
-        """
-        INSERT INTO expenses
-        (amount, category, note, date)
-        VALUES (?, ?, ?, ?)
-        """,
-        (amount, category, note, date)
-    )
+        client = OpenAI(api_key=api_key)
 
-    conn.commit()
+        prompt = f"""
+You are a helpful personal expense assistant.
 
-    expense_id = cursor.lastrowid
+User question:
+{question}
 
-    conn.close()
+Expense data:
+Total spent: ₹{total:.2f}
+Transactions: {count}
+Category totals: {categories}
 
-    return jsonify({
-        "success": True,
-        "id": expense_id
-    })
+Give a short, practical answer.
+Use Indian Rupees.
+Do not invent transactions.
+"""
 
+        response = client.responses.create(
+            model="gpt-5.6-luna",
+            input=prompt
+        )
 
-@app.route("/api/expenses/<int:expense_id>", methods=["DELETE"])
-def delete_expense(expense_id):
+        return jsonify({
+            "answer": response.output_text
+        })
 
-    conn = get_db()
-
-    conn.execute(
-        "DELETE FROM expenses WHERE id = ?",
-        (expense_id,)
-    )
-
-    conn.commit()
-    conn.close()
-
-    return jsonify({
-        "success": True
-    })
-
+    except Exception as e:
+        return jsonify({
+            "answer":
+            f"📊 Total spending: ₹{total:,.2f}. "
+            f"Transactions: {count}. "
+            f"Top category: {top}. "
+            f"AI service is temporarily unavailable."
+        })
 
 @app.route("/api/health")
 def health():
-
     return jsonify({
-        "success": True,
-        "message": "Smart Expense Tracker is running"
+        "success":True,
+        "message":"Smart Expense Tracker is running"
     })
 
-
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
