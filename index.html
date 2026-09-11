@@ -1284,7 +1284,41 @@ if(budget){
 /* START */
 
 loadExpenses();
+async function askAI(){
 
+    const question = document.getElementById("aiQuestion").value.trim();
+    const answer = document.getElementById("aiAnswer");
+
+    if(!question){
+        answer.textContent = "Please enter a question.";
+        return;
+    }
+
+    answer.textContent = "🤖 Thinking...";
+
+    try{
+
+        const response = await fetch("/api/ai",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                question:question
+            })
+        });
+
+        const data = await response.json();
+
+        answer.textContent = data.answer || "Unable to get an answer.";
+
+    }catch(error){
+
+        answer.textContent =
+            "Something went wrong. Please try again.";
+
+    }
+}
 </script>
 
 </body>
