@@ -1,1 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Savings Goals | Smart Expense Tracker</title>
 
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif
+}
+
+body{
+    background:#f4f6fa;
+    color:#172033;
+    min-height:100vh
+}
+
+header{
+    background:white;
+    padding:18px 6%;
+    border-bottom:1px solid #e5e7eb;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:5
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800
+}
+
+.back{
+    text-decoration:none;
+    background:#111827;
+    color:white;
+    padding:10px 16px;
+    border-radius:10px;
+    font-size:14px
+}
+
+.container{
+    width:88%;
+    max-width:1100px;
+    margin:30px auto
+}
+
+h1{
+    font-size:32px;
+    margin-bottom:7px
+}
+
+.subtitle{
+    color:#6b7280;
+    margin-bottom:25px
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1.5fr;
+    gap:20px
+}
+
+.panel{
+    background:white;
+    border:1px solid #e5e7eb;
+    border-radius:18px;
+    padding:22px;
+    box-shadow:0 5px 20px rgba(0,0,0,.04);
+    margin-bottom:20px
+}
+
+.panel h2{
+    margin-bottom:18px
+}
+
+.form{
+    display:grid;
+    gap:13px
+}
+
+input{
+    width:100%;
+    padding:13px;
+    border:1px solid #d7dce5;
+    border-radius:10px;
+    outline:none
+}
+
+button{
+    border:0;
+    border-radius:10px;
+    padding:13px;
+    background:#111827;
+    color:white;
+    cursor:pointer;
+    font-weight:600
+}
+
+.goal{
+    border:1px solid #e5e7eb;
+    border-radius:15px;
+    padding:18px;
+    margin-bottom:15px
+}
+
+.goal-top{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:10px
+}
+
+.goal-name{
+    font-size:18px;
+    font-weight:700
+}
+
+.goal-percent{
+    font-weight:700
+}
+
+.progress{
+    height:13px;
+    background:#e5e7eb;
+    border-radius:20px;
+    overflow:hidden;
+    margin:12px 0
+}
+
+.progress div{
+    height:100%;
+    width:0;
+    background:#111827;
+    transition:.4s
+}
+
+.goal-info{
+    color:#6b7280;
+    font-size:14px;
+    line-height:1.6
+}
+
+.goal-actions{
+    margin-top:12px;
+    display:flex;
+    gap:8px
+}
+
+.add{
+    background:#374151
+}
+
+.delete{
+    background:#fee2e2;
+    color:#b91c1c
+}
+
+.empty{
+    text-align:center;
+    color:#6b7280;
+    padding:30px
+}
+
+.summary{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-bottom:20px
+}
+
+.stat{
+    background:#f8fafc;
+    padding:15px;
+    border-radius:12px
+}
+
+.stat span{
+    display:block;
+    color:#6b7280;
+    font-size:13px
+}
+
+.stat strong{
+    display:block;
+    margin-top:6px;
+    font-size:20px
+}
+
+.ai{
+    background:#111827;
+    color:white
+}
+
+.ai p{
+    color:#cbd5e1;
+    line-height:1.6
+}
+
+@media(max-width:750px){
+
+    .grid{
+        grid-template-columns:1fr
+    }
+
+    .summary{
+        grid-template-columns:1fr
+    }
+
+    .container{
+        width:92%
+    }
+
+    h1{
+        font-size:27px
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">
+💰 Smart Expense Tracker
+</div>
+
+<a class="back" href="/">
+← Dashboard
+</a>
+
+</header>
+
+<div class="container">
+
+<h1>🎯 Savings Goals</h1>
+
+<p class="subtitle">
+Turn your plans into measurable financial goals.
+</p>
+
+<div class="summary">
+
+<div class="stat">
+<span>Total Goals</span>
+<strong id="goalCount">0</strong>
+</div>
+
+<div class="stat">
+<span>Total Target</span>
+<strong id="targetTotal">₹0</strong>
+</div>
+
+<div class="stat">
+<span>Total Saved</span>
+<strong id="savedTotal">₹0</strong>
+</div>
+
+</div>
+
+<div class="grid">
+
+<div class="panel">
+
+<h2>➕ Create Goal</h2>
+
+<form class="form" id="goalForm">
+
+<input
+id="name"
+type="text"
+placeholder="Goal name (Example: New Laptop)"
+required
+>
+
+<input
+id="target"
+type="number"
+placeholder="Target amount ₹"
+min="1"
+required
+>
+
+<input
+id="saved"
+type="number"
+placeholder="Already saved ₹"
+min="0"
+value="0"
+>
+
+<input
+id="deadline"
+type="date"
+>
+
+<button type="submit">
+Create Savings Goal
+</button>
+
+</form>
+
+</div>
+
+<div class="panel">
+
+<h2>📈 Your Goals</h2>
+
+<div id="goals"></div>
+
+</div>
+
+</div>
+
+<div class="panel ai">
+
+<h2>🤖 Smart Saving Advice</h2>
+
+<p id="advice">
+Create a goal to receive personalized saving advice.
+</p>
+
+</div>
+
+</div>
+
+<script>
+
+let goals =
+JSON.parse(localStorage.getItem("savingsGoals") || "[]");
+
+
+function money(n){
+
+return "₹"+Number(n).toLocaleString("en-IN",{
+maximumFractionDigits:2
+});
+
+}
+
+
+function saveGoals(){
+
+localStorage.setItem(
+"savingsGoals",
+JSON.stringify(goals)
+);
+
+}
+
+
+function render(){
+
+const box =
+document.getElementById("goals");
+
+if(!goals.length){
+
+box.innerHTML =
+'<div class="empty">No savings goals yet.</div>';
+
+}else{
+
+box.innerHTML =
+goals.map((g,i)=>{
+
+const target =
+Number(g.target);
+
+const saved =
+Number(g.saved);
+
+const percent =
+Math.min((saved/target)*100,100);
+
+const remaining =
+Math.max(target-saved,0);
+
+let deadlineText =
+"";
+
+if(g.deadline){
+
+deadlineText =
+` • Deadline: ${g.deadline}`;
+
+}
+
+return `
+
+<div class="goal">
+
+<div class="goal-top">
+
+<div class="goal-name">
+🎯 ${escapeHTML(g.name)}
+</div>
+
+<div class="goal-percent">
+${percent.toFixed(0)}%
+</div>
+
+</div>
+
+<div class="progress">
+
+<div style="width:${percent}%"></div>
+
+</div>
+
+<div class="goal-info">
+
+<strong>
+${money(saved)}
+</strong>
+saved of
+<strong>
+${money(target)}
+</strong>
+
+<br>
+
+${money(remaining)}
+remaining${deadlineText}
+
+</div>
+
+<div class="goal-actions">
+
+<button
+class="add"
+onclick="addSaving(${i})"
+>
++ Add Saving
+</button>
+
+<button
+class="delete"
+onclick="deleteGoal(${i})"
+>
+Delete
+</button>
+
+</div>
+
+</div>
+
+`;
+
+}).join("");
+
+}
+
+
+const targetTotal =
+goals.reduce(
+(s,g)=>s+Number(g.target),0
+);
+
+const savedTotal =
+goals.reduce(
+(s,g)=>s+Number(g.saved),0
+);
+
+
+document.getElementById("goalCount")
+.textContent=goals.length;
+
+document.getElementById("targetTotal")
+.textContent=money(targetTotal);
+
+document.getElementById("savedTotal")
+.textContent=money(savedTotal);
+
+
+createAdvice();
+
+}
+
+
+function createAdvice(){
+
+const advice =
+document.getElementById("advice");
+
+if(!goals.length){
+
+advice.textContent =
+"Create a savings goal to get personalized advice.";
+
+return;
+
+}
+
+
+const active =
+goals
+.filter(g=>Number(g.saved)<Number(g.target));
+
+
+if(!active.length){
+
+advice.textContent =
+"🎉 Amazing! You have completed all your savings goals.";
+
+return;
+
+}
+
+
+const goal =
+active
+.sort(
+(a,b)=>
+(Number(b.target)-Number(b.saved)) -
+(Number(a.target)-Number(a.saved))
+)[0];
+
+
+const remaining =
+Number(goal.target)-Number(goal.saved);
+
+
+advice.innerHTML =
+
+`💡 Your biggest remaining goal is
+<strong>${escapeHTML(goal.name)}</strong>.
+You need <strong>${money(remaining)}</strong>
+more to reach it. Consider setting aside a fixed
+amount every month instead of saving randomly.`;
+
+}
+
+
+function addSaving(index){
+
+const amount =
+prompt("How much did you save?");
+
+if(amount===null) return;
+
+const value =
+Number(amount);
+
+if(!value || value<=0){
+
+alert("Enter a valid amount.");
+
+return;
+
+}
+
+goals[index].saved += value;
+
+if(goals[index].saved >
+goals[index].target){
+
+goals[index].saved =
+goals[index].target;
+
+}
+
+saveGoals();
+
+render();
+
+}
+
+
+function deleteGoal(index){
+
+if(!confirm("Delete this savings goal?"))
+return;
+
+goals.splice(index,1);
+
+saveGoals();
+
+render();
+
+}
+
+
+document
+.getElementById("goalForm")
+.addEventListener("submit",function(e){
+
+e.preventDefault();
+
+const goal={
+
+name:
+document.getElementById("name").value.trim(),
+
+target:
+Number(document.getElementById("target").value),
+
+saved:
+Number(document.getElementById("saved").value)||0,
+
+deadline:
+document.getElementById("deadline").value
+
+};
+
+if(goal.saved>goal.target){
+
+goal.saved=goal.target;
+
+}
+
+goals.push(goal);
+
+saveGoals();
+
+this.reset();
+
+document.getElementById("saved").value=0;
+
+render();
+
+});
+
+
+function escapeHTML(text){
+
+return String(text)
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
+
+}
+
+
+render();
+
+</script>
+
+</body>
+  </html>
