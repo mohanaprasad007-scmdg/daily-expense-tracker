@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Smart Budget | Money Coach</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#f4f6fa;
+ color:#172033
+}
+header{
+ background:#fff;
+ padding:16px 6%;
+ border-bottom:1px solid #e5e7eb;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ position:sticky;
+ top:0;
+ z-index:5
+}
+.logo{font-size:21px;font-weight:800}
+.back{
+ background:#111827;
+ color:#fff;
+ text-decoration:none;
+ padding:10px 15px;
+ border-radius:10px
+}
+.container{
+ width:90%;
+ max-width:1100px;
+ margin:28px auto
+}
+h1{font-size:30px;margin:0 0 6px}
+.sub{color:#667085;margin-bottom:22px}
+.grid{
+ display:grid;
+ grid-template-columns:1fr 1.5fr;
+ gap:18px
+}
+.panel{
+ background:#fff;
+ border:1px solid #e5e7eb;
+ border-radius:18px;
+ padding:20px;
+ box-shadow:0 5px 20px #00000008;
+ margin-bottom:18px
+}
+.form{display:grid;gap:12px}
+input{
+ width:100%;
+ padding:13px;
+ border:1px solid #ccd3dd;
+ border-radius:10px;
+ font-size:15px;
+ outline:none
+}
+button{
+ border:0;
+ background:#111827;
+ color:#fff;
+ padding:13px 15px;
+ border-radius:10px;
+ font-weight:700;
+ cursor:pointer
+}
+.stats{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:13px;
+ margin-bottom:18px
+}
+.stat{
+ background:#fff;
+ border:1px solid #e5e7eb;
+ border-radius:16px;
+ padding:17px
+}
+.stat span{
+ color:#667085;
+ font-size:13px
+}
+.stat strong{
+ display:block;
+ font-size:22px;
+ margin-top:7px
+}
+.progress{
+ height:18px;
+ background:#e5e7eb;
+ border-radius:20px;
+ overflow:hidden;
+ margin:16px 0
+}
+.bar{
+ height:100%;
+ width:0%;
+ background:#111827;
+ transition:.4s
+}
+.status{
+ padding:13px;
+ border-radius:11px;
+ font-weight:700;
+ margin-top:10px
+}
+.safe{background:#ecfdf5;color:#047857}
+.warning{background:#fff7ed;color:#c2410c}
+.danger{background:#fee2e2;color:#b91c1c}
+.category{
+ border:1px solid #e5e7eb;
+ border-radius:13px;
+ padding:14px;
+ margin:10px 0
+}
+.catTop{
+ display:flex;
+ justify-content:space-between;
+ gap:10px
+}
+.catName{font-weight:700}
+.catBar{
+ height:9px;
+ background:#e5e7eb;
+ border-radius:10px;
+ overflow:hidden;
+ margin-top:10px
+}
+.catFill{
+ height:100%;
+ width:0%;
+ background:#111827
+}
+.small{
+ color:#667085;
+ font-size:13px;
+ margin-top:5px
+}
+.advice{
+ background:#111827;
+ color:#fff;
+ border-radius:15px;
+ padding:17px;
+ line-height:1.6
+}
+.advice p{color:#d1d5db}
+.action{
+ display:flex;
+ gap:9px;
+ flex-wrap:wrap;
+ margin-top:14px
+}
+.reset{
+ background:#fee2e2;
+ color:#b91c1c
+}
+@media(max-width:800px){
+ .stats{grid-template-columns:1fr 1fr}
+ .grid{grid-template-columns:1fr}
+}
+@media(max-width:500px){
+ .stats{grid-template-columns:1fr}
+ h1{font-size:26px}
+ .container{width:92%}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="logo">💰 Smart Money Coach</div>
+<a href="/" class="back">← Dashboard</a>
+</header>
+
+<div class="container">
+
+<h1>🎯 Smart Budget Manager</h1>
+<p class="sub">
+Set your monthly spending limit and let the app calculate your safe daily spending.
+</p>
+
+<div class="stats">
+
+<div class="stat">
+<span>Monthly Budget</span>
+<strong id="budget">₹0</strong>
+</div>
+
+<div class="stat">
+<span>Spent</span>
+<strong id="spent">₹0</strong>
+</div>
+
+<div class="stat">
+<span>Remaining</span>
+<strong id="remaining">₹0</strong>
+</div>
+
+<div class="stat">
+<span>Safe Today</span>
+<strong id="daily">₹0</strong>
+</div>
+
+</div>
+
+<div class="grid">
+
+<section class="panel">
+
+<h2>💰 Set Budget</h2>
+
+<form id="budgetForm" class="form">
+
+<input
+id="budgetInput"
+type="number"
+min="1"
+step=".01"
+placeholder="Monthly budget ₹"
+required
+>
+
+<button type="submit">
+💾 Save Budget
+</button>
+
+</form>
+
+<div class="action">
+<button class="reset" onclick="resetBudget()">
+Reset Budget
+</button>
+</div>
+
+</section>
+
+<section class="panel">
+
+<h2>📊 Budget Progress</h2>
+
+<div class="progress">
+<div id="bar" class="bar"></div>
+</div>
+
+<div id="status" class="status safe">
+Set a budget to begin.
+</div>
+
+<p class="small" id="percentage">
+0% of budget used
+</p>
+
+</section>
+
+</div>
+
+<section class="panel">
+
+<h2>📂 Category Spending</h2>
+
+<div id="categories">
+Loading...
+</div>
+
+</section>
+
+<section class="panel">
+
+<h2>🤖 Smart Budget Advice</h2>
+
+<div id="advice" class="advice">
+Analyzing your spending...
+</div>
+
+</section>
+
+</div>
+
+<script>
+
+let expenses=[];
+let budget=Number(localStorage.getItem("monthlyBudget")||0);
+
+const $=id=>document.getElementById(id);
+
+function money(n){
+ return "₹"+Number(n||0).toLocaleString(
+  "en-IN",
+  {maximumFractionDigits:2}
+ );
+}
+
+function monthKey(){
+ const d=new Date();
+ return d.getFullYear()+"-"+
+ String(d.getMonth()+1).padStart(2,"0");
+}
+
+function daysLeft(){
+ const d=new Date();
+ const last=new Date(
+  d.getFullYear(),
+  d.getMonth()+1,
+  0
+ );
+ return Math.max(
+  1,
+  last.getDate()-d.getDate()+1
+ );
+}
+
+function escapeHTML(x){
+ return String(x??"")
+ .replaceAll("&","&amp;")
+ .replaceAll("<","&lt;")
+ .replaceAll(">","&gt;")
+ .replaceAll('"',"&quot;")
+ .replaceAll("'","&#039;");
+}
+
+async function loadExpenses(){
+
+ try{
+
+  const response=await fetch("/api/expenses");
+
+  if(!response.ok)
+   throw new Error();
+
+  const data=await response.json();
+
+  expenses=Array.isArray(data)
+   ?data
+   :(data.expenses||[]);
+
+  render();
+
+ }catch(error){
+
+  console.error(error);
+
+  $("advice").textContent=
+   "Could not load your expenses.";
+
+ }
+
+}
+
+function monthlyExpenses(){
+
+ const key=monthKey();
+
+ return expenses.filter(e=>{
+  return String(e.date||"").slice(0,7)===key;
+ });
+
+}
+
+function totalSpent(){
+
+ return monthlyExpenses().reduce(
+  (sum,e)=>sum+Number(e.amount||0),
+  0
+ );
+
+}
+
+function render(){
+
+ const spent=totalSpent();
+ const remaining=Math.max(0,budget-spent);
+
+ let percent=budget
+  ?(spent/budget)*100
+  :0;
+
+ percent=Math.min(100,percent);
+
+ const daily=remaining/daysLeft();
+
+ $("budget").textContent=money(budget);
+ $("spent").textContent=money(spent);
+ $("remaining").textContent=money(remaining);
+ $("daily").textContent=money(daily);
+
+ $("bar").style.width=percent+"%";
+
+ $("percentage").textContent=
+  percent.toFixed(1)+"% of budget used";
+
+ updateStatus(percent,spent);
+ renderCategories();
+ renderAdvice(spent,remaining,daily,percent);
+
+}
+
+function updateStatus(percent,spent){
+
+ const box=$("status");
+
+ box.className="status";
+
+ if(!budget){
+
+  box.classList.add("safe");
+  box.textContent=
+   "💡 Set your monthly budget to start tracking.";
+
+  return;
+
+ }
+
+ if(spent>budget){
+
+  box.classList.add("danger");
+
+  box.textContent=
+   "🔴 You are over budget by "+
+   money(spent-budget)+".";
+
+ }else if(percent>=80){
+
+  box.classList.add("warning");
+
+  box.textContent=
+   "🟠 Warning: you have used "+
+   percent.toFixed(0)+"% of your budget.";
+
+ }else{
+
+  box.classList.add("safe");
+
+  box.textContent=
+   "🟢 You're within your budget.";
+
+ }
+
+}
+
+function renderCategories(){
+
+ const list=monthlyExpenses();
+ const totals={};
+
+ list.forEach(e=>{
+
+  const cat=e.category||"Other";
+
+  totals[cat]=
+   (totals[cat]||0)+Number(e.amount||0);
+
+ });
+
+ const names=Object.keys(totals)
+ .sort((a,b)=>totals[b]-totals[a]);
+
+ if(!names.length){
+
+  $("categories").innerHTML=
+   '<p class="small">No expenses recorded this month.</p>';
+
+  return;
+
+ }
+
+ const max=totals[names[0]]||1;
+
+ $("categories").innerHTML=
+ names.map(name=>{
+
+  const amount=totals[name];
+  const width=(amount/max)*100;
+
+  return `
+  <div class="category">
+
+   <div class="catTop">
+
+    <div class="catName">
+     ${escapeHTML(name)}
+    </div>
+
+    <b>${money(amount)}</b>
+
+   </div>
+
+   <div class="catBar">
+    <div
+     class="catFill"
+     style="width:${width}%">
+    </div>
+   </div>
+
+   <div class="small">
+    ${((amount/totalSpent())*100).toFixed(1)}%
+    of this month's spending
+   </div>
+
+  </div>
+  `;
+
+ }).join("");
+
+}
+
+function renderAdvice(spent,remaining,daily,percent){
+
+ if(!budget){
+
+  $("advice").innerHTML=
+   "<b>🎯 Start with a realistic monthly budget.</b>"+
+   "<p>Enter your monthly spending limit above. "+
+   "The app will then calculate your remaining money "+
+   "and safe daily spending amount.</p>";
+
+  return;
+
+ }
+
+ let text="";
+
+ if(spent>budget){
+
+  text=
+   "🚨 <b>Budget exceeded.</b>"+
+   "<p>You have spent "+money(spent)+
+   " against a budget of "+money(budget)+
+   ". You are over by "+
+   money(spent-budget)+
+   ".</p>"+
+   "<p>Try reducing non-essential spending for the rest of the month.</p>";
+
+ }else if(percent>=80){
+
+  text=
+   "⚠️ <b>Slow down your spending.</b>"+
+   "<p>You have used "+percent.toFixed(0)+
+   "% of your monthly budget.</p>"+
+   "<p>Your estimated safe spending limit is "+
+   money(daily)+" per day for the remaining "+
+   daysLeft()+" days.</p>";
+
+ }else if(percent>=50){
+
+  text=
+   "💡 <b>You're doing reasonably well.</b>"+
+   "<p>You have "+money(remaining)+
+   " remaining.</p>"+
+   "<p>Try keeping daily spending near "+
+   money(daily)+" or below.</p>";
+
+ }else{
+
+  text=
+   "🟢 <b>Excellent budget control!</b>"+
+   "<p>Only "+percent.toFixed(0)+
+   "% of your budget has been used.</p>"+
+   "<p>You have "+money(remaining)+
+   " remaining. Your current daily allowance is "+
+   money(daily)+".</p>";
+
+ }
+
+ $("advice").innerHTML=text;
+
+}
+
+$("budgetForm").addEventListener(
+ "submit",
+ e=>{
+
+  e.preventDefault();
+
+  const value=Number(
+   $("budgetInput").value
+  );
+
+  if(!value||value<=0)
+   return;
+
+  budget=value;
+
+  localStorage.setItem(
+   "monthlyBudget",
+   String(budget)
+  );
+
+  render();
+
+  $("budgetInput").value="";
+
+  alert("✅ Monthly budget saved!");
+
+ }
+);
+
+function resetBudget(){
+
+ if(!confirm("Reset your monthly budget?"))
+  return;
+
+ budget=0;
+
+ localStorage.removeItem("monthlyBudget");
+
+ render();
+
+}
+
+if(budget)
+ $("budgetInput").placeholder=
+ "Current budget: "+money(budget);
+
+loadExpenses();
+
+</script>
+
+</body>
+</html>
