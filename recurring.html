@@ -3,203 +3,156 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Recurring Payments | Smart Expense Tracker</title>
+<title>Recurring Payments | Smart Money Coach</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
-
+*{box-sizing:border-box}
 body{
-    background:#f4f6fa;
-    color:#172033;
+margin:0;
+font-family:Arial,sans-serif;
+background:#f4f6fa;
+color:#172033
 }
-
 header{
-    background:white;
-    padding:18px 6%;
-    border-bottom:1px solid #e5e7eb;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    position:sticky;
-    top:0;
-    z-index:5;
+background:#fff;
+padding:16px 6%;
+border-bottom:1px solid #e5e7eb;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:12px;
+position:sticky;
+top:0;
+z-index:5
 }
-
-.logo{
-    font-size:22px;
-    font-weight:800;
-}
-
+.logo{font-size:21px;font-weight:800}
 .back{
-    text-decoration:none;
-    background:#111827;
-    color:white;
-    padding:10px 16px;
-    border-radius:10px;
-    font-size:14px;
+background:#111827;
+color:#fff;
+text-decoration:none;
+padding:10px 15px;
+border-radius:10px
 }
-
 .container{
-    width:88%;
-    max-width:1100px;
-    margin:30px auto;
+width:90%;
+max-width:1100px;
+margin:28px auto
 }
-
-h1{
-    font-size:32px;
-    margin-bottom:7px;
-}
-
-.subtitle{
-    color:#6b7280;
-    margin-bottom:25px;
-}
-
+h1{font-size:30px;margin-bottom:6px}
+.sub{color:#667085;margin-bottom:22px}
 .stats{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:15px;
-    margin-bottom:20px;
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:13px;
+margin-bottom:18px
 }
-
 .stat,.panel{
-    background:white;
-    border:1px solid #e5e7eb;
-    border-radius:18px;
-    box-shadow:0 5px 20px rgba(0,0,0,.04);
+background:#fff;
+border:1px solid #e5e7eb;
+border-radius:18px;
+padding:19px;
+box-shadow:0 5px 20px #00000008
 }
-
-.stat{
-    padding:20px;
-}
-
-.stat span{
-    color:#6b7280;
-    font-size:13px;
-}
-
+.stat span{color:#667085;font-size:13px}
 .stat strong{
-    display:block;
-    font-size:23px;
-    margin-top:7px;
+display:block;
+font-size:23px;
+margin-top:7px
 }
-
-.panel{
-    padding:22px;
-    margin-bottom:20px;
-}
-
-.panel h2{
-    margin-bottom:18px;
-}
-
 .grid{
-    display:grid;
-    grid-template-columns:1fr 1.5fr;
-    gap:20px;
+display:grid;
+grid-template-columns:1fr 1.5fr;
+gap:18px
 }
-
-.form{
-    display:grid;
-    gap:12px;
-}
-
+.form{display:grid;gap:11px}
 input,select{
-    width:100%;
-    padding:13px;
-    border:1px solid #d7dce5;
-    border-radius:10px;
-    background:white;
-    outline:none;
+width:100%;
+padding:13px;
+border:1px solid #ccd3dd;
+border-radius:10px;
+font-size:14px;
+background:#fff;
+outline:none
 }
-
 button{
-    border:0;
-    border-radius:10px;
-    padding:12px;
-    background:#111827;
-    color:white;
-    cursor:pointer;
-    font-weight:600;
+border:0;
+background:#111827;
+color:#fff;
+padding:12px 14px;
+border-radius:10px;
+font-weight:700;
+cursor:pointer
 }
-
+button:active{transform:scale(.98)}
 .payment{
-    border:1px solid #e5e7eb;
-    border-radius:15px;
-    padding:17px;
-    margin-bottom:13px;
+border:1px solid #e5e7eb;
+border-radius:15px;
+padding:16px;
+margin-bottom:12px
 }
-
-.payment-top{
-    display:flex;
-    justify-content:space-between;
-    gap:10px;
+.top{
+display:flex;
+justify-content:space-between;
+gap:10px
 }
-
-.payment-name{
-    font-size:18px;
-    font-weight:700;
+.name{
+font-size:18px;
+font-weight:700
 }
-
-.amount{
-    font-weight:700;
-}
-
+.amount{font-weight:800}
 .info{
-    color:#6b7280;
-    font-size:14px;
-    line-height:1.7;
-    margin-top:7px;
+color:#667085;
+font-size:13px;
+line-height:1.8;
+margin-top:7px
 }
-
+.badge{
+display:inline-block;
+padding:5px 9px;
+border-radius:8px;
+font-size:12px;
+font-weight:700;
+margin-top:6px
+}
+.normal{background:#ecfdf5;color:#047857}
+.warning{background:#fff7ed;color:#c2410c}
+.overdue{background:#fee2e2;color:#b91c1c}
 .actions{
-    display:flex;
-    gap:8px;
-    margin-top:12px;
+display:flex;
+gap:8px;
+margin-top:12px
 }
-
 .delete{
-    background:#fee2e2;
-    color:#b91c1c;
+background:#fee2e2;
+color:#b91c1c
 }
-
-.due{
-    background:#fff7ed;
-    color:#c2410c;
-    border-radius:8px;
-    padding:4px 8px;
-    font-size:12px;
-    display:inline-block;
-    margin-top:8px;
-}
-
-.normal{
-    background:#ecfdf5;
-    color:#047857;
-}
-
 .empty{
-    text-align:center;
-    color:#6b7280;
-    padding:30px;
+text-align:center;
+padding:28px;
+color:#667085
 }
-
+.ai{
+margin-top:18px;
+background:#111827;
+color:#fff
+}
+.ai h2{margin-top:0}
+.ai p{color:#cbd5e1}
+.advice{
+background:#1f2937;
+padding:14px;
+border-radius:12px;
+line-height:1.6
+}
 @media(max-width:750px){
-    .grid{
-        grid-template-columns:1fr;
-    }
-
-    .stats{
-        grid-template-columns:1fr;
-    }
-
-    .container{
-        width:92%;
-    }
-
-    h1{
-        font-size:27px;
-    }
+header{
+align-items:flex-start;
+flex-direction:column
+}
+.stats{grid-template-columns:1fr}
+.grid{grid-template-columns:1fr}
+.container{width:92%}
+h1{font-size:27px}
 }
 </style>
 </head>
@@ -207,25 +160,17 @@ button{
 <body>
 
 <header>
-
-<div class="logo">
-💰 Smart Expense Tracker
-</div>
-
-<a href="/" class="back">
-← Dashboard
-</a>
-
+<div class="logo">💰 Smart Money Coach</div>
+<a href="/" class="back">← Dashboard</a>
 </header>
 
 <div class="container">
 
-<h1>🔄 Recurring Payments</h1>
+<h1>🔄 Recurring Payments 2.0</h1>
 
-<p class="subtitle">
-Keep track of subscriptions, bills and regular payments.
+<p class="sub">
+Track subscriptions, bills and regular payments automatically.
 </p>
-
 
 <div class="stats">
 
@@ -246,20 +191,18 @@ Keep track of subscriptions, bills and regular payments.
 
 </div>
 
-
 <div class="grid">
 
+<section class="panel">
 
-<div class="panel">
-
-<h2>➕ Add Recurring Payment</h2>
+<h2>➕ Add Payment</h2>
 
 <form id="form" class="form">
 
 <input
 id="name"
 type="text"
-placeholder="Payment name (Example: Netflix)"
+placeholder="Payment name e.g. Netflix"
 required
 >
 
@@ -273,11 +216,9 @@ required
 >
 
 <select id="frequency">
-
 <option value="monthly">Monthly</option>
 <option value="weekly">Weekly</option>
 <option value="yearly">Yearly</option>
-
 </select>
 
 <input
@@ -286,200 +227,226 @@ type="date"
 required
 >
 
-<button>
-Add Payment
+<button type="submit">
+➕ Add Payment
 </button>
 
 </form>
 
-</div>
+</section>
 
-
-<div class="panel">
+<section class="panel">
 
 <h2>📅 Upcoming Payments</h2>
 
-<div id="payments"></div>
+<div id="payments">
+<div class="empty">Loading payments...</div>
+</div>
+
+</section>
 
 </div>
 
+<section class="panel ai">
+
+<h2>🤖 Smart Subscription Advice</h2>
+
+<p>
+Your recurring payments are analyzed automatically.
+</p>
+
+<div id="advice" class="advice">
+Analyzing your recurring payments...
 </div>
 
-</div>
+</section>
 
+</div>
 
 <script>
 
-let payments =
-JSON.parse(
-localStorage.getItem("recurringPayments") || "[]"
-);
+let payments=[];
 
+const $=id=>document.getElementById(id);
 
 function money(n){
-
-return "₹"+Number(n).toLocaleString(
+return "₹"+Number(n||0).toLocaleString(
 "en-IN",
-{
-maximumFractionDigits:2
+{maximumFractionDigits:2}
+);
 }
+
+function today(){
+
+const d=new Date();
+
+return d.getFullYear()+"-"+
+String(d.getMonth()+1).padStart(2,"0")+"-"+
+String(d.getDate()).padStart(2,"0");
+
+}
+
+function escapeHTML(x){
+
+return String(x??"")
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
+
+}
+
+function monthlyCost(p){
+
+const a=Number(p.amount||0);
+
+if(p.frequency==="weekly")
+return a*52/12;
+
+if(p.frequency==="yearly")
+return a/12;
+
+return a;
+
+}
+
+function nextDate(p){
+
+let date=new Date(
+(p.next_date||today())+"T00:00:00"
 );
 
+const now=new Date();
+now.setHours(0,0,0,0);
+
+while(date<now){
+
+if(p.frequency==="weekly")
+date.setDate(date.getDate()+7);
+
+else if(p.frequency==="yearly")
+date.setFullYear(date.getFullYear()+1);
+
+else
+date.setMonth(date.getMonth()+1);
+
 }
 
-
-function save(){
-
-localStorage.setItem(
-"recurringPayments",
-JSON.stringify(payments)
-);
+return date.toISOString().slice(0,10);
 
 }
-
 
 function daysUntil(date){
 
-const today=new Date();
-today.setHours(0,0,0,0);
+const a=new Date();
+a.setHours(0,0,0,0);
 
-const target=new Date(date+"T00:00:00");
+const b=new Date(date+"T00:00:00");
 
 return Math.ceil(
-(target-today)/(1000*60*60*24)
+(b-a)/(1000*60*60*24)
 );
 
 }
 
+async function loadPayments(){
 
-function nextDate(payment){
+try{
 
-let date=new Date(
-payment.date+"T00:00:00"
-);
+const response=await fetch("/api/recurring");
 
-const today=new Date();
-today.setHours(0,0,0,0);
+if(!response.ok)
+throw new Error("Could not load payments.");
 
-while(date<today){
+const data=await response.json();
 
-if(payment.frequency==="weekly"){
+payments=Array.isArray(data)
+?data
+:(data.recurring||[]);
 
-date.setDate(date.getDate()+7);
+render();
 
-}else if(payment.frequency==="monthly"){
+}catch(error){
 
-date.setMonth(date.getMonth()+1);
+console.error(error);
 
-}else{
-
-date.setFullYear(
-date.getFullYear()+1
-);
+$("payments").innerHTML=
+'<div class="empty">❌ Could not load recurring payments.</div>';
 
 }
 
 }
-
-return date.toISOString().split("T")[0];
-
-}
-
-
-function monthlyCost(payment){
-
-const amount=Number(payment.amount);
-
-if(payment.frequency==="weekly")
-return amount*52/12;
-
-if(payment.frequency==="yearly")
-return amount/12;
-
-return amount;
-
-}
-
 
 function render(){
 
-const box=document.getElementById("payments");
-
-let monthlyTotal=0;
-let dueSoon=0;
+let total=0;
+let soon=0;
 
 payments.forEach(p=>{
 
-monthlyTotal+=monthlyCost(p);
+total+=monthlyCost(p);
 
-const next=nextDate(p);
-const days=daysUntil(next);
+const days=daysUntil(
+nextDate(p)
+);
 
-if(days>=0 && days<=7)
-dueSoon++;
+if(days>=0&&days<=7)
+soon++;
 
 });
 
-
-document.getElementById("count")
-.textContent=payments.length;
-
-document.getElementById("monthly")
-.textContent=money(monthlyTotal);
-
-document.getElementById("soon")
-.textContent=dueSoon;
-
+$("count").textContent=payments.length;
+$("monthly").textContent=money(total);
+$("soon").textContent=soon;
 
 if(!payments.length){
 
-box.innerHTML=
+$("payments").innerHTML=
 '<div class="empty">No recurring payments yet.</div>';
+
+renderAdvice(0,0);
 
 return;
 
 }
 
-
 const sorted=[...payments].sort(
-(a,b)=>
-nextDate(a).localeCompare(nextDate(b))
+(a,b)=>nextDate(a).localeCompare(nextDate(b))
 );
 
-
-box.innerHTML=sorted.map(p=>{
+$("payments").innerHTML=sorted.map(p=>{
 
 const next=nextDate(p);
 const days=daysUntil(next);
 
-let status="normal";
+let badge="normal";
 let text="Due in "+days+" days";
 
-if(days===0){
+if(days<0){
 
-status="due";
-text="Due today";
-
-}else if(days<0){
-
-status="due";
+badge="overdue";
 text="Overdue";
+
+}else if(days===0){
+
+badge="warning";
+text="Due today";
 
 }else if(days<=7){
 
-status="due";
+badge="warning";
 text="Due in "+days+" days";
 
 }
-
 
 return `
 
 <div class="payment">
 
-<div class="payment-top">
+<div class="top">
 
-<div class="payment-name">
+<div class="name">
 ${escapeHTML(p.name)}
 </div>
 
@@ -492,21 +459,21 @@ ${money(p.amount)}
 <div class="info">
 
 Frequency:
-<strong>${p.frequency}</strong>
+<b>${escapeHTML(p.frequency)}</b>
 
 <br>
 
 Next payment:
-<strong>${next}</strong>
+<b>${next}</b>
 
 <br>
 
 Monthly equivalent:
-<strong>${money(monthlyCost(p))}</strong>
+<b>${money(monthlyCost(p))}</b>
 
 <br>
 
-<span class="due ${status}">
+<span class="badge ${badge}">
 ${text}
 </span>
 
@@ -514,14 +481,15 @@ ${text}
 
 <div class="actions">
 
-<button onclick="markPaid(${p.id})">
+<button
+onclick="markPaid(${p.id})">
 ✓ Mark Paid
 </button>
 
 <button
 class="delete"
 onclick="removePayment(${p.id})">
-Delete
+🗑 Delete
 </button>
 
 </div>
@@ -532,119 +500,211 @@ Delete
 
 }).join("");
 
+renderAdvice(total,soon);
+
 }
 
+function renderAdvice(total,soon){
 
-function markPaid(id){
+let text="";
 
-const p=payments.find(
-x=>x.id===id
-);
+if(!total){
 
-if(!p) return;
-
-const current=new Date(
-p.date+"T00:00:00"
-);
-
-if(p.frequency==="weekly"){
-
-current.setDate(
-current.getDate()+7
-);
-
-}else if(p.frequency==="monthly"){
-
-current.setMonth(
-current.getMonth()+1
-);
+text=
+"✨ Add recurring payments to receive smart subscription advice.";
 
 }else{
 
-current.setFullYear(
-current.getFullYear()+1
+text=
+"💰 Your recurring commitments are approximately "+
+money(total)+" per month.";
+
+if(soon)
+text+=
+" 🔔 You have "+soon+
+" payment(s) due within 7 days.";
+
+if(total>10000)
+text+=
+" ⚠️ Your recurring commitments are high. Review subscriptions you rarely use.";
+
+else if(total>5000)
+text+=
+" 💡 Consider reviewing your subscriptions and regular bills for savings.";
+
+else
+text+=
+" ✅ Your recurring commitments are currently relatively manageable.";
+
+}
+
+$("advice").textContent=text;
+
+}
+
+$("form").addEventListener(
+"submit",
+async function(e){
+
+e.preventDefault();
+
+const name=$("name").value.trim();
+const amount=Number($("amount").value);
+const frequency=$("frequency").value;
+const date=$("date").value;
+
+if(!name||!amount||!date)
+return;
+
+try{
+
+const response=await fetch(
+"/api/recurring",
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+name:name,
+amount:amount,
+frequency:frequency,
+next_date:date
+})
+}
+);
+
+const data=await response.json();
+
+if(!response.ok||data.success===false){
+
+alert(
+data.error||
+"Could not add payment."
+);
+
+return;
+
+}
+
+this.reset();
+
+$("date").value=today();
+
+await loadPayments();
+
+}catch(error){
+
+alert(
+"Could not connect to the server."
 );
 
 }
 
-p.date=
-current.toISOString().split("T")[0];
+});
 
-save();
-render();
+async function markPaid(id){
+
+const p=payments.find(
+x=>Number(x.id)===Number(id)
+);
+
+if(!p)return;
+
+const next=nextDate(p);
+
+let d=new Date(
+next+"T00:00:00"
+);
+
+if(p.frequency==="weekly")
+d.setDate(d.getDate()+7);
+
+else if(p.frequency==="yearly")
+d.setFullYear(d.getFullYear()+1);
+
+else
+d.setMonth(d.getMonth()+1);
+
+const newDate=d.toISOString().slice(0,10);
+
+try{
+
+/*
+The current backend has DELETE + POST.
+So marking paid replaces the old payment
+with the next payment date.
+*/
+
+await fetch(
+"/api/recurring/"+p.id,
+{
+method:"DELETE"
+}
+);
+
+await fetch(
+"/api/recurring",
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+name:p.name,
+amount:p.amount,
+frequency:p.frequency,
+next_date:newDate
+})
+}
+);
+
+await loadPayments();
+
+}catch(error){
+
+alert(
+"Could not update payment."
+);
 
 }
 
+}
 
-function removePayment(id){
+async function removePayment(id){
 
 if(!confirm(
 "Delete this recurring payment?"
 ))
 return;
 
-payments=
-payments.filter(
-p=>p.id!==id
+try{
+
+const response=await fetch(
+"/api/recurring/"+id,
+{
+method:"DELETE"
+}
 );
 
-save();
-render();
+if(!response.ok)
+throw new Error();
+
+await loadPayments();
+
+}catch(error){
+
+alert(
+"Could not delete payment."
+);
 
 }
 
-
-document
-.getElementById("form")
-.addEventListener(
-"submit",
-function(e){
-
-e.preventDefault();
-
-const payment={
-
-id:Date.now(),
-
-name:
-document.getElementById("name")
-.value.trim(),
-
-amount:
-Number(document.getElementById("amount").value),
-
-frequency:
-document.getElementById("frequency").value,
-
-date:
-document.getElementById("date").value
-
-};
-
-payments.push(payment);
-
-save();
-
-this.reset();
-
-render();
-
-});
-
-
-function escapeHTML(text){
-
-return String(text)
-.replaceAll("&","&amp;")
-.replaceAll("<","&lt;")
-.replaceAll(">","&gt;")
-.replaceAll('"',"&quot;")
-.replaceAll("'","&#039;");
-
 }
 
+$("date").value=today();
 
-render();
+loadPayments();
 
 </script>
 
