@@ -3,14 +3,17 @@ import sqlite3
 import os
 
 app = Flask(__name__)
-
 DB = "expenses.db"
 
 
-# ---------------- DATABASE ----------------
+def get_db():
+    conn = sqlite3.connect(DB)
+    conn.row_factory = sqlite3.Row
+    return conn
+
 
 def init_db():
-    conn = sqlite3.connect(DB)
+    conn = get_db()
 
     conn.execute("""
         CREATE TABLE IF NOT EXISTS expenses (
@@ -22,20 +25,21 @@ def init_db():
         )
     """)
 
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS income (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            amount REAL NOT NULL,
+            source TEXT NOT NULL,
+            date TEXT NOT NULL
+        )
+    """)
+
     conn.commit()
     conn.close()
 
 
-def get_db():
-    conn = sqlite3.connect(DB)
-    conn.row_factory = sqlite3.Row
-    return conn
-
-
 init_db()
 
-
-# ---------------- PAGES ----------------
 
 @app.route("/")
 def home():
@@ -47,6 +51,11 @@ def analytics():
     return send_from_directory(".", "analytics.html")
 
 
+@app.route("/goals.html")
+def goals():
+    return send_from_directory(".", "goals.html")
+
+
 # ---------------- EXPENSES ----------------
 
 @app.route("/api/expenses", methods=["GET"])
@@ -55,7 +64,7 @@ def get_expenses():
     conn = get_db()
 
     rows = conn.execute(
-        "SELECT * FROM expenses ORDER BY date DESC, id DESC"
+        "SELECT * FROM expenses ORDER BY date DESC,id DESC"
     ).fetchall()
 
     conn.close()
@@ -79,68 +88,139 @@ def add_expense():
             "error": "Please fill all required fields."
         }), 400
 
-    try:
+    conn = get_db()
 
-        conn = get_db()
+    cur = conn.execute(
+        """
+        INSERT INTO expenses(amount,category,note,date)
+        VALUES(?,?,?,?)
+        """,
+        (float(amount), category, note, date)
+    )
 
-        cursor = conn.execute(
-            """
-            INSERT INTO expenses
-            (amount, category, note, date)
-            VALUES (?, ?, ?, ?)
-            """,
-            (
-                float(amount),
-                category,
-                note,
-                date
-            )
-        )
+    conn.commit()
+    expense_id = cur.lastrowid
+    conn.close()
 
-        conn.commit()
-
-        expense_id = cursor.lastrowid
-
-        conn.close()
-
-        return jsonify({
-            "success": True,
-            "id": expense_id
-        })
-
-    except Exception as e:
-
-        return jsonify({
-            "success": False,
-            "error": str(e)
-        }), 500
+    return jsonify({
+        "success": True,
+        "id": expense_id
+    })
 
 
-@app.route("/api/expenses/<int:expense_id>", methods=["DELETE"])
-def delete_expense(expense_id):
+@app.route("/api/expenses/<int:eid>", methods=["DELETE"])
+def delete_expense(eid):
 
     conn = get_db()
 
     conn.execute(
-        "DELETE FROM expenses WHERE id = ?",
-        (expense_id,)
+        "DELETE FROM expenses WHERE id=?",
+        (eid,)
     )
 
     conn.commit()
     conn.close()
 
+    return jsonify({"success": True})
+
+
+# ---------------- INCOME ----------------
+
+@app.route("/api/income", methods=["GET"])
+def get_income():
+
+    conn = get_db()
+
+    rows = conn.execute(
+        "SELECT * FROM income ORDER BY date DESC,id DESC"
+    ).fetchall()
+
+    conn.close()
+
+    return jsonify([dict(row) for row in rows])
+
+
+@app.route("/api/income", methods=["POST"])
+def add_income():
+
+    data = request.get_json() or {}
+
+    amount = data.get("amount")
+    source = data.get("source")
+    date = data.get("date")
+
+    if not amount or not source or not date:
+        return jsonify({
+            "success": False,
+            "error": "Please fill all income fields."
+        }), 400
+
+    conn = get_db()
+
+    cur = conn.execute(
+        """
+        INSERT INTO income(amount,source,date)
+        VALUES(?,?,?)
+        """,
+        (float(amount), source, date)
+    )
+
+    conn.commit()
+    income_id = cur.lastrowid
+    conn.close()
+
     return jsonify({
-        "success": True
+        "success": True,
+        "id": income_id
     })
 
 
-# ---------------- AI ASSISTANT ----------------
+@app.route("/api/income/<int:iid>", methods=["DELETE"])
+def delete_income(iid):
+
+    conn = get_db()
+
+    conn.execute(
+        "DELETE FROM income WHERE id=?",
+        (iid,)
+    )
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({"success": True})
+
+
+# ---------------- FINANCIAL SUMMARY ----------------
+
+@app.route("/api/financial-summary")
+def financial_summary():
+
+    conn = get_db()
+
+    expense = conn.execute(
+        "SELECT COALESCE(SUM(amount),0) AS total FROM expenses"
+    ).fetchone()["total"]
+
+    income = conn.execute(
+        "SELECT COALESCE(SUM(amount),0) AS total FROM income"
+    ).fetchone()["total"]
+
+    conn.close()
+
+    return jsonify({
+        "income": float(income),
+        "expenses": float(expense),
+        "balance": float(income) - float(expense)
+    })
+
+
+# ---------------- AI ----------------
 
 @app.route("/api/ai", methods=["POST"])
 def ai_assistant():
 
     data = request.get_json() or {}
-
     question = data.get("question", "").strip()
 
     if not question:
@@ -148,146 +228,111 @@ def ai_assistant():
             "answer": "Please enter a question."
         }), 400
 
-
-    # Get expenses
     conn = get_db()
 
-    rows = conn.execute(
-        """
-        SELECT amount, category, note, date
-        FROM expenses
-        ORDER BY date DESC
-        """
-    ).fetchall()
+    expenses = [
+        dict(x) for x in conn.execute(
+            "SELECT amount,category,note,date FROM expenses"
+        ).fetchall()
+    ]
+
+    income = [
+        dict(x) for x in conn.execute(
+            "SELECT amount,source,date FROM income"
+        ).fetchall()
+    ]
 
     conn.close()
 
-
-    expenses = [dict(row) for row in rows]
-
-
-    # Basic calculations
-    total = sum(
-        float(expense["amount"])
-        for expense in expenses
+    total_expenses = sum(
+        float(x["amount"]) for x in expenses
     )
 
-    transaction_count = len(expenses)
+    total_income = sum(
+        float(x["amount"]) for x in income
+    )
 
+    balance = total_income - total_expenses
 
     categories = {}
 
-    for expense in expenses:
+    for x in expenses:
 
-        category = expense["category"]
+        category = x["category"]
 
         categories[category] = (
             categories.get(category, 0)
-            + float(expense["amount"])
+            + float(x["amount"])
         )
 
-
-    if categories:
-
-        top_category = max(
-            categories,
-            key=categories.get
-        )
-
-    else:
-
-        top_category = "None"
-
-
-    # API key
     api_key = os.getenv("OPENAI_API_KEY")
 
-
     if not api_key:
-
         return jsonify({
-            "answer":
-            "⚠️ OPENAI_API_KEY is not configured in Render."
+            "answer": (
+                f"Income: ₹{total_income:,.2f}\n"
+                f"Expenses: ₹{total_expenses:,.2f}\n"
+                f"Balance: ₹{balance:,.2f}"
+            )
         })
-
 
     try:
 
         from openai import OpenAI
 
-        client = OpenAI(
-            api_key=api_key
-        )
-
-
-        expense_summary = "\n".join(
-            [
-                f"- {e['date']} | "
-                f"{e['category']} | "
-                f"₹{float(e['amount']):,.2f} | "
-                f"{e['note'] or 'No description'}"
-                for e in expenses
-            ]
-        )
-
+        client = OpenAI(api_key=api_key)
 
         prompt = f"""
-You are an intelligent personal finance assistant.
-
-Answer the user's question using ONLY the expense information
-provided below.
+You are a personal finance assistant.
 
 User question:
 {question}
 
-Total spending:
-₹{total:,.2f}
+Financial information:
 
-Number of transactions:
-{transaction_count}
+Total income:
+₹{total_income:,.2f}
 
-Category totals:
+Total expenses:
+₹{total_expenses:,.2f}
+
+Current balance:
+₹{balance:,.2f}
+
+Category spending:
 {categories}
 
-Highest spending category:
-{top_category}
-
 Expense records:
-{expense_summary}
+{expenses}
 
-Give a clear and useful answer.
+Income records:
+{income}
 
-Use Indian Rupees (₹).
-
-If the user asks for advice, provide practical and
-reasonable suggestions.
-
-Never invent expenses or financial information.
+Give a concise, practical answer.
+Use Indian Rupees.
+Do not invent financial information.
 """
-
 
         response = client.responses.create(
             model="gpt-5.6-luna",
             input=prompt
         )
 
-
-        answer = response.output_text
-
-
         return jsonify({
-            "answer": answer
+            "answer": response.output_text
         })
-
 
     except Exception as e:
 
         print("AI ERROR:", repr(e))
 
         return jsonify({
-            "answer":
-            "⚠️ AI request failed.\n\n"
-            "Error: " + str(e)
+            "answer": (
+                f"Income: ₹{total_income:,.2f}\n"
+                f"Expenses: ₹{total_expenses:,.2f}\n"
+                f"Balance: ₹{balance:,.2f}\n\n"
+                "AI service is temporarily unavailable."
+            )
         })
 
 
@@ -301,8 +346,6 @@ def health():
         "message": "Smart Expense Tracker is running"
     })
 
-
-# ---------------- START ----------------
 
 if __name__ == "__main__":
 
