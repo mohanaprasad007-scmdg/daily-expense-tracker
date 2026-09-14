@@ -8,160 +8,327 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
 
-body{background:#f4f6fa;color:#172033;min-height:100vh}
+body{
+background:#f4f6fa;
+color:#172033;
+min-height:100vh
+}
 
 header{
-    background:white;padding:18px 6%;
-    border-bottom:1px solid #e5e7eb;
-    display:flex;justify-content:space-between;align-items:center;
-    position:sticky;top:0;z-index:10
+background:white;
+padding:18px 6%;
+border-bottom:1px solid #e5e7eb;
+display:flex;
+justify-content:space-between;
+align-items:center;
+position:sticky;
+top:0;
+z-index:10
 }
 
 .logo{font-size:22px;font-weight:800}
 
-.nav{display:flex;gap:8px;flex-wrap:wrap}
-
-.nav a{
-    text-decoration:none;background:#111827;color:white;
-    padding:10px 14px;border-radius:10px;font-size:13px
+.nav{
+display:flex;
+gap:8px;
+flex-wrap:wrap
 }
 
-.container{width:88%;max-width:1200px;margin:30px auto}
+.nav a{
+text-decoration:none;
+background:#111827;
+color:white;
+padding:10px 14px;
+border-radius:10px;
+font-size:13px
+}
+
+.container{
+width:88%;
+max-width:1200px;
+margin:30px auto
+}
 
 .hero{margin-bottom:25px}
-.hero h1{font-size:32px;margin-bottom:7px}
+
+.hero h1{
+font-size:32px;
+margin-bottom:7px
+}
+
 .hero p{color:#6b7280}
 
 .cards{
-    display:grid;grid-template-columns:repeat(5,1fr);
-    gap:15px;margin-bottom:22px
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:15px;
+margin-bottom:22px
 }
 
 .card,.panel{
-    background:white;border:1px solid #e5e7eb;
-    border-radius:18px;box-shadow:0 5px 20px rgba(0,0,0,.04)
+background:white;
+border:1px solid #e5e7eb;
+border-radius:18px;
+box-shadow:0 5px 20px rgba(0,0,0,.04)
 }
 
 .card{padding:18px}
-.card span{color:#6b7280;font-size:13px}
-.card h2{margin-top:8px;font-size:22px}
+
+.card span{
+color:#6b7280;
+font-size:13px
+}
+
+.card h2{
+margin-top:8px;
+font-size:22px
+}
+
 .balance{font-size:24px!important}
 
 .grid{
-    display:grid;grid-template-columns:1fr 1fr;gap:20px
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px
 }
 
-.panel{padding:22px;margin-bottom:20px}
-.panel h2{font-size:20px;margin-bottom:17px}
+.panel{
+padding:22px;
+margin-bottom:20px
+}
 
-.form{display:grid;gap:12px}
+.panel h2{
+font-size:20px;
+margin-bottom:17px
+}
+
+.form{
+display:grid;
+gap:12px
+}
 
 input,select{
-    width:100%;padding:13px;
-    border:1px solid #d7dce5;border-radius:10px;
-    outline:none;background:white
+width:100%;
+padding:13px;
+border:1px solid #d7dce5;
+border-radius:10px;
+outline:none;
+background:white
 }
 
-input:focus,select:focus{border-color:#111827}
+input:focus,select:focus{
+border-color:#111827
+}
 
 button{
-    border:0;border-radius:10px;padding:13px;
-    background:#111827;color:white;cursor:pointer;
-    font-weight:600
+border:0;
+border-radius:10px;
+padding:13px;
+background:#111827;
+color:white;
+cursor:pointer;
+font-weight:600
 }
 
 button:hover{opacity:.9}
 
-.income-list{
-    margin-top:15px;
-    max-height:190px;
-    overflow:auto
-}
-
-.income-item{
-    display:flex;justify-content:space-between;
-    align-items:center;padding:11px 0;
-    border-bottom:1px solid #edf0f4
-}
-
-.income-item small{color:#6b7280}
-
 .delete{
-    background:#fee2e2;color:#b91c1c;
-    padding:7px 9px;margin-left:8px
+background:#fee2e2;
+color:#b91c1c;
+padding:7px 9px;
+margin-left:8px
+}
+
+.income-list,
+.recurring-list{
+margin-top:15px;
+max-height:230px;
+overflow:auto
+}
+
+.income-item,
+.recurring-item{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:12px 0;
+border-bottom:1px solid #edf0f4
+}
+
+.income-item small,
+.recurring-item small{
+color:#6b7280
 }
 
 .budget{margin-top:14px}
 
 .progress{
-    height:12px;background:#e5e7eb;
-    border-radius:20px;overflow:hidden;margin-top:9px
+height:12px;
+background:#e5e7eb;
+border-radius:20px;
+overflow:hidden;
+margin-top:9px
 }
 
 .progress div{
-    height:100%;width:0;
-    background:#111827;transition:.3s
+height:100%;
+width:0;
+background:#111827;
+transition:.3s
 }
 
 .filters{
-    display:grid;
-    grid-template-columns:2fr 1fr 1fr;
-    gap:10px;margin-bottom:15px
+display:grid;
+grid-template-columns:2fr 1fr 1fr;
+gap:10px;
+margin-bottom:15px
 }
 
 .expense{
-    display:flex;justify-content:space-between;
-    align-items:center;padding:14px 0;
-    border-bottom:1px solid #edf0f4
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:14px 0;
+border-bottom:1px solid #edf0f4
 }
 
-.expense strong{display:block;margin-bottom:5px}
-.expense small{color:#6b7280}
+.expense strong{
+display:block;
+margin-bottom:5px
+}
+
+.expense small{
+color:#6b7280
+}
 
 .amount{font-weight:700}
 
 .ai{
-    background:#111827;color:white
+background:#111827;
+color:white
 }
 
-.ai p{color:#cbd5e1;margin-bottom:15px}
+.ai p{
+color:#cbd5e1;
+margin-bottom:15px
+}
 
-.ai-row{display:flex;gap:10px}
+.ai-row{
+display:flex;
+gap:10px
+}
 
-.ai input{background:white;color:#111827}
+.ai input{
+background:white;
+color:#111827
+}
 
-.ai button{background:white;color:#111827;white-space:nowrap}
+.ai button{
+background:white;
+color:#111827;
+white-space:nowrap
+}
 
 .ai-answer{
-    background:#1f2937;border-radius:12px;
-    padding:15px;margin-top:15px;
-    line-height:1.6;min-height:50px
+background:#1f2937;
+border-radius:12px;
+padding:15px;
+margin-top:15px;
+line-height:1.6;
+min-height:50px;
+white-space:pre-wrap
 }
 
-.empty{text-align:center;color:#6b7280;padding:25px}
+.recurring-summary{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+margin-bottom:15px
+}
+
+.mini{
+background:#f8fafc;
+border-radius:12px;
+padding:14px
+}
+
+.mini span{
+display:block;
+font-size:12px;
+color:#6b7280;
+margin-bottom:5px
+}
+
+.mini strong{font-size:18px}
 
 .warning{color:#b45309}
 
 .positive{color:#047857}
 
+.empty{
+text-align:center;
+color:#6b7280;
+padding:25px
+}
+
+.badge{
+display:inline-block;
+padding:5px 8px;
+border-radius:8px;
+font-size:11px;
+background:#eef2ff;
+margin-top:5px
+}
+
+.danger-badge{
+background:#fee2e2;
+color:#b91c1c
+}
+
 @media(max-width:1000px){
-    .cards{grid-template-columns:repeat(3,1fr)}
+.cards{grid-template-columns:repeat(3,1fr)}
 }
 
 @media(max-width:800px){
-    .grid{grid-template-columns:1fr}
-    .cards{grid-template-columns:repeat(2,1fr)}
+.grid{grid-template-columns:1fr}
+.cards{grid-template-columns:repeat(2,1fr)}
+.recurring-summary{grid-template-columns:1fr}
 }
 
 @media(max-width:550px){
-    header{padding:14px 4%}
-    .logo{font-size:18px}
-    .container{width:92%;margin:22px auto}
-    .cards{grid-template-columns:1fr 1fr}
-    .card{padding:14px}
-    .card h2{font-size:19px}
-    .filters{grid-template-columns:1fr}
-    .ai-row{flex-direction:column}
+
+header{padding:14px 4%}
+
+.logo{font-size:18px}
+
+.container{
+width:92%;
+margin:22px auto
+}
+
+.cards{
+grid-template-columns:1fr 1fr
+}
+
+.card{padding:14px}
+
+.card h2{font-size:19px}
+
+.filters{
+grid-template-columns:1fr
+}
+
+.ai-row{
+flex-direction:column
+}
+
+.expense,
+.income-item,
+.recurring-item{
+align-items:flex-start;
+gap:10px
+}
+
 }
 </style>
 </head>
@@ -175,6 +342,7 @@ button:hover{opacity:.9}
 <div class="nav">
 <a href="/analytics.html">📊 Analytics</a>
 <a href="/goals.html">🎯 Goals</a>
+<a href="/recurring.html">🔄 Recurring</a>
 </div>
 
 </header>
@@ -182,8 +350,13 @@ button:hover{opacity:.9}
 <div class="container">
 
 <div class="hero">
+
 <h1>Financial Dashboard</h1>
-<p>Track your money, understand your spending and reach your goals.</p>
+
+<p>
+Track your money, understand your spending and reach your goals.
+</p>
+
 </div>
 
 
@@ -213,7 +386,7 @@ button:hover{opacity:.9}
 
 <div class="card">
 <span>Current Balance</span>
-<h2 id="balance" class="balance">₹0</h2>
+<h2 id="balance" class="balance positive">₹0</h2>
 </div>
 
 </div>
@@ -222,7 +395,7 @@ button:hover{opacity:.9}
 <div class="grid">
 
 
-<!-- ADD EXPENSE -->
+<!-- EXPENSE -->
 
 <div class="panel">
 
@@ -253,7 +426,10 @@ required>
 
 <input id="date" type="date" required>
 
-<input id="note" type="text" placeholder="Description">
+<input
+id="note"
+type="text"
+placeholder="Description">
 
 <button>Add Expense</button>
 
@@ -262,7 +438,7 @@ required>
 </div>
 
 
-<!-- ADD INCOME -->
+<!-- INCOME -->
 
 <div class="panel">
 
@@ -292,6 +468,51 @@ required>
 <div id="incomeList" class="income-list"></div>
 
 </div>
+
+</div>
+
+
+<!-- RECURRING PAYMENTS -->
+
+<div class="panel">
+
+<h2>🔄 Recurring Payments</h2>
+
+<div class="recurring-summary">
+
+<div class="mini">
+<span>Monthly Commitment</span>
+<strong id="recurringMonthly">₹0</strong>
+</div>
+
+<div class="mini">
+<span>Active Payments</span>
+<strong id="recurringCount">0</strong>
+</div>
+
+<div class="mini">
+<span>Next Payment</span>
+<strong id="nextPayment">None</strong>
+</div>
+
+</div>
+
+<div id="recurringList" class="recurring-list"></div>
+
+<a
+href="/recurring.html"
+style="
+display:block;
+text-align:center;
+margin-top:15px;
+text-decoration:none;
+background:#111827;
+color:white;
+padding:12px;
+border-radius:10px;
+">
+Manage Recurring Payments →
+</a>
 
 </div>
 
@@ -370,6 +591,7 @@ placeholder="Search description...">
 
 <p>
 Ask questions about your income, expenses and financial decisions.
+The AI also considers your recurring commitments.
 </p>
 
 <div class="ai-row">
@@ -395,6 +617,7 @@ placeholder="Example: Can I afford ₹5,000?">
 
 let expenses=[];
 let incomes=[];
+let recurring=[];
 
 
 function $(id){
@@ -422,40 +645,50 @@ maximumFractionDigits:2
 }
 
 
-if(!$("date").value)
 $("date").value=todayDate();
-
-if(!$("incomeDate").value)
 $("incomeDate").value=todayDate();
 
+
+/* LOAD EVERYTHING */
 
 async function loadData(){
 
 try{
 
-const [expenseResponse,incomeResponse]=await Promise.all([
+const [
+expenseResponse,
+incomeResponse,
+recurringResponse
+]=await Promise.all([
 
 fetch("/api/expenses"),
-fetch("/api/income")
+fetch("/api/income"),
+fetch("/api/recurring")
 
 ]);
 
 expenses=await expenseResponse.json();
 incomes=await incomeResponse.json();
+recurring=await recurringResponse.json();
 
 updateDashboard();
 showHistory();
 showIncome();
+showRecurring();
 
 }catch(error){
 
 $("history").innerHTML=
 '<div class="empty">Unable to load financial data.</div>';
 
-}
+console.error(error);
 
 }
 
+}
+
+
+/* DASHBOARD */
 
 function updateDashboard(){
 
@@ -492,23 +725,24 @@ $("balance").textContent=money(balance);
 
 
 $("balance").className=
-balance>=0
-?"balance positive"
-:"balance warning";
+"balance "+
+(balance>=0?"positive":"warning");
 
 
 updateBudget(monthTotal);
+updateRecurringSummary();
 
 }
 
+
+/* BUDGET */
 
 function updateBudget(spent){
 
 const budget=
 Number(localStorage.getItem("budget")||0);
 
-$("budget").value=
-budget||"";
+$("budget").value=budget||"";
 
 $("budgetText").textContent=
 money(spent)+" / "+money(budget);
@@ -522,15 +756,9 @@ $("progress").style.width=
 percent+"%";
 
 
-if(budget && spent>budget){
-
-$("budgetText").className="warning";
-
-}else{
-
-$("budgetText").className="";
-
-}
+$("budgetText").className=
+budget && spent>budget
+?"warning":"";
 
 }
 
@@ -547,7 +775,7 @@ updateDashboard();
 });
 
 
-/* EXPENSE */
+/* ADD EXPENSE */
 
 $("expenseForm").addEventListener(
 "submit",
@@ -582,7 +810,6 @@ const result=await response.json();
 if(!result.success){
 
 alert(result.error||"Unable to add expense");
-
 return;
 
 }
@@ -591,12 +818,12 @@ return;
 $("amount").value="";
 $("note").value="";
 
-loadData();
+await loadData();
 
 });
 
 
-/* INCOME */
+/* ADD INCOME */
 
 $("incomeForm").addEventListener(
 "submit",
@@ -630,7 +857,6 @@ const result=await response.json();
 if(!result.success){
 
 alert(result.error||"Unable to add income");
-
 return;
 
 }
@@ -639,10 +865,12 @@ return;
 $("incomeAmount").value="";
 $("incomeSource").value="";
 
-loadData();
+await loadData();
 
 });
 
+
+/* INCOME LIST */
 
 function showIncome(){
 
@@ -700,6 +928,160 @@ return;
 
 await fetch(
 "/api/income/"+id,
+{method:"DELETE"}
+);
+
+loadData();
+
+}
+
+
+/* RECURRING */
+
+function monthlyAmount(payment){
+
+const amount=Number(payment.amount);
+
+if(payment.frequency==="weekly")
+return amount*52/12;
+
+if(payment.frequency==="yearly")
+return amount/12;
+
+return amount;
+
+}
+
+
+function updateRecurringSummary(){
+
+const monthly=recurring.reduce(
+(sum,p)=>sum+monthlyAmount(p),
+0
+);
+
+$("recurringMonthly").textContent=
+money(monthly);
+
+$("recurringCount").textContent=
+recurring.length;
+
+
+if(!recurring.length){
+
+$("nextPayment").textContent="None";
+return;
+
+}
+
+
+const sorted=[...recurring].sort(
+(a,b)=>
+a.next_date.localeCompare(b.next_date)
+);
+
+$("nextPayment").textContent=
+sorted[0].next_date;
+
+}
+
+
+function showRecurring(){
+
+const box=$("recurringList");
+
+if(!recurring.length){
+
+box.innerHTML=
+'<div class="empty">No recurring payments yet.</div>';
+
+return;
+
+}
+
+
+box.innerHTML=recurring
+.slice(0,8)
+.map(p=>{
+
+const monthly=monthlyAmount(p);
+
+const dueDate=new Date(p.next_date);
+const now=new Date();
+
+const diff=Math.ceil(
+(dueDate-now)/(1000*60*60*24)
+);
+
+let badge="";
+
+if(diff>=0 && diff<=7){
+
+badge=
+'<span class="badge danger-badge">⚠️ Due soon</span>';
+
+}else{
+
+badge=
+'<span class="badge">'+
+escapeHTML(p.frequency)+
+'</span>';
+
+}
+
+return `
+
+<div class="recurring-item">
+
+<div>
+
+<strong>
+${escapeHTML(p.name)}
+</strong>
+
+<br>
+
+<small>
+₹${Number(p.amount).toLocaleString("en-IN")}
+ • Next: ${p.next_date}
+</small>
+
+<br>
+
+${badge}
+
+</div>
+
+<div>
+
+<strong>
+${money(monthly)}/mo
+</strong>
+
+<button
+class="delete"
+onclick="deleteRecurring(${p.id})">
+×
+</button>
+
+</div>
+
+</div>
+
+`;
+
+}).join("");
+
+}
+
+
+async function deleteRecurring(id){
+
+if(!confirm("Delete this recurring payment?"))
+return;
+
+await fetch(
+"/api/recurring/"+id,
 {method:"DELETE"}
 );
 
@@ -766,7 +1148,6 @@ if(sort==="low"){
 data.sort((a,b)=>
 Number(a.amount)-Number(b.amount)
 );
-
 
 }
 
@@ -913,6 +1294,8 @@ askAI();
 });
 
 
+/* SECURITY */
+
 function escapeHTML(text){
 
 return String(text)
@@ -925,9 +1308,11 @@ return String(text)
 }
 
 
+/* START */
+
 loadData();
 
 </script>
 
 </body>
-    </html>
+</html>
