@@ -8,107 +8,150 @@
 *{box-sizing:border-box}
 body{margin:0;background:#f4f6fa;color:#172033;font:15px Arial,sans-serif}
 header{background:#fff;padding:15px 5%;border-bottom:1px solid #ddd;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5}
-.logo{font-size:20px;font-weight:800}
+.logo{font-size:21px;font-weight:800}
 nav{display:flex;gap:7px;flex-wrap:wrap}
-nav a,button{background:#111827;color:#fff;border:0;border-radius:10px;padding:10px 13px;text-decoration:none;cursor:pointer;font-weight:600}
-main{width:90%;max-width:1200px;margin:25px auto}
-p{color:#667085}
-.health{background:#111827;color:#fff;border-radius:20px;padding:22px;display:flex;gap:25px;align-items:center;margin:20px 0}
-.circle{width:135px;height:135px;border:9px solid #555;border-radius:50%;display:grid;place-items:center;text-align:center;flex:none}
-.circle b{font-size:38px}.circle small{display:block;color:#bbb}
-.bar,.progress{height:10px;background:#ddd;border-radius:20px;overflow:hidden;margin-top:12px}
-.bar i,.progress i{display:block;height:100%;width:0;background:#111827}
-.health .bar{background:#444}.health .bar i{background:#fff}
-.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:15px 0}
-.card,.panel{background:#fff;border:1px solid #e5e7eb;border-radius:17px;padding:17px;box-shadow:0 4px 18px #00000008}
-.card span{font-size:12px;color:#667085}.card b{display:block;font-size:20px;margin-top:7px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
-.form{display:grid;gap:9px}
-input,select{padding:12px;border:1px solid #ccd2da;border-radius:9px;width:100%;background:#fff}
-.del{background:#fee2e2;color:#b91c1c;padding:6px 9px}
-.item{display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid #eee}
-.item small{display:block;color:#667085;margin-top:4px}
-.action{background:#f8fafc;border-left:4px solid #111827;border-radius:10px;padding:13px;margin:8px 0}
-.good{border-left-color:#087f5b}.warn{border-left-color:#b7791f}.bad{border-left-color:#c92a2a}
-.challenge{background:#f8fafc;border-radius:12px;padding:15px}
-.challenge-top{display:flex;justify-content:space-between}
-.filters{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px}
-.ai{background:#111827;color:#fff}.ai p{color:#cbd5e1}
-.airow{display:flex;gap:8px}.airow input{flex:1}
-.airow button{background:#fff;color:#111827}
-.answer{background:#1f2937;padding:14px;border-radius:10px;margin-top:10px;white-space:pre-wrap;line-height:1.5}
-.empty{text-align:center;padding:18px;color:#667085}
-.receipt{background:#f8fafc;border:2px dashed #cbd5e1;text-align:center;padding:22px;border-radius:14px}
-.scanbtn{display:inline-block;background:#111827;color:#fff;padding:14px 20px;border-radius:10px;cursor:pointer;font-weight:700}
-.scanstatus{margin-top:12px;font-weight:600}
+nav a{padding:9px 11px;border-radius:9px;background:#eef2f7;color:#172033;text-decoration:none;font-size:13px}
+.container{width:92%;max-width:1100px;margin:25px auto}
+h1{margin:0 0 5px;font-size:29px}
+.sub{color:#667085;margin:0 0 20px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:17px}
+.panel{background:#fff;border:1px solid #e1e5ea;border-radius:17px;padding:19px;margin-bottom:17px;box-shadow:0 4px 18px #00000007}
+.form{display:grid;gap:11px}
+input,select{width:100%;padding:12px;border:1px solid #cbd3dd;border-radius:10px;background:#fff;font-size:14px}
+button{border:0;background:#111827;color:#fff;padding:12px 15px;border-radius:10px;font-weight:700;cursor:pointer}
+button:active{transform:scale(.98)}
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0 14px}
+.quick button{background:#eef2f7;color:#172033;padding:11px 5px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:17px}
+.stat{background:#fff;border:1px solid #e1e5ea;border-radius:14px;padding:15px}
+.stat span{font-size:12px;color:#667085}
+.stat strong{display:block;font-size:21px;margin-top:6px}
+.receipt{background:#f8fafc;border:2px dashed #cbd5e1;text-align:center;padding:20px;border-radius:13px}
+.scanbtn{display:inline-block;background:#111827;color:#fff;padding:13px 19px;border-radius:10px;cursor:pointer;font-weight:700}
 .preview{max-width:100%;max-height:220px;border-radius:10px;margin-top:12px;display:none}
-@media(max-width:900px){.cards{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:1fr}}
-@media(max-width:600px){
+.scanstatus{margin-top:11px;font-weight:600}
+.filters{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:9px}
+.expense{border:1px solid #e5e7eb;border-radius:13px;padding:14px;margin:9px 0}
+.expTop{display:flex;justify-content:space-between;gap:10px}
+.expName{font-weight:700}
+.expAmount{font-weight:800}
+.expInfo{font-size:12px;color:#667085;margin-top:6px;line-height:1.6}
+.empty{text-align:center;color:#667085;padding:25px}
+.clear{background:#fee2e2;color:#b91c1c}
+.ai{background:#111827;color:#fff}
+.ai p{color:#d1d5db;line-height:1.6}
+.links{display:flex;gap:8px;flex-wrap:wrap}
+.links a{background:#111827;color:#fff;text-decoration:none;padding:11px 13px;border-radius:9px;font-weight:700;font-size:13px}
+@media(max-width:800px){
+.grid{grid-template-columns:1fr}
+.stats{grid-template-columns:1fr 1fr}
+.filters{grid-template-columns:1fr 1fr}
+.quick{grid-template-columns:1fr 1fr}
+}
+@media(max-width:500px){
 header{align-items:flex-start;gap:10px;flex-direction:column}
-main{width:92%}.cards{grid-template-columns:1fr 1fr}
-.health{flex-direction:column;text-align:center}
-.filters{grid-template-columns:1fr}.airow{flex-direction:column}
+nav{width:100%}
+nav a{flex:1;text-align:center}
+.stats{grid-template-columns:1fr 1fr}
+.filters{grid-template-columns:1fr}
+.quick{grid-template-columns:1fr 1fr}
+h1{font-size:25px}
 }
 </style>
 </head>
+
 <body>
 
 <header>
 <div class="logo">💰 Smart Money Coach</div>
 <nav>
 <a href="/analytics.html">📊 Analytics</a>
-<a href="/goals.html">🎯 Goals</a>
+<a href="/budget.html">🎯 Budget</a>
+<a href="/goals.html">🏆 Goals</a>
 <a href="/recurring.html">🔄 Recurring</a>
+<a href="/coach.html">🤖 AI Coach</a>
+<a href="/intelligence.html">🧠 Intelligence</a>
 </nav>
 </header>
 
-<main>
+<div class="container">
 
-<h1>Financial Command Center</h1>
-<p>Track your money, improve your habits and reach your goals.</p>
+<h1>💰 Expense Dashboard</h1>
+<p class="sub">Track, search and understand your money instantly.</p>
 
-<section class="health">
-<div class="circle">
-<div><b id="score">0</b><small>/ 100</small></div>
+<div class="stats">
+<div class="stat">
+<span>Total Expenses</span>
+<strong id="total">₹0</strong>
 </div>
-<div>
-<h2 id="healthTitle">Your Financial Health</h2>
-<p id="healthText">Add your financial data to calculate your score.</p>
-<div class="bar"><i id="scoreBar"></i></div>
+<div class="stat">
+<span>Transactions</span>
+<strong id="count">0</strong>
 </div>
-</section>
-
-<div class="cards">
-<div class="card"><span>Today</span><b id="today">₹0</b></div>
-<div class="card"><span>This Month</span><b id="month">₹0</b></div>
-<div class="card"><span>Income</span><b id="income">₹0</b></div>
-<div class="card"><span>Expenses</span><b id="total">₹0</b></div>
-<div class="card"><span>Balance</span><b id="balance">₹0</b></div>
+<div class="stat">
+<span>Filtered Total</span>
+<strong id="filteredTotal">₹0</strong>
+</div>
+<div class="stat">
+<span>Today</span>
+<strong id="todayTotal">₹0</strong>
+</div>
 </div>
 
 <div class="grid">
 
 <section class="panel">
+
 <h2>➕ Add Expense</h2>
+
+<div class="quick">
+<button type="button" onclick="quickCat('Food')">🍔 Food</button>
+<button type="button" onclick="quickCat('Travel')">🚗 Travel</button>
+<button type="button" onclick="quickCat('Shopping')">🛍️ Shopping</button>
+<button type="button" onclick="quickCat('Bills')">💡 Bills</button>
+<button type="button" onclick="quickCat('Education')">📚 Education</button>
+<button type="button" onclick="quickCat('Entertainment')">🎬 Fun</button>
+<button type="button" onclick="quickCat('Health')">❤️ Health</button>
+<button type="button" onclick="quickCat('Other')">📦 Other</button>
+</div>
+
 <form id="expenseForm" class="form">
+
 <input id="amount" type="number" step=".01" placeholder="Amount ₹" required>
+
 <select id="category" required>
 <option value="">Category</option>
-<option>Food</option><option>Travel</option><option>Shopping</option>
-<option>Bills</option><option>Education</option>
-<option>Entertainment</option><option>Health</option><option>Other</option>
+<option>Food</option>
+<option>Travel</option>
+<option>Shopping</option>
+<option>Bills</option>
+<option>Education</option>
+<option>Entertainment</option>
+<option>Health</option>
+<option>Other</option>
 </select>
+
 <input id="date" type="date" required>
+
 <input id="note" placeholder="Description">
-<button>Add Expense</button>
+
+<button type="submit">➕ Add Expense</button>
+
 </form>
+
 </section>
 
 <section class="panel">
+
 <h2>📸 AI Receipt Scanner</h2>
-<p>Take a clear receipt photo. AI will extract the amount, category, date and description.</p>
+
+<p>
+Take a clear receipt photo. AI will extract the amount,
+category, date and description.
+</p>
 
 <div class="receipt">
+
 <label class="scanbtn">
 📷 Scan Receipt
 <input id="receiptFile" type="file" accept="image/*" capture="environment" hidden>
@@ -119,320 +162,438 @@ main{width:92%}.cards{grid-template-columns:1fr 1fr}
 <div id="scanStatus" class="scanstatus">
 Ready to scan.
 </div>
-</div>
-</section>
 
 </div>
 
-<section class="panel">
-<h2>💵 Add Income</h2>
-<form id="incomeForm" class="form">
-<input id="incomeAmount" type="number" step=".01" placeholder="Income ₹" required>
-<input id="incomeSource" placeholder="Source" required>
-<input id="incomeDate" type="date" required>
-<button>Add Income</button>
-</form>
-<div id="incomeList"></div>
 </section>
 
-<section class="panel">
-<h2>🧠 Smart Action Plan</h2>
-<div id="actions"><div class="empty">Analyzing...</div></div>
-</section>
-
-<section class="panel">
-<h2>🎯 Weekly Savings Challenge</h2>
-<div class="challenge">
-<div class="challenge-top">
-<b>Save ₹500 this week</b>
-<b id="challengeAmount">₹0 / ₹500</b>
 </div>
-<div class="progress"><i id="challengeProgress"></i></div>
-<div id="streak">🔥 Savings streak: 0 days</div>
-</div>
-</section>
 
 <section class="panel">
-<h2>🔄 Recurring Payments</h2>
-<div class="cards">
-<div class="card"><span>Monthly Commitment</span><b id="recurringMonthly">₹0</b></div>
-<div class="card"><span>Active</span><b id="recurringCount">0</b></div>
-<div class="card"><span>Next Payment</span><b id="nextPayment">None</b></div>
-</div>
-<div id="recurringList"></div>
-<a href="/recurring.html">Manage Recurring →</a>
-</section>
 
-<section class="panel">
-<h2>💳 Monthly Budget</h2>
-<input id="budget" type="number" placeholder="Monthly budget ₹">
-<p><b id="budgetText">₹0 / ₹0</b></p>
-<div class="progress"><i id="budgetProgress"></i></div>
-</section>
+<h2>🔎 Smart Expense Search</h2>
 
-<section class="panel">
-<h2>🔍 Expense History</h2>
 <div class="filters">
-<input id="search" placeholder="Search description">
+
+<input id="search" placeholder="Search merchant, note, category...">
+
 <select id="filterCategory">
-<option value="">All categories</option>
-<option>Food</option><option>Travel</option><option>Shopping</option>
-<option>Bills</option><option>Education</option>
-<option>Entertainment</option><option>Health</option><option>Other</option>
+<option value="">All Categories</option>
+<option>Food</option>
+<option>Travel</option>
+<option>Shopping</option>
+<option>Bills</option>
+<option>Education</option>
+<option>Entertainment</option>
+<option>Health</option>
+<option>Other</option>
 </select>
+
+<select id="filterDate">
+<option value="">All Time</option>
+<option value="today">Today</option>
+<option value="week">This Week</option>
+<option value="month">This Month</option>
+</select>
+
 <select id="sort">
-<option value="new">Newest</option>
-<option value="old">Oldest</option>
-<option value="high">Highest</option>
-<option value="low">Lowest</option>
+<option value="new">Newest First</option>
+<option value="old">Oldest First</option>
+<option value="high">Highest Amount</option>
+<option value="low">Lowest Amount</option>
 </select>
+
 </div>
-<div id="history"></div>
+
+<br>
+
+<button class="clear" onclick="clearFilters()">
+✕ Clear Filters
+</button>
+
+</section>
+
+<section class="panel">
+
+<h2>📋 Expenses</h2>
+
+<div id="expenses">
+<div class="empty">Loading expenses...</div>
+</div>
+
 </section>
 
 <section class="panel ai">
-<h2>🤖 AI Money Coach</h2>
-<p>Ask about your spending, saving, budget or whether you can afford something.</p>
-<div class="airow">
-<input id="aiQuestion" placeholder="Can I afford ₹5,000?">
-<button onclick="askAI()">Ask Coach</button>
-</div>
-<div id="aiAnswer" class="answer">👋 Ask me anything about your finances.</div>
+
+<h2>🤖 Quick AI Advice</h2>
+
+<p id="aiText">
+Add some expenses and your financial data will appear here.
+</p>
+
 </section>
 
-</main>
+<section class="panel">
+
+<h2>🚀 Smart Money Tools</h2>
+
+<div class="links">
+<a href="/analytics.html">📊 Analytics</a>
+<a href="/budget.html">🎯 Budget</a>
+<a href="/goals.html">🏆 Savings Goals</a>
+<a href="/recurring.html">🔄 Recurring</a>
+<a href="/coach.html">🤖 AI Coach</a>
+<a href="/intelligence.html">🧠 Intelligence</a>
+</div>
+
+</section>
+
+</div>
 
 <script>
-let expenses=[],incomes=[],recurring=[];
+
 const $=id=>document.getElementById(id);
-const money=n=>"₹"+Number(n||0).toLocaleString("en-IN",{maximumFractionDigits:2});
+
+let expenses=[];
+
+function money(n){
+return "₹"+Number(n||0).toLocaleString(
+"en-IN",
+{maximumFractionDigits:2}
+);
+}
 
 function today(){
-let d=new Date();
-return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+
+const d=new Date();
+
+return d.getFullYear()+"-"+
+String(d.getMonth()+1).padStart(2,"0")+"-"+
+String(d.getDate()).padStart(2,"0");
+
 }
 
-function esc(x){
-return String(x??"").replaceAll("&","&amp;").replaceAll("<","&lt;")
-.replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+function escapeHTML(x){
+
+return String(x??"")
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
+
 }
 
-$("date").value=today();
-$("incomeDate").value=today();
+function quickCat(cat){
+$("category").value=cat;
+$("amount").focus();
+}
 
-async function load(){
+async function loadExpenses(){
+
 try{
-let r=await Promise.all([
-fetch("/api/expenses"),fetch("/api/income"),fetch("/api/recurring")
-]);
-expenses=await r[0].json();
-incomes=await r[1].json();
-recurring=await r[2].json();
-dashboard();history();incomeList();recurringList();challenge();
-}catch(e){console.error(e)}
+
+const response=await fetch("/api/expenses");
+
+if(!response.ok)throw new Error();
+
+const data=await response.json();
+
+expenses=Array.isArray(data)
+?data
+:(data.expenses||[]);
+
+render();
+
+}catch(e){
+
+$("expenses").innerHTML=
+'<div class="empty">❌ Could not load expenses.</div>';
+
 }
 
-function recurringMonthly(){
-return recurring.reduce((s,p)=>{
-let a=Number(p.amount);
-return s+(p.frequency=="weekly"?a*52/12:p.frequency=="yearly"?a/12:a);
-},0);
 }
 
-function dashboard(){
-let t=today(),m=t.slice(0,7);
-let day=expenses.filter(x=>x.date==t).reduce((s,x)=>s+Number(x.amount),0);
-let mt=expenses.filter(x=>x.date.startsWith(m)).reduce((s,x)=>s+Number(x.amount),0);
-let out=expenses.reduce((s,x)=>s+Number(x.amount),0);
-let inc=incomes.reduce((s,x)=>s+Number(x.amount),0);
-$("today").textContent=money(day);
-$("month").textContent=money(mt);
-$("income").textContent=money(inc);
-$("total").textContent=money(out);
-$("balance").textContent=money(inc-out);
-budget(mt);health(inc,out,mt);actions(inc,out,mt);
+function totalAll(){
+return expenses.reduce(
+(s,e)=>s+Number(e.amount||0),0
+);
 }
 
-function health(inc,out,mt){
-if(!inc&&!out)return;
-let s=50;
-if(inc){
-let r=(inc-out)/inc;
-s+=r>=.3?30:r>=.2?25:r>=.1?15:r>=0?5:-20;
-}
-let b=Number(localStorage.budget||0);
-if(b){
-let u=mt/b;
-s+=u<=.7?15:u<=.9?8:u<=1?-5:-20;
-}
-let r=recurringMonthly();
-if(inc){
-let q=r/inc;
-s+=q<.2?10:q>.4?-10:0;
-}
-s=Math.max(0,Math.min(100,Math.round(s)));
-$("score").textContent=s;
-$("scoreBar").style.width=s+"%";
-$("healthTitle").textContent=s>=80?"🟢 Excellent Financial Health":
-s>=60?"🟡 Good Financial Health":s>=40?"🟠 Needs Attention":"🔴 Financial Health Risk";
-$("healthText").textContent=s>=80?"You're managing your money very well.":
-s>=60?"You're on the right track.":
-s>=40?"A few spending changes can improve your finances.":
-"Your spending needs attention. Start reducing non-essential costs.";
+function isThisWeek(date){
+
+const d=new Date(date+"T00:00:00");
+const now=new Date();
+
+const start=new Date(now);
+start.setHours(0,0,0,0);
+start.setDate(now.getDate()-now.getDay());
+
+return d>=start&&d<=now;
+
 }
 
-function actions(inc,out,mt){
-let h="",b=Number(localStorage.budget||0),r=recurringMonthly();
-if(inc&&out>inc)h+=`<div class="action bad"><b>⚠️ Spending exceeds income</b><p>${money(out-inc)} more spent than recorded income.</p></div>`;
-else if(inc)h+=`<div class="action good"><b>💰 Money retained</b><p>You have kept ${money(inc-out)} from recorded income.</p></div>`;
-if(b&&mt>b)h+=`<div class="action bad"><b>🚨 Budget exceeded</b><p>You are ${money(mt-b)} over budget.</p></div>`;
-else if(b)h+=`<div class="action good"><b>✅ Budget under control</b><p>${money(b-mt)} remains.</p></div>`;
-if(r)h+=`<div class="action warn"><b>🔄 Recurring commitments</b><p>About ${money(r)} per month. Review unused subscriptions.</p></div>`;
-$("actions").innerHTML=h||'<div class="empty">Add income, expenses and a budget for personalized advice.</div>';
-}
+function filtered(){
 
-function budget(spent){
-let b=Number(localStorage.budget||0);
-$("budget").value=b||"";
-$("budgetText").textContent=money(spent)+" / "+money(b);
-$("budgetProgress").style.width=(b?Math.min(100,spent/b*100):0)+"%";
-}
+const q=$("search").value.trim().toLowerCase();
+const cat=$("filterCategory").value;
+const period=$("filterDate").value;
+const sort=$("sort").value;
 
-$("budget").onchange=()=>{
-localStorage.budget=Number($("budget").value)||0;
-dashboard();
-};
+let list=expenses.filter(e=>{
 
-$("expenseForm").onsubmit=async e=>{
-e.preventDefault();
-let r=await fetch("/api/expenses",{
-method:"POST",headers:{"Content-Type":"application/json"},
-body:JSON.stringify({
-amount:$("amount").value,category:$("category").value,
-date:$("date").value,note:$("note").value
-})
+const text=(
+(e.note||"")+" "+
+(e.category||"")+" "+
+(e.date||"")+" "+
+(e.amount||"")
+).toLowerCase();
+
+if(q&&!text.includes(q))return false;
+
+if(cat&&(e.category||"")!==cat)return false;
+
+const date=e.date||"";
+
+if(period==="today"&&date!==today())
+return false;
+
+if(period==="week"&&!isThisWeek(date))
+return false;
+
+if(period==="month"&&
+date.slice(0,7)!==today().slice(0,7))
+return false;
+
+return true;
+
 });
-let d=await r.json();
-if(!d.success){alert(d.error);return}
-$("amount").value="";$("note").value="";load();
-};
 
-$("incomeForm").onsubmit=async e=>{
-e.preventDefault();
-let r=await fetch("/api/income",{
-method:"POST",headers:{"Content-Type":"application/json"},
-body:JSON.stringify({
-amount:$("incomeAmount").value,
-source:$("incomeSource").value,
-date:$("incomeDate").value
-})
-});
-let d=await r.json();
-if(!d.success){alert(d.error);return}
-$("incomeAmount").value="";$("incomeSource").value="";load();
-};
+list.sort((a,b)=>{
 
-async function delExpense(id){
-if(confirm("Delete this expense?")){
-await fetch("/api/expenses/"+id,{method:"DELETE"});load();
-}
-}
+if(sort==="high")
+return Number(b.amount||0)-Number(a.amount||0);
 
-async function delIncome(id){
-if(confirm("Delete this income?")){
-await fetch("/api/income/"+id,{method:"DELETE"});load();
-}
-}
+if(sort==="low")
+return Number(a.amount||0)-Number(b.amount||0);
 
-async function delRecurring(id){
-if(confirm("Delete this recurring payment?")){
-await fetch("/api/recurring/"+id,{method:"DELETE"});load();
-}
-}
-
-function incomeList(){
-$("incomeList").innerHTML=incomes.length?
-incomes.slice(0,6).map(i=>`
-<div class="item"><div><b>${esc(i.source)}</b><small>${i.date}</small></div>
-<div>${money(i.amount)} <button class="del" onclick="delIncome(${i.id})">×</button></div></div>`).join(""):
-'<div class="empty">No income yet.</div>';
-}
-
-function recurringList(){
-$("recurringList").innerHTML=recurring.length?
-recurring.slice(0,6).map(p=>`
-<div class="item"><div><b>${esc(p.name)}</b>
-<small>${money(p.amount)} • ${esc(p.frequency)} • ${p.next_date}</small></div>
-<button class="del" onclick="delRecurring(${p.id})">×</button></div>`).join(""):
-'<div class="empty">No recurring payments yet.</div>';
-
-$("recurringMonthly").textContent=money(recurringMonthly());
-$("recurringCount").textContent=recurring.length;
-$("nextPayment").textContent=recurring.length?
-[...recurring].sort((a,b)=>a.next_date.localeCompare(b.next_date))[0].next_date:"None";
-}
-
-function history(){
-let d=[...expenses],q=$("search").value.toLowerCase(),
-c=$("filterCategory").value,o=$("sort").value;
-d=d.filter(x=>(x.note||"").toLowerCase().includes(q));
-if(c)d=d.filter(x=>x.category==c);
-if(o=="new")d.sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id);
-if(o=="old")d.sort((a,b)=>a.date.localeCompare(b.date)||a.id-b.id);
-if(o=="high")d.sort((a,b)=>b.amount-a.amount);
-if(o=="low")d.sort((a,b)=>a.amount-b.amount);
-$("history").innerHTML=d.length?
-d.map(x=>`
-<div class="item"><div><b>${esc(x.category)}</b>
-<small>${esc(x.note||"No description")} • ${x.date}</small></div>
-<div>${money(x.amount)} <button class="del" onclick="delExpense(${x.id})">Delete</button></div></div>`).join(""):
-'<div class="empty">No expenses found.</div>';
-}
-
-["search","filterCategory","sort"].forEach(x=>
-$(x).addEventListener(x=="search"?"input":"change",history)
+if(sort==="old")
+return String(a.date||"").localeCompare(
+String(b.date||"")
 );
 
-function challenge(){
-let m=today().slice(0,7);
-let spent=expenses.filter(x=>x.date.startsWith(m))
-.reduce((s,x)=>s+Number(x.amount),0);
-let saved=Math.max(0,500-spent);
-$("challengeAmount").textContent=money(saved)+" / ₹500";
-$("challengeProgress").style.width=Math.min(100,(500-saved)/500*100)+"%";
-$("streak").textContent="🔥 Savings streak: "+(Number(localStorage.savingStreak)||0)+" days";
-}
+return String(b.date||"").localeCompare(
+String(a.date||"")
+);
 
-async function askAI(){
-let q=$("aiQuestion").value.trim();
-if(!q)return;
-$("aiAnswer").textContent="🤖 Thinking...";
-try{
-let r=await fetch("/api/ai",{
-method:"POST",headers:{"Content-Type":"application/json"},
-body:JSON.stringify({question:q})
 });
-let d=await r.json();
-$("aiAnswer").textContent=d.answer||"No answer.";
-}catch(e){
-$("aiAnswer").textContent="Something went wrong. Please try again.";
-}
+
+return list;
+
 }
 
-$("aiQuestion").onkeydown=e=>{if(e.key=="Enter")askAI()};
+function render(){
 
-/* ---------- FIXED AI RECEIPT SCANNER ---------- */
+const list=filtered();
 
-$("receiptFile").onchange=async e=>{
-const file=e.target.files&&e.target.files[0];
-if(!file)return;
+$("total").textContent=money(totalAll());
+$("count").textContent=expenses.length;
 
-if(!file.type.startsWith("image/")){
-$("scanStatus").textContent="❌ Please select a receipt image.";
+const ft=list.reduce(
+(s,e)=>s+Number(e.amount||0),0
+);
+
+$("filteredTotal").textContent=money(ft);
+
+const tt=expenses
+.filter(e=>e.date===today())
+.reduce((s,e)=>s+Number(e.amount||0),0);
+
+$("todayTotal").textContent=money(tt);
+
+if(!list.length){
+
+$("expenses").innerHTML=
+'<div class="empty">No matching expenses found.</div>';
+
+return;
+
+}
+
+$("expenses").innerHTML=list.map(e=>`
+
+<div class="expense">
+
+<div class="expTop">
+
+<div class="expName">
+${escapeHTML(e.category||"Other")}
+</div>
+
+<div class="expAmount">
+${money(e.amount)}
+</div>
+
+</div>
+
+<div class="expInfo">
+${escapeHTML(e.note||"No description")}
+<br>
+📅 ${escapeHTML(e.date||"")}
+</div>
+
+<br>
+
+<button onclick="deleteExpense(${e.id})">
+🗑 Delete
+</button>
+
+</div>
+
+`).join("");
+
+smartAdvice();
+
+}
+
+function smartAdvice(){
+
+if(!expenses.length){
+$("aiText").textContent=
+"Add expenses to receive smart spending advice.";
 return;
 }
 
-$("scanStatus").textContent="📷 Preparing image...";
+const total=totalAll();
+
+const cats={};
+
+expenses.forEach(e=>{
+const c=e.category||"Other";
+cats[c]=(cats[c]||0)+Number(e.amount||0);
+});
+
+const top=Object.entries(cats)
+.sort((a,b)=>b[1]-a[1])[0];
+
+$("aiText").textContent=
+"💡 Your highest spending category is "+
+top[0]+" at "+money(top[1])+
+". Total recorded spending is "+
+money(total)+
+". Open AI Coach for deeper personalized analysis.";
+
+}
+
+$("expenseForm").addEventListener(
+"submit",
+async e=>{
+
+e.preventDefault();
+
+const amount=Number($("amount").value);
+const category=$("category").value;
+const date=$("date").value;
+const note=$("note").value.trim();
+
+if(!amount||!category||!date)return;
+
+try{
+
+const response=await fetch("/api/expenses",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+amount,
+category,
+date,
+note
+})
+});
+
+const data=await response.json();
+
+if(!response.ok||data.success===false){
+
+alert(data.error||"Could not add expense.");
+return;
+
+}
+
+$("expenseForm").reset();
+$("date").value=today();
+
+await loadExpenses();
+
+}catch(err){
+
+alert("Could not connect to server.");
+
+}
+
+});
+
+async function deleteExpense(id){
+
+if(!confirm("Delete this expense?"))return;
+
+try{
+
+const response=await fetch(
+"/api/expenses/"+id,
+{method:"DELETE"}
+);
+
+if(!response.ok)throw new Error();
+
+await loadExpenses();
+
+}catch(e){
+
+alert("Could not delete expense.");
+
+}
+
+}
+
+function clearFilters(){
+
+$("search").value="";
+$("filterCategory").value="";
+$("filterDate").value="";
+$("sort").value="new";
+
+render();
+
+}
+
+$("search").addEventListener("input",render);
+$("filterCategory").addEventListener("change",render);
+$("filterDate").addEventListener("change",render);
+$("sort").addEventListener("change",render);
+
+$("date").value=today();
+
+$("receiptFile").onchange=async e=>{
+
+const file=e.target.files&&e.target.files[0];
+
+if(!file)return;
+
+if(!file.type.startsWith("image/")){
+
+$("scanStatus").textContent=
+"❌ Please select a receipt image.";
+
+return;
+
+}
+
+$("scanStatus").textContent=
+"📷 Preparing image...";
+
 $("receiptPreview").style.display="none";
 
 try{
@@ -441,15 +602,23 @@ const dataUrl=await compressImage(file);
 
 $("receiptPreview").src=dataUrl;
 $("receiptPreview").style.display="block";
-$("scanStatus").textContent="🤖 AI is reading your receipt...";
 
-const response=await fetch("/api/scan-receipt",{
+$("scanStatus").textContent=
+"🤖 AI is reading your receipt...";
+
+const response=await fetch(
+"/api/scan-receipt",
+{
 method:"POST",
-headers:{"Content-Type":"application/json"},
+headers:{
+"Content-Type":"application/json"
+},
 body:JSON.stringify({image:dataUrl})
-});
+}
+);
 
 let data;
+
 try{
 data=await response.json();
 }catch(err){
@@ -457,7 +626,11 @@ throw new Error("Server returned an invalid response.");
 }
 
 if(!response.ok||!data.success){
-throw new Error(data.error||"Receipt scanner failed.");
+
+throw new Error(
+data.error||"Receipt scanner failed."
+);
+
 }
 
 $("amount").value=data.amount||"";
@@ -470,12 +643,15 @@ $("scanStatus").textContent=
 
 }catch(err){
 
-console.error("Receipt scanner error:",err);
-$("scanStatus").textContent="❌ "+err.message;
+console.error(err);
+
+$("scanStatus").textContent=
+"❌ "+err.message;
 
 }
 
 e.target.value="";
+
 };
 
 function compressImage(file){
@@ -485,7 +661,9 @@ return new Promise((resolve,reject)=>{
 const reader=new FileReader();
 
 reader.onerror=()=>{
-reject(new Error("Could not read the image."));
+reject(
+new Error("Could not read the image.")
+);
 };
 
 reader.onload=()=>{
@@ -493,12 +671,15 @@ reader.onload=()=>{
 const img=new Image();
 
 img.onerror=()=>{
-reject(new Error("This image format is not supported."));
+reject(
+new Error("This image format is not supported.")
+);
 };
 
 img.onload=()=>{
 
 const max=1400;
+
 const scale=Math.min(
 1,
 max/Math.max(img.width,img.height)
@@ -506,18 +687,36 @@ max/Math.max(img.width,img.height)
 
 const canvas=document.createElement("canvas");
 
-canvas.width=Math.max(1,Math.round(img.width*scale));
-canvas.height=Math.max(1,Math.round(img.height*scale));
+canvas.width=Math.max(
+1,
+Math.round(img.width*scale)
+);
+
+canvas.height=Math.max(
+1,
+Math.round(img.height*scale)
+);
 
 const ctx=canvas.getContext("2d");
 
 if(!ctx){
-reject(new Error("Image processing is not supported."));
+
+reject(
+new Error("Image processing is not supported.")
+);
+
 return;
+
 }
 
 ctx.fillStyle="#fff";
-ctx.fillRect(0,0,canvas.width,canvas.height);
+
+ctx.fillRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
 
 ctx.drawImage(
 img,
@@ -528,7 +727,10 @@ canvas.height
 );
 
 resolve(
-canvas.toDataURL("image/jpeg",0.82)
+canvas.toDataURL(
+"image/jpeg",
+0.82
+)
 );
 
 };
@@ -540,10 +742,12 @@ img.src=reader.result;
 reader.readAsDataURL(file);
 
 });
+
 }
 
-load();
+loadExpenses();
 
 </script>
+
 </body>
 </html>
