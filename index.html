@@ -1,418 +1,70 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Smart Expense Tracker</title>
-
+<title>Smart Money Coach</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
-
-body{
-background:#f4f6fa;
-color:#172033;
-min-height:100vh
-}
-
-header{
-background:white;
-padding:18px 6%;
-border-bottom:1px solid #e5e7eb;
-display:flex;
-justify-content:space-between;
-align-items:center;
-position:sticky;
-top:0;
-z-index:10
-}
-
-.logo{font-size:22px;font-weight:800}
-
-.nav{
-display:flex;
-gap:8px;
-flex-wrap:wrap
-}
-
-.nav a{
-text-decoration:none;
-background:#111827;
-color:white;
-padding:10px 14px;
-border-radius:10px;
-font-size:13px
-}
-
-.container{
-width:88%;
-max-width:1200px;
-margin:30px auto
-}
-
-.hero{margin-bottom:25px}
-
-.hero h1{
-font-size:32px;
-margin-bottom:7px
-}
-
-.hero p{color:#6b7280}
-
-.cards{
-display:grid;
-grid-template-columns:repeat(5,1fr);
-gap:15px;
-margin-bottom:22px
-}
-
-.card,.panel{
-background:white;
-border:1px solid #e5e7eb;
-border-radius:18px;
-box-shadow:0 5px 20px rgba(0,0,0,.04)
-}
-
-.card{padding:18px}
-
-.card span{
-color:#6b7280;
-font-size:13px
-}
-
-.card h2{
-margin-top:8px;
-font-size:22px
-}
-
-.balance{font-size:24px!important}
-
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:20px
-}
-
-.panel{
-padding:22px;
-margin-bottom:20px
-}
-
-.panel h2{
-font-size:20px;
-margin-bottom:17px
-}
-
-.form{
-display:grid;
-gap:12px
-}
-
-input,select{
-width:100%;
-padding:13px;
-border:1px solid #d7dce5;
-border-radius:10px;
-outline:none;
-background:white
-}
-
-input:focus,select:focus{
-border-color:#111827
-}
-
-button{
-border:0;
-border-radius:10px;
-padding:13px;
-background:#111827;
-color:white;
-cursor:pointer;
-font-weight:600
-}
-
-button:hover{opacity:.9}
-
-.delete{
-background:#fee2e2;
-color:#b91c1c;
-padding:7px 9px;
-margin-left:8px
-}
-
-.income-list,
-.recurring-list{
-margin-top:15px;
-max-height:230px;
-overflow:auto
-}
-
-.income-item,
-.recurring-item{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:12px 0;
-border-bottom:1px solid #edf0f4
-}
-
-.income-item small,
-.recurring-item small{
-color:#6b7280
-}
-
-.budget{margin-top:14px}
-
-.progress{
-height:12px;
-background:#e5e7eb;
-border-radius:20px;
-overflow:hidden;
-margin-top:9px
-}
-
-.progress div{
-height:100%;
-width:0;
-background:#111827;
-transition:.3s
-}
-
-.filters{
-display:grid;
-grid-template-columns:2fr 1fr 1fr;
-gap:10px;
-margin-bottom:15px
-}
-
-.expense{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:14px 0;
-border-bottom:1px solid #edf0f4
-}
-
-.expense strong{
-display:block;
-margin-bottom:5px
-}
-
-.expense small{
-color:#6b7280
-}
-
-.amount{font-weight:700}
-
-.ai{
-background:#111827;
-color:white
-}
-
-.ai p{
-color:#cbd5e1;
-margin-bottom:15px
-}
-
-.ai-row{
-display:flex;
-gap:10px
-}
-
-.ai input{
-background:white;
-color:#111827
-}
-
-.ai button{
-background:white;
-color:#111827;
-white-space:nowrap
-}
-
-.ai-answer{
-background:#1f2937;
-border-radius:12px;
-padding:15px;
-margin-top:15px;
-line-height:1.6;
-min-height:50px;
-white-space:pre-wrap
-}
-
-.recurring-summary{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:10px;
-margin-bottom:15px
-}
-
-.mini{
-background:#f8fafc;
-border-radius:12px;
-padding:14px
-}
-
-.mini span{
-display:block;
-font-size:12px;
-color:#6b7280;
-margin-bottom:5px
-}
-
-.mini strong{font-size:18px}
-
-.warning{color:#b45309}
-
-.positive{color:#047857}
-
-.empty{
-text-align:center;
-color:#6b7280;
-padding:25px
-}
-
-.badge{
-display:inline-block;
-padding:5px 8px;
-border-radius:8px;
-font-size:11px;
-background:#eef2ff;
-margin-top:5px
-}
-
-.danger-badge{
-background:#fee2e2;
-color:#b91c1c
-}
-
-@media(max-width:1000px){
-.cards{grid-template-columns:repeat(3,1fr)}
-}
-
-@media(max-width:800px){
-.grid{grid-template-columns:1fr}
-.cards{grid-template-columns:repeat(2,1fr)}
-.recurring-summary{grid-template-columns:1fr}
-}
-
-@media(max-width:550px){
-
-header{padding:14px 4%}
-
-.logo{font-size:18px}
-
-.container{
-width:92%;
-margin:22px auto
-}
-
-.cards{
-grid-template-columns:1fr 1fr
-}
-
-.card{padding:14px}
-
-.card h2{font-size:19px}
-
-.filters{
-grid-template-columns:1fr
-}
-
-.ai-row{
-flex-direction:column
-}
-
-.expense,
-.income-item,
-.recurring-item{
-align-items:flex-start;
-gap:10px
-}
-
-}
+*{box-sizing:border-box}body{margin:0;background:#f4f6fa;color:#172033;font:15px Arial,sans-serif}
+header{background:#fff;padding:15px 5%;border-bottom:1px solid #ddd;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5}.logo{font-size:20px;font-weight:800}
+nav{display:flex;gap:7px;flex-wrap:wrap}nav a,button{background:#111827;color:#fff;border:0;border-radius:10px;padding:10px 13px;text-decoration:none;cursor:pointer;font-weight:600}
+main{width:90%;max-width:1200px;margin:25px auto}h1{margin-bottom:5px}p{color:#667085}.health{background:#111827;color:#fff;border-radius:20px;padding:22px;display:flex;gap:25px;align-items:center;margin:20px 0}
+.circle{width:135px;height:135px;border:9px solid #555;border-radius:50%;display:grid;place-items:center;text-align:center;flex:none}.circle b{font-size:38px}.circle small{display:block;color:#bbb}
+.bar{height:10px;background:#ddd;border-radius:20px;overflow:hidden;margin-top:12px}.bar i{display:block;height:100%;width:0;background:#111827}.health .bar{background:#444}.health .bar i{background:#fff}
+.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:15px 0}.card,.panel{background:#fff;border:1px solid #e5e7eb;border-radius:17px;padding:17px;box-shadow:0 4px 18px #00000008}.card span{font-size:12px;color:#667085}.card b{display:block;font-size:20px;margin-top:7px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.form{display:grid;gap:9px}input,select{padding:12px;border:1px solid #ccd2da;border-radius:9px;width:100%;background:#fff}
+button{border:0;border-radius:10px;padding:12px;background:#111827;color:#fff;cursor:pointer;font-weight:600}.del{background:#fee2e2;color:#b91c1c;padding:6px 9px}
+.item{display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid #eee}.item small{display:block;color:#667085;margin-top:4px}
+.action{background:#f8fafc;border-left:4px solid #111827;border-radius:10px;padding:13px;margin:8px 0}.good{border-left-color:#087f5b}.warn{border-left-color:#b7791f}.bad{border-left-color:#c92a2a}
+.challenge{background:#f8fafc;border-radius:12px;padding:15px}.challenge-top{display:flex;justify-content:space-between}.progress{height:10px;background:#ddd;border-radius:20px;overflow:hidden;margin-top:10px}.progress i{display:block;height:100%;width:0;background:#111827}.streak{margin-top:12px}
+.filters{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px}.ai{background:#111827;color:#fff}.ai p{color:#cbd5e1}.airow{display:flex;gap:8px}.airow input{flex:1}.airow button{background:#fff;color:#111827}.answer{background:#1f2937;padding:14px;border-radius:10px;margin-top:10px;white-space:pre-wrap;line-height:1.5}.empty{text-align:center;padding:18px;color:#667085}
+@media(max-width:900px){.cards{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:1fr}}
+@media(max-width:600px){header{align-items:flex-start;gap:10px;flex-direction:column}main{width:92%}.cards{grid-template-columns:1fr 1fr}.health{flex-direction:column;text-align:center}.filters{grid-template-columns:1fr}.airow{flex-direction:column}}
 </style>
 </head>
-
 <body>
 
 <header>
-
-<div class="logo">💰 Smart Expense Tracker</div>
-
-<div class="nav">
+<div class="logo">💰 Smart Money Coach</div>
+<nav>
 <a href="/analytics.html">📊 Analytics</a>
 <a href="/goals.html">🎯 Goals</a>
 <a href="/recurring.html">🔄 Recurring</a>
-</div>
-
+</nav>
 </header>
 
-<div class="container">
+<main>
 
-<div class="hero">
+<h1>Financial Command Center</h1>
+<p>Track your money, improve your habits and reach your goals.</p>
 
-<h1>Financial Dashboard</h1>
-
-<p>
-Track your money, understand your spending and reach your goals.
-</p>
-
+<section class="health">
+<div class="circle">
+<div><b id="score">0</b><small>/ 100</small></div>
 </div>
-
-
-<!-- SUMMARY -->
+<div>
+<h2 id="healthTitle">Your Financial Health</h2>
+<p id="healthText">Add your financial data to calculate your score.</p>
+<div class="bar"><i id="scoreBar"></i></div>
+</div>
+</section>
 
 <div class="cards">
-
-<div class="card">
-<span>Today's Spending</span>
-<h2 id="today">₹0</h2>
+<div class="card"><span>Today</span><b id="today">₹0</b></div>
+<div class="card"><span>This Month</span><b id="month">₹0</b></div>
+<div class="card"><span>Income</span><b id="income">₹0</b></div>
+<div class="card"><span>Expenses</span><b id="total">₹0</b></div>
+<div class="card"><span>Balance</span><b id="balance">₹0</b></div>
 </div>
-
-<div class="card">
-<span>Monthly Spending</span>
-<h2 id="month">₹0</h2>
-</div>
-
-<div class="card">
-<span>Total Income</span>
-<h2 id="income">₹0</h2>
-</div>
-
-<div class="card">
-<span>Total Expenses</span>
-<h2 id="total">₹0</h2>
-</div>
-
-<div class="card">
-<span>Current Balance</span>
-<h2 id="balance" class="balance positive">₹0</h2>
-</div>
-
-</div>
-
 
 <div class="grid">
 
-
-<!-- EXPENSE -->
-
-<div class="panel">
-
+<section class="panel">
 <h2>➕ Add Expense</h2>
-
 <form id="expenseForm" class="form">
-
-<input
-id="amount"
-type="number"
-step="0.01"
-placeholder="Amount ₹"
-required>
-
+<input id="amount" type="number" step=".01" placeholder="Amount ₹" required>
 <select id="category" required>
-
-<option value="">Select category</option>
+<option value="">Category</option>
 <option>Food</option>
 <option>Travel</option>
 <option>Shopping</option>
@@ -421,140 +73,85 @@ required>
 <option>Entertainment</option>
 <option>Health</option>
 <option>Other</option>
-
 </select>
-
 <input id="date" type="date" required>
-
-<input
-id="note"
-type="text"
-placeholder="Description">
-
+<input id="note" placeholder="Description">
 <button>Add Expense</button>
-
 </form>
+</section>
 
-</div>
-
-
-<!-- INCOME -->
-
-<div class="panel">
-
+<section class="panel">
 <h2>💵 Add Income</h2>
-
 <form id="incomeForm" class="form">
-
-<input
-id="incomeAmount"
-type="number"
-step="0.01"
-placeholder="Income amount ₹"
-required>
-
-<input
-id="incomeSource"
-type="text"
-placeholder="Source (Salary, Freelance...)"
-required>
-
+<input id="incomeAmount" type="number" step=".01" placeholder="Income ₹" required>
+<input id="incomeSource" placeholder="Source" required>
 <input id="incomeDate" type="date" required>
-
 <button>Add Income</button>
-
 </form>
-
-<div id="incomeList" class="income-list"></div>
-
-</div>
+<div id="incomeList"></div>
+</section>
 
 </div>
 
+<section class="panel">
+<h2>🧠 Smart Action Plan</h2>
+<div id="actions"><div class="empty">Analyzing...</div></div>
+</section>
 
-<!-- RECURRING PAYMENTS -->
+<section class="panel">
+<h2>🎯 Weekly Savings Challenge</h2>
+<div class="challenge">
+<div class="challenge-top">
+<b>Save ₹500 this week</b>
+<b id="challengeAmount">₹0 / ₹500</b>
+</div>
+<div class="progress"><i id="challengeProgress"></i></div>
+<div class="streak" id="streak">🔥 Savings streak: 0 days</div>
+</div>
+</section>
 
-<div class="panel">
-
+<section class="panel">
 <h2>🔄 Recurring Payments</h2>
 
-<div class="recurring-summary">
-
-<div class="mini">
+<div class="cards">
+<div class="card">
 <span>Monthly Commitment</span>
-<strong id="recurringMonthly">₹0</strong>
+<b id="recurringMonthly">₹0</b>
 </div>
 
-<div class="mini">
-<span>Active Payments</span>
-<strong id="recurringCount">0</strong>
+<div class="card">
+<span>Active</span>
+<b id="recurringCount">0</b>
 </div>
 
-<div class="mini">
+<div class="card">
 <span>Next Payment</span>
-<strong id="nextPayment">None</strong>
+<b id="nextPayment">None</b>
+</div>
 </div>
 
-</div>
+<div id="recurringList"></div>
 
-<div id="recurringList" class="recurring-list"></div>
+<a href="/recurring.html">Manage Recurring →</a>
+</section>
 
-<a
-href="/recurring.html"
-style="
-display:block;
-text-align:center;
-margin-top:15px;
-text-decoration:none;
-background:#111827;
-color:white;
-padding:12px;
-border-radius:10px;
-">
-Manage Recurring Payments →
-</a>
-
-</div>
-
-
-<!-- BUDGET -->
-
-<div class="panel">
-
-<h2>🎯 Monthly Budget</h2>
-
-<input
-id="budget"
-type="number"
-placeholder="Enter monthly budget ₹">
-
-<div class="budget">
-
-<strong id="budgetText">₹0 / ₹0</strong>
-
+<section class="panel">
+<h2>💳 Monthly Budget</h2>
+<input id="budget" type="number" placeholder="Monthly budget ₹">
+<p><b id="budgetText">₹0 / ₹0</b></p>
 <div class="progress">
-<div id="progress"></div>
+<i id="budgetProgress"></i>
 </div>
+</section>
 
-</div>
-
-</div>
-
-
-<!-- EXPENSE HISTORY -->
-
-<div class="panel">
-
+<section class="panel">
 <h2>🔍 Expense History</h2>
 
 <div class="filters">
 
-<input
-id="search"
-placeholder="Search description...">
+<input id="search" placeholder="Search description">
 
 <select id="filterCategory">
-
 <option value="">All categories</option>
 <option>Food</option>
 <option>Travel</option>
@@ -564,54 +161,40 @@ placeholder="Search description...">
 <option>Entertainment</option>
 <option>Health</option>
 <option>Other</option>
-
 </select>
 
 <select id="sort">
-
 <option value="new">Newest</option>
 <option value="old">Oldest</option>
-<option value="high">Highest amount</option>
-<option value="low">Lowest amount</option>
-
+<option value="high">Highest</option>
+<option value="low">Lowest</option>
 </select>
 
 </div>
 
 <div id="history"></div>
+</section>
 
-</div>
+<section class="panel ai">
 
-
-<!-- AI -->
-
-<div class="panel ai">
-
-<h2>🤖 AI Financial Assistant</h2>
+<h2>🤖 AI Money Coach</h2>
 
 <p>
-Ask questions about your income, expenses and financial decisions.
-The AI also considers your recurring commitments.
+Ask about your spending, saving, budget or whether you can afford something.
 </p>
 
-<div class="ai-row">
-
-<input
-id="aiQuestion"
-placeholder="Example: Can I afford ₹5,000?">
-
-<button onclick="askAI()">Ask AI</button>
-
+<div class="airow">
+<input id="aiQuestion" placeholder="Can I afford ₹5,000?">
+<button onclick="askAI()">Ask Coach</button>
 </div>
 
-<div id="aiAnswer" class="ai-answer">
+<div id="aiAnswer" class="answer">
 👋 Ask me anything about your finances.
 </div>
 
-</div>
+</section>
 
-</div>
-
+</main>
 
 <script>
 
@@ -619,15 +202,16 @@ let expenses=[];
 let incomes=[];
 let recurring=[];
 
+const $=x=>document.getElementById(x);
 
-function $(id){
-return document.getElementById(id);
-}
+const money=n=>"₹"+Number(n).toLocaleString(
+"en-IN",
+{maximumFractionDigits:2}
+);
 
+function today(){
 
-function todayDate(){
-
-const d=new Date();
+let d=new Date();
 
 return d.getFullYear()+"-"+
 String(d.getMonth()+1).padStart(2,"0")+"-"+
@@ -635,560 +219,508 @@ String(d.getDate()).padStart(2,"0");
 
 }
 
+function esc(x){
 
-function money(n){
-
-return "₹"+Number(n).toLocaleString("en-IN",{
-maximumFractionDigits:2
-});
+return String(x)
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
 
 }
 
+$("date").value=today();
+$("incomeDate").value=today();
 
-$("date").value=todayDate();
-$("incomeDate").value=todayDate();
 
-
-/* LOAD EVERYTHING */
-
-async function loadData(){
+async function load(){
 
 try{
 
-const [
-expenseResponse,
-incomeResponse,
-recurringResponse
-]=await Promise.all([
-
+let r=await Promise.all([
 fetch("/api/expenses"),
 fetch("/api/income"),
 fetch("/api/recurring")
-
 ]);
 
-expenses=await expenseResponse.json();
-incomes=await incomeResponse.json();
-recurring=await recurringResponse.json();
+expenses=await r[0].json();
+incomes=await r[1].json();
+recurring=await r[2].json();
 
-updateDashboard();
-showHistory();
-showIncome();
-showRecurring();
+dashboard();
+history();
+incomeList();
+recurringList();
+challenge();
 
-}catch(error){
+}catch(e){
 
-$("history").innerHTML=
-'<div class="empty">Unable to load financial data.</div>';
-
-console.error(error);
+console.log(e);
 
 }
 
 }
 
 
-/* DASHBOARD */
+function recurringMonthly(){
 
-function updateDashboard(){
+return recurring.reduce((s,p)=>{
 
-const today=todayDate();
-const month=today.substring(0,7);
+let a=Number(p.amount);
 
-
-const todayTotal=expenses
-.filter(e=>e.date===today)
-.reduce((s,e)=>s+Number(e.amount),0);
-
-
-const monthTotal=expenses
-.filter(e=>e.date.startsWith(month))
-.reduce((s,e)=>s+Number(e.amount),0);
-
-
-const totalExpenses=expenses
-.reduce((s,e)=>s+Number(e.amount),0);
-
-
-const totalIncome=incomes
-.reduce((s,e)=>s+Number(e.amount),0);
-
-
-const balance=totalIncome-totalExpenses;
-
-
-$("today").textContent=money(todayTotal);
-$("month").textContent=money(monthTotal);
-$("income").textContent=money(totalIncome);
-$("total").textContent=money(totalExpenses);
-$("balance").textContent=money(balance);
-
-
-$("balance").className=
-"balance "+
-(balance>=0?"positive":"warning");
-
-
-updateBudget(monthTotal);
-updateRecurringSummary();
-
-}
-
-
-/* BUDGET */
-
-function updateBudget(spent){
-
-const budget=
-Number(localStorage.getItem("budget")||0);
-
-$("budget").value=budget||"";
-
-$("budgetText").textContent=
-money(spent)+" / "+money(budget);
-
-
-const percent=budget
-?Math.min((spent/budget)*100,100)
-:0;
-
-$("progress").style.width=
-percent+"%";
-
-
-$("budgetText").className=
-budget && spent>budget
-?"warning":"";
-
-}
-
-
-$("budget").addEventListener("change",()=>{
-
-localStorage.setItem(
-"budget",
-Number($("budget").value)||0
+return s+
+(
+p.frequency=="weekly"
+?a*52/12
+:p.frequency=="yearly"
+?a/12
+:a
 );
 
-updateDashboard();
+},0);
 
-});
+}
 
 
-/* ADD EXPENSE */
+function dashboard(){
 
-$("expenseForm").addEventListener(
-"submit",
-async e=>{
+let t=today();
+let m=t.slice(0,7);
 
-e.preventDefault();
+let day=expenses
+.filter(x=>x.date==t)
+.reduce((s,x)=>s+Number(x.amount),0);
 
-const data={
+let mt=expenses
+.filter(x=>x.date.startsWith(m))
+.reduce((s,x)=>s+Number(x.amount),0);
 
-amount:$("amount").value,
-category:$("category").value,
-date:$("date").value,
-note:$("note").value
+let out=expenses
+.reduce((s,x)=>s+Number(x.amount),0);
+
+let inc=incomes
+.reduce((s,x)=>s+Number(x.amount),0);
+
+let bal=inc-out;
+
+$("today").textContent=money(day);
+$("month").textContent=money(mt);
+$("income").textContent=money(inc);
+$("total").textContent=money(out);
+$("balance").textContent=money(bal);
+
+budget(mt);
+health(inc,out,mt);
+actions(inc,out,mt);
+
+}
+
+
+function health(inc,out,mt){
+
+if(!inc&&!out)return;
+
+let s=50;
+
+if(inc){
+
+let r=(inc-out)/inc;
+
+s+=
+r>=.3?30:
+r>=.2?25:
+r>=.1?15:
+r>=0?5:-20;
+
+}
+
+let b=Number(localStorage.budget||0);
+
+if(b){
+
+let u=mt/b;
+
+s+=
+u<=.7?15:
+u<=.9?8:
+u<=1?-5:-20;
+
+}
+
+let r=recurringMonthly();
+
+if(inc){
+
+let q=r/inc;
+
+s+=q<.2?10:q>.4?-10:0;
+
+}
+
+s=Math.max(0,Math.min(100,Math.round(s)));
+
+$("score").textContent=s;
+$("scoreBar").style.width=s+"%";
+
+$("healthTitle").textContent=
+s>=80?"🟢 Excellent Financial Health":
+s>=60?"🟡 Good Financial Health":
+s>=40?"🟠 Needs Attention":
+"🔴 Financial Health Risk";
+
+$("healthText").textContent=
+s>=80
+?"You're managing your money very well."
+:s>=60
+?"You're on the right track."
+:s>=40
+?"A few spending changes can improve your finances."
+:"Your spending needs attention. Start reducing non-essential costs.";
+
+}
+
+
+function actions(inc,out,mt){
+
+let h="";
+let b=Number(localStorage.budget||0);
+let r=recurringMonthly();
+
+if(inc&&out>inc){
+
+h+=`
+<div class="action bad">
+<b>⚠️ Spending exceeds income</b>
+<p>${money(out-inc)} more spent than recorded income.</p>
+</div>
+`;
+
+}else if(inc){
+
+h+=`
+<div class="action good">
+<b>💰 Money retained</b>
+<p>You have kept ${money(inc-out)} from recorded income.</p>
+</div>
+`;
+
+}
+
+if(b&&mt>b){
+
+h+=`
+<div class="action bad">
+<b>🚨 Budget exceeded</b>
+<p>You are ${money(mt-b)} over budget.</p>
+</div>
+`;
+
+}else if(b){
+
+h+=`
+<div class="action good">
+<b>✅ Budget under control</b>
+<p>${money(b-mt)} remains.</p>
+</div>
+`;
+
+}
+
+if(r){
+
+h+=`
+<div class="action warn">
+<b>🔄 Recurring commitments</b>
+<p>About ${money(r)} per month. Review unused subscriptions.</p>
+</div>
+`;
+
+}
+
+$("actions").innerHTML=
+h||
+'<div class="empty">Add income, expenses and a budget for personalized advice.</div>';
+
+}
+
+
+function budget(spent){
+
+let b=Number(localStorage.budget||0);
+
+$("budget").value=b||"";
+
+$("budgetText").textContent=
+money(spent)+" / "+money(b);
+
+$("budgetProgress").style.width=
+(b?Math.min(100,spent/b*100):0)+"%";
+
+}
+
+
+$("budget").onchange=()=>{
+
+localStorage.budget=
+Number($("budget").value)||0;
+
+dashboard();
 
 };
 
 
-const response=await fetch(
+$("expenseForm").onsubmit=async e=>{
+
+e.preventDefault();
+
+let r=await fetch(
 "/api/expenses",
 {
 method:"POST",
 headers:{
 "Content-Type":"application/json"
 },
-body:JSON.stringify(data)
-});
+body:JSON.stringify({
+amount:$("amount").value,
+category:$("category").value,
+date:$("date").value,
+note:$("note").value
+})
+}
+);
 
+let d=await r.json();
 
-const result=await response.json();
+if(!d.success){
 
+alert(d.error);
 
-if(!result.success){
-
-alert(result.error||"Unable to add expense");
 return;
 
 }
 
-
 $("amount").value="";
 $("note").value="";
 
-await loadData();
-
-});
-
-
-/* ADD INCOME */
-
-$("incomeForm").addEventListener(
-"submit",
-async e=>{
-
-e.preventDefault();
-
-const data={
-
-amount:$("incomeAmount").value,
-source:$("incomeSource").value,
-date:$("incomeDate").value
+load();
 
 };
 
 
-const response=await fetch(
+$("incomeForm").onsubmit=async e=>{
+
+e.preventDefault();
+
+let r=await fetch(
 "/api/income",
 {
 method:"POST",
 headers:{
 "Content-Type":"application/json"
 },
-body:JSON.stringify(data)
-});
+body:JSON.stringify({
+amount:$("incomeAmount").value,
+source:$("incomeSource").value,
+date:$("incomeDate").value
+})
+}
+);
 
+let d=await r.json();
 
-const result=await response.json();
+if(!d.success){
 
+alert(d.error);
 
-if(!result.success){
-
-alert(result.error||"Unable to add income");
 return;
 
 }
-
 
 $("incomeAmount").value="";
 $("incomeSource").value="";
 
-await loadData();
+load();
 
-});
+};
 
 
-/* INCOME LIST */
+async function delExpense(id){
 
-function showIncome(){
+if(confirm("Delete this expense?")){
 
-const box=$("incomeList");
+await fetch(
+"/api/expenses/"+id,
+{method:"DELETE"}
+);
 
-if(!incomes.length){
+load();
 
-box.innerHTML=
-'<div class="empty">No income added yet.</div>';
-
-return;
+}
 
 }
 
 
-box.innerHTML=incomes
-.slice(0,8)
-.map(i=>`
+async function delIncome(id){
 
-<div class="income-item">
-
-<div>
-
-<strong>${escapeHTML(i.source)}</strong>
-
-<br>
-
-<small>${i.date}</small>
-
-</div>
-
-<div>
-
-<strong>${money(i.amount)}</strong>
-
-<button
-class="delete"
-onclick="deleteIncome(${i.id})">
-×
-</button>
-
-</div>
-
-</div>
-
-`).join("");
-
-}
-
-
-async function deleteIncome(id){
-
-if(!confirm("Delete this income?"))
-return;
+if(confirm("Delete this income?")){
 
 await fetch(
 "/api/income/"+id,
 {method:"DELETE"}
 );
 
-loadData();
+load();
+
+}
 
 }
 
 
-/* RECURRING */
+async function delRecurring(id){
 
-function monthlyAmount(payment){
-
-const amount=Number(payment.amount);
-
-if(payment.frequency==="weekly")
-return amount*52/12;
-
-if(payment.frequency==="yearly")
-return amount/12;
-
-return amount;
-
-}
-
-
-function updateRecurringSummary(){
-
-const monthly=recurring.reduce(
-(sum,p)=>sum+monthlyAmount(p),
-0
-);
-
-$("recurringMonthly").textContent=
-money(monthly);
-
-$("recurringCount").textContent=
-recurring.length;
-
-
-if(!recurring.length){
-
-$("nextPayment").textContent="None";
-return;
-
-}
-
-
-const sorted=[...recurring].sort(
-(a,b)=>
-a.next_date.localeCompare(b.next_date)
-);
-
-$("nextPayment").textContent=
-sorted[0].next_date;
-
-}
-
-
-function showRecurring(){
-
-const box=$("recurringList");
-
-if(!recurring.length){
-
-box.innerHTML=
-'<div class="empty">No recurring payments yet.</div>';
-
-return;
-
-}
-
-
-box.innerHTML=recurring
-.slice(0,8)
-.map(p=>{
-
-const monthly=monthlyAmount(p);
-
-const dueDate=new Date(p.next_date);
-const now=new Date();
-
-const diff=Math.ceil(
-(dueDate-now)/(1000*60*60*24)
-);
-
-let badge="";
-
-if(diff>=0 && diff<=7){
-
-badge=
-'<span class="badge danger-badge">⚠️ Due soon</span>';
-
-}else{
-
-badge=
-'<span class="badge">'+
-escapeHTML(p.frequency)+
-'</span>';
-
-}
-
-return `
-
-<div class="recurring-item">
-
-<div>
-
-<strong>
-${escapeHTML(p.name)}
-</strong>
-
-<br>
-
-<small>
-₹${Number(p.amount).toLocaleString("en-IN")}
- • Next: ${p.next_date}
-</small>
-
-<br>
-
-${badge}
-
-</div>
-
-<div>
-
-<strong>
-${money(monthly)}/mo
-</strong>
-
-<button
-class="delete"
-onclick="deleteRecurring(${p.id})">
-×
-</button>
-
-</div>
-
-</div>
-
-`;
-
-}).join("");
-
-}
-
-
-async function deleteRecurring(id){
-
-if(!confirm("Delete this recurring payment?"))
-return;
+if(confirm("Delete this recurring payment?")){
 
 await fetch(
 "/api/recurring/"+id,
 {method:"DELETE"}
 );
 
-loadData();
+load();
+
+}
 
 }
 
 
-/* HISTORY */
+function incomeList(){
 
-function showHistory(){
+$("incomeList").innerHTML=
 
-let data=[...expenses];
+incomes.length
 
-const search=
-$("search").value.toLowerCase();
+?incomes.slice(0,6).map(i=>`
 
-const category=
-$("filterCategory").value;
-
-const sort=
-$("sort").value;
-
-
-data=data.filter(e=>
-(e.note||"")
-.toLowerCase()
-.includes(search)
-);
-
-
-if(category)
-data=data.filter(e=>
-e.category===category
-);
-
-
-if(sort==="new"){
-
-data.sort((a,b)=>
-b.date.localeCompare(a.date)||b.id-a.id
-);
-
-}
-
-if(sort==="old"){
-
-data.sort((a,b)=>
-a.date.localeCompare(b.date)||a.id-b.id
-);
-
-}
-
-if(sort==="high"){
-
-data.sort((a,b)=>
-Number(b.amount)-Number(a.amount)
-);
-
-}
-
-if(sort==="low"){
-
-data.sort((a,b)=>
-Number(a.amount)-Number(b.amount)
-);
-
-}
-
-
-if(!data.length){
-
-$("history").innerHTML=
-'<div class="empty">No expenses found.</div>';
-
-return;
-
-}
-
-
-$("history").innerHTML=data
-.map(e=>`
-
-<div class="expense">
+<div class="item">
 
 <div>
-
-<strong>
-${escapeHTML(e.category)}
-</strong>
-
-<small>
-${escapeHTML(e.note||"No description")}
- • ${e.date}
-</small>
-
+<b>${esc(i.source)}</b>
+<small>${i.date}</small>
 </div>
 
 <div>
+${money(i.amount)}
+<button class="del"
+onclick="delIncome(${i.id})">×</button>
+</div>
 
-<span class="amount">
-${money(e.amount)}
-</span>
+</div>
 
-<button
-class="delete"
-onclick="deleteExpense(${e.id})">
+`).join("")
+
+:'<div class="empty">No income yet.</div>';
+
+}
+
+
+function recurringList(){
+
+$("recurringList").innerHTML=
+
+recurring.length
+
+?recurring.slice(0,6).map(p=>`
+
+<div class="item">
+
+<div>
+<b>${esc(p.name)}</b>
+<small>
+${money(p.amount)} •
+${esc(p.frequency)} •
+${p.next_date}
+</small>
+</div>
+
+<button class="del"
+onclick="delRecurring(${p.id})">×</button>
+
+</div>
+
+`).join("")
+
+:'<div class="empty">No recurring payments yet.</div>';
+
+$("recurringMonthly").textContent=
+money(recurringMonthly());
+
+$("recurringCount").textContent=
+recurring.length;
+
+$("nextPayment").textContent=
+
+recurring.length
+?[...recurring]
+.sort((a,b)=>a.next_date.localeCompare(b.next_date))[0]
+.next_date
+:"None";
+
+}
+
+
+function history(){
+
+let d=[...expenses];
+
+let q=$("search").value.toLowerCase();
+let c=$("filterCategory").value;
+let o=$("sort").value;
+
+d=d.filter(x=>
+(x.note||"")
+.toLowerCase()
+.includes(q)
+);
+
+if(c)
+d=d.filter(x=>x.category==c);
+
+if(o=="new")
+d.sort((a,b)=>
+b.date.localeCompare(a.date)||b.id-a.id
+);
+
+if(o=="old")
+d.sort((a,b)=>
+a.date.localeCompare(b.date)||a.id-b.id
+);
+
+if(o=="high")
+d.sort((a,b)=>b.amount-a.amount);
+
+if(o=="low")
+d.sort((a,b)=>a.amount-b.amount);
+
+$("history").innerHTML=
+
+d.length
+
+?d.map(x=>`
+
+<div class="item">
+
+<div>
+<b>${esc(x.category)}</b>
+<small>
+${esc(x.note||"No description")} • ${x.date}
+</small>
+</div>
+
+<div>
+${money(x.amount)}
+
+<button class="del"
+onclick="delExpense(${x.id})">
 Delete
 </button>
 
@@ -1196,64 +728,63 @@ Delete
 
 </div>
 
-`).join("");
+`).join("")
+
+:'<div class="empty">No expenses found.</div>';
 
 }
 
 
-async function deleteExpense(id){
+["search","filterCategory","sort"].forEach(x=>
 
-if(!confirm("Delete this expense?"))
-return;
+$(x).addEventListener(
+x=="search"?"input":"change",
+history
+)
 
-await fetch(
-"/api/expenses/"+id,
-{method:"DELETE"}
 );
 
-loadData();
+
+function challenge(){
+
+let m=today().slice(0,7);
+
+let spent=expenses
+.filter(x=>x.date.startsWith(m))
+.reduce((s,x)=>s+Number(x.amount),0);
+
+let saved=Math.max(0,500-spent);
+
+$("challengeAmount").textContent=
+money(saved)+" / ₹500";
+
+$("challengeProgress").style.width=
+Math.min(
+100,
+(500-saved)/500*100
+)+"%";
+
+$("streak").textContent=
+"🔥 Savings streak: "+
+(Number(localStorage.savingStreak)||0)+
+" days";
 
 }
 
-
-$("search").addEventListener(
-"input",showHistory
-);
-
-$("filterCategory").addEventListener(
-"change",showHistory
-);
-
-$("sort").addEventListener(
-"change",showHistory
-);
-
-
-/* AI */
 
 async function askAI(){
 
-const question=
-$("aiQuestion").value.trim();
+let q=$("aiQuestion").value.trim();
 
-
-if(!question){
-
-$("aiAnswer").textContent=
-"Please enter a question.";
-
+if(!q)
 return;
-
-}
-
 
 $("aiAnswer").textContent=
 "🤖 Thinking...";
 
-
 try{
 
-const response=await fetch(
+let r=await fetch(
 "/api/ai",
 {
 method:"POST",
@@ -1261,20 +792,17 @@ headers:{
 "Content-Type":"application/json"
 },
 body:JSON.stringify({
-question:question
+question:q
 })
-});
+}
+);
 
-
-const data=await response.json();
-
+let d=await r.json();
 
 $("aiAnswer").textContent=
-data.answer||
-"Unable to get an answer.";
+d.answer||"No answer.";
 
-
-}catch(error){
+}catch(e){
 
 $("aiAnswer").textContent=
 "Something went wrong. Please try again.";
@@ -1284,33 +812,15 @@ $("aiAnswer").textContent=
 }
 
 
-$("aiQuestion").addEventListener(
-"keydown",
-e=>{
+$("aiQuestion").onkeydown=e=>{
 
-if(e.key==="Enter")
+if(e.key=="Enter")
 askAI();
 
-});
+};
 
 
-/* SECURITY */
-
-function escapeHTML(text){
-
-return String(text)
-.replaceAll("&","&amp;")
-.replaceAll("<","&lt;")
-.replaceAll(">","&gt;")
-.replaceAll('"',"&quot;")
-.replaceAll("'","&#039;");
-
-}
-
-
-/* START */
-
-loadData();
+load();
 
 </script>
 
