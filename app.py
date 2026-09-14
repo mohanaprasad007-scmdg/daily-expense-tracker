@@ -4,65 +4,107 @@ import sqlite3, os, json, re
 app = Flask(__name__)
 DB = "expenses.db"
 
+
 def db():
     c = sqlite3.connect(DB)
     c.row_factory = sqlite3.Row
     return c
 
+
 def init_db():
     c = db()
-    c.execute("""CREATE TABLE IF NOT EXISTS expenses(
+
+    c.execute("""
+    CREATE TABLE IF NOT EXISTS expenses(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         amount REAL NOT NULL,
         category TEXT NOT NULL,
         note TEXT,
         date TEXT NOT NULL
-    )""")
-    c.execute("""CREATE TABLE IF NOT EXISTS income(
+    )
+    """)
+
+    c.execute("""
+    CREATE TABLE IF NOT EXISTS income(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         amount REAL NOT NULL,
         source TEXT NOT NULL,
         date TEXT NOT NULL
-    )""")
-    c.execute("""CREATE TABLE IF NOT EXISTS recurring(
+    )
+    """)
+
+    c.execute("""
+    CREATE TABLE IF NOT EXISTS recurring(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
         amount REAL NOT NULL,
         frequency TEXT NOT NULL,
         next_date TEXT NOT NULL
-    )""")
+    )
+    """)
+
     c.commit()
     c.close()
 
+
 init_db()
+
+
+# ---------------- PAGES ----------------
 
 @app.route("/")
 def home():
     return send_from_directory(".", "index.html")
 
+
 @app.route("/analytics.html")
 def analytics():
     return send_from_directory(".", "analytics.html")
+
 
 @app.route("/goals.html")
 def goals():
     return send_from_directory(".", "goals.html")
 
+
 @app.route("/recurring.html")
 def recurring():
     return send_from_directory(".", "recurring.html")
 
+
+@app.route("/coach.html")
+def coach():
+    return send_from_directory(".", "coach.html")
+
+
+@app.route("/intelligence.html")
+def intelligence():
+    return send_from_directory(".", "intelligence.html")
+
+
+@app.route("/budget.html")
+def budget():
+    return send_from_directory(".", "budget.html")
+
+
+# ---------------- EXPENSES ----------------
+
 @app.route("/api/expenses")
 def expenses():
     c = db()
+
     r = c.execute(
         "SELECT * FROM expenses ORDER BY date DESC,id DESC"
     ).fetchall()
+
     c.close()
+
     return jsonify([dict(x) for x in r])
+
 
 @app.route("/api/expenses", methods=["POST"])
 def add_expense():
+
     d = request.get_json() or {}
 
     if not d.get("amount") or not d.get("category") or not d.get("date"):
@@ -74,9 +116,11 @@ def add_expense():
     c = db()
 
     x = c.execute(
-        """INSERT INTO expenses
+        """
+        INSERT INTO expenses
         (amount,category,note,date)
-        VALUES(?,?,?,?)""",
+        VALUES(?,?,?,?)
+        """,
         (
             float(d["amount"]),
             d["category"],
@@ -86,30 +130,52 @@ def add_expense():
     )
 
     c.commit()
+
     i = x.lastrowid
+
     c.close()
 
-    return jsonify(success=True, id=i)
+    return jsonify(
+        success=True,
+        id=i
+    )
+
 
 @app.route("/api/expenses/<int:i>", methods=["DELETE"])
 def delete_expense(i):
+
     c = db()
-    c.execute("DELETE FROM expenses WHERE id=?", (i,))
+
+    c.execute(
+        "DELETE FROM expenses WHERE id=?",
+        (i,)
+    )
+
     c.commit()
     c.close()
+
     return jsonify(success=True)
+
+
+# ---------------- INCOME ----------------
 
 @app.route("/api/income")
 def income():
+
     c = db()
+
     r = c.execute(
         "SELECT * FROM income ORDER BY date DESC,id DESC"
     ).fetchall()
+
     c.close()
+
     return jsonify([dict(x) for x in r])
+
 
 @app.route("/api/income", methods=["POST"])
 def add_income():
+
     d = request.get_json() or {}
 
     if not d.get("amount") or not d.get("source") or not d.get("date"):
@@ -121,9 +187,11 @@ def add_income():
     c = db()
 
     x = c.execute(
-        """INSERT INTO income
+        """
+        INSERT INTO income
         (amount,source,date)
-        VALUES(?,?,?)""",
+        VALUES(?,?,?)
+        """,
         (
             float(d["amount"]),
             d["source"],
@@ -132,30 +200,79 @@ def add_income():
     )
 
     c.commit()
+
     i = x.lastrowid
+
     c.close()
 
-    return jsonify(success=True, id=i)
+    return jsonify(
+        success=True,
+        id=i
+    )
+
 
 @app.route("/api/income/<int:i>", methods=["DELETE"])
 def delete_income(i):
+
     c = db()
-    c.execute("DELETE FROM income WHERE id=?", (i,))
+
+    c.execute(
+        "DELETE FROM income WHERE id=?",
+        (i,)
+    )
+
     c.commit()
     c.close()
+
     return jsonify(success=True)
+
+
+# ---------------- FINANCIAL SUMMARY ----------------
+
+@app.route("/api/financial-summary")
+def financial_summary():
+
+    c = db()
+
+    income_total = c.execute(
+        "SELECT COALESCE(SUM(amount),0) FROM income"
+    ).fetchone()[0]
+
+    expense_total = c.execute(
+        "SELECT COALESCE(SUM(amount),0) FROM expenses"
+    ).fetchone()[0]
+
+    c.close()
+
+    income_total = float(income_total)
+    expense_total = float(expense_total)
+
+    return jsonify(
+        total_income=income_total,
+        total_expenses=expense_total,
+        balance=income_total - expense_total
+    )
+
+
+# ---------------- RECURRING ----------------
 
 @app.route("/api/recurring")
 def get_recurring():
+
     c = db()
+
     r = c.execute(
         "SELECT * FROM recurring ORDER BY next_date"
     ).fetchall()
+
     c.close()
+
     return jsonify([dict(x) for x in r])
+
 
 @app.route("/api/recurring", methods=["POST"])
 def add_recurring():
+
     d = request.get_json() or {}
 
     if not d.get("name") or not d.get("amount") or not d.get("next_date"):
@@ -167,9 +284,11 @@ def add_recurring():
     c = db()
 
     x = c.execute(
-        """INSERT INTO recurring
+        """
+        INSERT INTO recurring
         (name,amount,frequency,next_date)
-        VALUES(?,?,?,?)""",
+        VALUES(?,?,?,?)
+        """,
         (
             d["name"],
             float(d["amount"]),
@@ -179,86 +298,136 @@ def add_recurring():
     )
 
     c.commit()
+
     i = x.lastrowid
+
     c.close()
 
-    return jsonify(success=True, id=i)
+    return jsonify(
+        success=True,
+        id=i
+    )
+
 
 @app.route("/api/recurring/<int:i>", methods=["DELETE"])
 def delete_recurring(i):
+
     c = db()
-    c.execute("DELETE FROM recurring WHERE id=?", (i,))
+
+    c.execute(
+        "DELETE FROM recurring WHERE id=?",
+        (i,)
+    )
+
     c.commit()
     c.close()
+
     return jsonify(success=True)
 
-# ---------------- AI MONEY COACH ----------------
+
+# ---------------- FINANCIAL DATA FOR AI ----------------
 
 def financial_data():
+
     c = db()
 
-    e = [
+    expenses = [
         dict(x)
         for x in c.execute(
-            "SELECT amount,category,note,date FROM expenses"
+            """
+            SELECT amount,category,note,date
+            FROM expenses
+            """
         ).fetchall()
     ]
 
-    inc = [
+    income = [
         dict(x)
         for x in c.execute(
-            "SELECT amount,source,date FROM income"
+            """
+            SELECT amount,source,date
+            FROM income
+            """
         ).fetchall()
     ]
 
-    rec = [
+    recurring = [
         dict(x)
         for x in c.execute(
-            "SELECT name,amount,frequency,next_date FROM recurring"
+            """
+            SELECT name,amount,frequency,next_date
+            FROM recurring
+            """
         ).fetchall()
     ]
 
     c.close()
 
-    return e, inc, rec
+    return expenses, income, recurring
+
+
+# ---------------- AI MONEY COACH ----------------
 
 @app.route("/api/ai", methods=["POST"])
 def ai():
 
     d = request.get_json() or {}
-    q = d.get("question", "").strip()
 
-    if not q:
-        return jsonify(answer="Please enter a question."), 400
+    # Supports both old and new AI Coach versions
+    question = (
+        d.get("question")
+        or d.get("message")
+        or ""
+    ).strip()
 
-    e, inc, rec = financial_data()
+    if not question:
 
-    te = sum(float(x["amount"]) for x in e)
-    ti = sum(float(x["amount"]) for x in inc)
+        return jsonify(
+            success=False,
+            answer="Please enter a question."
+        ), 400
 
-    bal = ti - te
+    expenses, income, recurring = financial_data()
 
-    rm = 0
+    total_expenses = sum(
+        float(x["amount"])
+        for x in expenses
+    )
 
-    for x in rec:
-        a = float(x["amount"])
+    total_income = sum(
+        float(x["amount"])
+        for x in income
+    )
+
+    balance = total_income - total_expenses
+
+    monthly_recurring = 0
+
+    for x in recurring:
+
+        amount = float(x["amount"])
 
         if x["frequency"] == "weekly":
-            rm += a * 52 / 12
+            monthly_recurring += amount * 52 / 12
+
         elif x["frequency"] == "yearly":
-            rm += a / 12
+            monthly_recurring += amount / 12
+
         else:
-            rm += a
+            monthly_recurring += amount
 
     key = os.getenv("OPENAI_API_KEY")
 
     if not key:
+
         return jsonify(
-            answer=
-            f"Income: ₹{ti:,.2f}\n"
-            f"Expenses: ₹{te:,.2f}\n"
-            f"Balance: ₹{bal:,.2f}\n"
-            f"Recurring: ₹{rm:,.2f}/month"
+            success=True,
+            answer=(
+                f"Income: ₹{total_income:,.2f}\n"
+                f"Expenses: ₹{total_expenses:,.2f}\n"
+                f"Balance: ₹{balance:,.2f}\n"
+                f"Recurring: ₹{monthly_recurring:,.2f}/month"
+            )
         )
 
     try:
@@ -268,63 +437,83 @@ def ai():
         client = OpenAI(api_key=key)
 
         prompt = f"""
-You are the AI financial assistant in a personal expense app.
+You are the AI Financial Coach inside a personal
+expense tracking application.
 
-Answer the user's question using ONLY the financial data below.
+Answer the user's question using the financial
+information provided below.
 
-QUESTION:
-{q}
+USER QUESTION:
+{question}
 
-INCOME:
-₹{ti:,.2f}
+TOTAL INCOME:
+₹{total_income:,.2f}
 
-EXPENSES:
-₹{te:,.2f}
+TOTAL EXPENSES:
+₹{total_expenses:,.2f}
 
-BALANCE:
-₹{bal:,.2f}
+CURRENT BALANCE:
+₹{balance:,.2f}
 
-MONTHLY RECURRING:
-₹{rm:,.2f}
+MONTHLY RECURRING PAYMENTS:
+₹{monthly_recurring:,.2f}
 
 EXPENSE RECORDS:
-{e}
+{expenses}
 
 INCOME RECORDS:
-{inc}
+{income}
 
-RECURRING:
-{rec}
+RECURRING PAYMENTS:
+{recurring}
 
-Use Indian Rupees.
-Be accurate and practical.
-Never invent financial information.
+Rules:
+
+- Use Indian Rupees.
+- Be practical and concise.
+- Explain calculations when useful.
+- Never invent financial information.
+- Identify useful savings opportunities.
+- Give actionable advice.
 """
 
-        r = client.responses.create(
+        response = client.responses.create(
             model="gpt-5.6-luna",
             input=prompt
         )
 
-        return jsonify(answer=r.output_text)
+        return jsonify(
+            success=True,
+            answer=response.output_text
+        )
 
     except Exception as ex:
 
-        print("AI ERROR:", repr(ex))
-
-        return jsonify(
-            answer="⚠️ AI service error. Please try again later."
+        print(
+            "AI ERROR:",
+            repr(ex)
         )
 
-# ---------------- RECEIPT SCANNER ----------------
+        return jsonify(
+            success=False,
+            answer=(
+                "⚠️ AI service error. "
+                "Please try again later."
+            )
+        ), 500
+
+
+# ---------------- AI RECEIPT SCANNER ----------------
 
 @app.route("/api/scan-receipt", methods=["POST"])
 def scan_receipt():
 
     d = request.get_json() or {}
+
     image = d.get("image", "")
 
     if not image:
+
         return jsonify(
             success=False,
             error="Please upload a receipt image."
@@ -333,6 +522,7 @@ def scan_receipt():
     key = os.getenv("OPENAI_API_KEY")
 
     if not key:
+
         return jsonify(
             success=False,
             error="AI service is not configured."
@@ -344,42 +534,29 @@ def scan_receipt():
 
         client = OpenAI(api_key=key)
 
-        # Keep the complete image data URL.
-        image_url = image
+        if not image.startswith("data:image/"):
 
-        if not image_url.startswith("data:image/"):
-            image_url = (
+            image = (
                 "data:image/jpeg;base64,"
-                + image_url
+                + image
             )
 
         prompt = """
-You are an expert receipt-reading AI.
+Read this receipt carefully.
 
-Look at the ENTIRE receipt carefully.
-
-Your most important task is to find the
-FINAL TOTAL AMOUNT PAID.
+Find the FINAL TOTAL AMOUNT PAID.
 
 Do NOT use:
-- individual item prices
+- item prices
 - subtotal
 - tax alone
 - discount
 - change
 - quantity
-- unit price
 
-Use the final grand total / total paid amount.
+Use the final grand total or amount paid.
 
-Also identify:
-1. Merchant or short description
-2. Category
-3. Receipt date
-
-Return ONLY valid JSON.
-
-Exactly this format:
+Return ONLY valid JSON:
 
 {
   "amount": 123.45,
@@ -388,7 +565,7 @@ Exactly this format:
   "date": "YYYY-MM-DD"
 }
 
-CATEGORY MUST BE ONE OF:
+Category must be one of:
 
 Food
 Travel
@@ -399,18 +576,10 @@ Entertainment
 Health
 Other
 
-IMPORTANT:
+If the receipt date is visible,
+convert it to YYYY-MM-DD.
 
-- Carefully zoom mentally into the bottom of the receipt.
-- The final total is often near TOTAL, GRAND TOTAL,
-  AMOUNT PAID, NET TOTAL or similar.
-- Read faint and small digits carefully.
-- If there are several totals, choose the final amount paid.
-- Do not return 0 unless the receipt genuinely contains
-  no readable total.
-- Never put ₹ or other currency symbols inside amount.
-- If date is visible, convert it to YYYY-MM-DD.
-- If date is not visible, use today's date.
+Never invent an amount.
 """
 
         response = client.responses.create(
@@ -420,15 +589,19 @@ IMPORTANT:
             input=[
                 {
                     "role": "user",
+
                     "content": [
+
                         {
                             "type": "input_text",
                             "text": prompt
                         },
+
                         {
                             "type": "input_image",
-                            "image_url": image_url
+                            "image_url": image
                         }
+
                     ]
                 }
             ]
@@ -443,14 +616,13 @@ IMPORTANT:
             text
         )
 
-        # Remove markdown fences if present.
-        text = text.replace(
-            "```json", ""
-        ).replace(
-            "```", ""
-        ).strip()
+        text = (
+            text
+            .replace("```json", "")
+            .replace("```", "")
+            .strip()
+        )
 
-        # Find JSON even if AI added a sentence.
         match = re.search(
             r"\{.*\}",
             text,
@@ -458,8 +630,9 @@ IMPORTANT:
         )
 
         if not match:
+
             raise ValueError(
-                "AI did not return valid receipt data."
+                "AI returned invalid receipt data."
             )
 
         result = json.loads(
@@ -485,13 +658,6 @@ IMPORTANT:
                 else 0
             )
 
-        category = str(
-            result.get(
-                "category",
-                "Other"
-            )
-        )
-
         allowed = {
             "Food",
             "Travel",
@@ -503,7 +669,15 @@ IMPORTANT:
             "Other"
         }
 
+        category = str(
+            result.get(
+                "category",
+                "Other"
+            )
+        )
+
         if category not in allowed:
+
             category = "Other"
 
         note = str(
@@ -512,6 +686,10 @@ IMPORTANT:
                 "Receipt"
             )
         ).strip()
+
+        if not note:
+
+            note = "Receipt"
 
         date = str(
             result.get(
@@ -524,6 +702,7 @@ IMPORTANT:
             r"\d{4}-\d{2}-\d{2}",
             date
         ):
+
             date = ""
 
         print(
@@ -535,11 +714,17 @@ IMPORTANT:
         )
 
         return jsonify(
+
             success=True,
+
             amount=amount,
+
             category=category,
+
             note=note,
+
             date=date
+
         )
 
     except Exception as ex:
@@ -551,10 +736,14 @@ IMPORTANT:
 
         return jsonify(
             success=False,
-            error=
-            "Could not read the receipt. "
-            "Please take a closer, clearer photo."
+            error=(
+                "Could not read the receipt. "
+                "Please take a clearer photo."
+            )
         ), 500
+
+
+# ---------------- HEALTH ----------------
 
 @app.route("/api/health")
 def health():
@@ -563,6 +752,9 @@ def health():
         success=True,
         message="Smart Expense Tracker is running"
     )
+
+
+# ---------------- START SERVER ----------------
 
 if __name__ == "__main__":
 
@@ -574,4 +766,4 @@ if __name__ == "__main__":
                 5000
             )
         )
-    )
+        )
