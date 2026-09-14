@@ -1,1 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Recurring Payments | Smart Expense Tracker</title>
 
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+
+body{
+    background:#f4f6fa;
+    color:#172033;
+}
+
+header{
+    background:white;
+    padding:18px 6%;
+    border-bottom:1px solid #e5e7eb;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:5;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:800;
+}
+
+.back{
+    text-decoration:none;
+    background:#111827;
+    color:white;
+    padding:10px 16px;
+    border-radius:10px;
+    font-size:14px;
+}
+
+.container{
+    width:88%;
+    max-width:1100px;
+    margin:30px auto;
+}
+
+h1{
+    font-size:32px;
+    margin-bottom:7px;
+}
+
+.subtitle{
+    color:#6b7280;
+    margin-bottom:25px;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.stat,.panel{
+    background:white;
+    border:1px solid #e5e7eb;
+    border-radius:18px;
+    box-shadow:0 5px 20px rgba(0,0,0,.04);
+}
+
+.stat{
+    padding:20px;
+}
+
+.stat span{
+    color:#6b7280;
+    font-size:13px;
+}
+
+.stat strong{
+    display:block;
+    font-size:23px;
+    margin-top:7px;
+}
+
+.panel{
+    padding:22px;
+    margin-bottom:20px;
+}
+
+.panel h2{
+    margin-bottom:18px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1.5fr;
+    gap:20px;
+}
+
+.form{
+    display:grid;
+    gap:12px;
+}
+
+input,select{
+    width:100%;
+    padding:13px;
+    border:1px solid #d7dce5;
+    border-radius:10px;
+    background:white;
+    outline:none;
+}
+
+button{
+    border:0;
+    border-radius:10px;
+    padding:12px;
+    background:#111827;
+    color:white;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.payment{
+    border:1px solid #e5e7eb;
+    border-radius:15px;
+    padding:17px;
+    margin-bottom:13px;
+}
+
+.payment-top{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.payment-name{
+    font-size:18px;
+    font-weight:700;
+}
+
+.amount{
+    font-weight:700;
+}
+
+.info{
+    color:#6b7280;
+    font-size:14px;
+    line-height:1.7;
+    margin-top:7px;
+}
+
+.actions{
+    display:flex;
+    gap:8px;
+    margin-top:12px;
+}
+
+.delete{
+    background:#fee2e2;
+    color:#b91c1c;
+}
+
+.due{
+    background:#fff7ed;
+    color:#c2410c;
+    border-radius:8px;
+    padding:4px 8px;
+    font-size:12px;
+    display:inline-block;
+    margin-top:8px;
+}
+
+.normal{
+    background:#ecfdf5;
+    color:#047857;
+}
+
+.empty{
+    text-align:center;
+    color:#6b7280;
+    padding:30px;
+}
+
+@media(max-width:750px){
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .container{
+        width:92%;
+    }
+
+    h1{
+        font-size:27px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">
+💰 Smart Expense Tracker
+</div>
+
+<a href="/" class="back">
+← Dashboard
+</a>
+
+</header>
+
+<div class="container">
+
+<h1>🔄 Recurring Payments</h1>
+
+<p class="subtitle">
+Keep track of subscriptions, bills and regular payments.
+</p>
+
+
+<div class="stats">
+
+<div class="stat">
+<span>Active Payments</span>
+<strong id="count">0</strong>
+</div>
+
+<div class="stat">
+<span>Monthly Commitment</span>
+<strong id="monthly">₹0</strong>
+</div>
+
+<div class="stat">
+<span>Due Soon</span>
+<strong id="soon">0</strong>
+</div>
+
+</div>
+
+
+<div class="grid">
+
+
+<div class="panel">
+
+<h2>➕ Add Recurring Payment</h2>
+
+<form id="form" class="form">
+
+<input
+id="name"
+type="text"
+placeholder="Payment name (Example: Netflix)"
+required
+>
+
+<input
+id="amount"
+type="number"
+min="1"
+step="0.01"
+placeholder="Amount ₹"
+required
+>
+
+<select id="frequency">
+
+<option value="monthly">Monthly</option>
+<option value="weekly">Weekly</option>
+<option value="yearly">Yearly</option>
+
+</select>
+
+<input
+id="date"
+type="date"
+required
+>
+
+<button>
+Add Payment
+</button>
+
+</form>
+
+</div>
+
+
+<div class="panel">
+
+<h2>📅 Upcoming Payments</h2>
+
+<div id="payments"></div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+let payments =
+JSON.parse(
+localStorage.getItem("recurringPayments") || "[]"
+);
+
+
+function money(n){
+
+return "₹"+Number(n).toLocaleString(
+"en-IN",
+{
+maximumFractionDigits:2
+}
+);
+
+}
+
+
+function save(){
+
+localStorage.setItem(
+"recurringPayments",
+JSON.stringify(payments)
+);
+
+}
+
+
+function daysUntil(date){
+
+const today=new Date();
+today.setHours(0,0,0,0);
+
+const target=new Date(date+"T00:00:00");
+
+return Math.ceil(
+(target-today)/(1000*60*60*24)
+);
+
+}
+
+
+function nextDate(payment){
+
+let date=new Date(
+payment.date+"T00:00:00"
+);
+
+const today=new Date();
+today.setHours(0,0,0,0);
+
+while(date<today){
+
+if(payment.frequency==="weekly"){
+
+date.setDate(date.getDate()+7);
+
+}else if(payment.frequency==="monthly"){
+
+date.setMonth(date.getMonth()+1);
+
+}else{
+
+date.setFullYear(
+date.getFullYear()+1
+);
+
+}
+
+}
+
+return date.toISOString().split("T")[0];
+
+}
+
+
+function monthlyCost(payment){
+
+const amount=Number(payment.amount);
+
+if(payment.frequency==="weekly")
+return amount*52/12;
+
+if(payment.frequency==="yearly")
+return amount/12;
+
+return amount;
+
+}
+
+
+function render(){
+
+const box=document.getElementById("payments");
+
+let monthlyTotal=0;
+let dueSoon=0;
+
+payments.forEach(p=>{
+
+monthlyTotal+=monthlyCost(p);
+
+const next=nextDate(p);
+const days=daysUntil(next);
+
+if(days>=0 && days<=7)
+dueSoon++;
+
+});
+
+
+document.getElementById("count")
+.textContent=payments.length;
+
+document.getElementById("monthly")
+.textContent=money(monthlyTotal);
+
+document.getElementById("soon")
+.textContent=dueSoon;
+
+
+if(!payments.length){
+
+box.innerHTML=
+'<div class="empty">No recurring payments yet.</div>';
+
+return;
+
+}
+
+
+const sorted=[...payments].sort(
+(a,b)=>
+nextDate(a).localeCompare(nextDate(b))
+);
+
+
+box.innerHTML=sorted.map(p=>{
+
+const next=nextDate(p);
+const days=daysUntil(next);
+
+let status="normal";
+let text="Due in "+days+" days";
+
+if(days===0){
+
+status="due";
+text="Due today";
+
+}else if(days<0){
+
+status="due";
+text="Overdue";
+
+}else if(days<=7){
+
+status="due";
+text="Due in "+days+" days";
+
+}
+
+
+return `
+
+<div class="payment">
+
+<div class="payment-top">
+
+<div class="payment-name">
+${escapeHTML(p.name)}
+</div>
+
+<div class="amount">
+${money(p.amount)}
+</div>
+
+</div>
+
+<div class="info">
+
+Frequency:
+<strong>${p.frequency}</strong>
+
+<br>
+
+Next payment:
+<strong>${next}</strong>
+
+<br>
+
+Monthly equivalent:
+<strong>${money(monthlyCost(p))}</strong>
+
+<br>
+
+<span class="due ${status}">
+${text}
+</span>
+
+</div>
+
+<div class="actions">
+
+<button onclick="markPaid(${p.id})">
+✓ Mark Paid
+</button>
+
+<button
+class="delete"
+onclick="removePayment(${p.id})">
+Delete
+</button>
+
+</div>
+
+</div>
+
+`;
+
+}).join("");
+
+}
+
+
+function markPaid(id){
+
+const p=payments.find(
+x=>x.id===id
+);
+
+if(!p) return;
+
+const current=new Date(
+p.date+"T00:00:00"
+);
+
+if(p.frequency==="weekly"){
+
+current.setDate(
+current.getDate()+7
+);
+
+}else if(p.frequency==="monthly"){
+
+current.setMonth(
+current.getMonth()+1
+);
+
+}else{
+
+current.setFullYear(
+current.getFullYear()+1
+);
+
+}
+
+p.date=
+current.toISOString().split("T")[0];
+
+save();
+render();
+
+}
+
+
+function removePayment(id){
+
+if(!confirm(
+"Delete this recurring payment?"
+))
+return;
+
+payments=
+payments.filter(
+p=>p.id!==id
+);
+
+save();
+render();
+
+}
+
+
+document
+.getElementById("form")
+.addEventListener(
+"submit",
+function(e){
+
+e.preventDefault();
+
+const payment={
+
+id:Date.now(),
+
+name:
+document.getElementById("name")
+.value.trim(),
+
+amount:
+Number(document.getElementById("amount").value),
+
+frequency:
+document.getElementById("frequency").value,
+
+date:
+document.getElementById("date").value
+
+};
+
+payments.push(payment);
+
+save();
+
+this.reset();
+
+render();
+
+});
+
+
+function escapeHTML(text){
+
+return String(text)
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
+
+}
+
+
+render();
+
+</script>
+
+</body>
+</html>
