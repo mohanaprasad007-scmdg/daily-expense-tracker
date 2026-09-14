@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Expense Intelligence | Smart Money Coach</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f6fa;color:#172033}
+header{background:#fff;padding:16px 6%;border-bottom:1px solid #e5e7eb;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5}
+.logo{font-size:21px;font-weight:800}
+.back{background:#111827;color:#fff;text-decoration:none;padding:10px 15px;border-radius:10px}
+.container{width:92%;max-width:1100px;margin:28px auto}
+h1{font-size:30px;margin:0 0 6px}
+.sub{color:#667085;margin-bottom:22px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:18px}
+.card,.panel{background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:19px;box-shadow:0 5px 20px #00000008}
+.card span{color:#667085;font-size:13px}
+.card strong{display:block;font-size:23px;margin-top:7px}
+.panel{margin-bottom:18px}
+.score{text-align:center}
+.scoreNum{font-size:52px;font-weight:800;margin:10px 0}
+.scoreText{font-weight:700}
+.good{color:#047857}
+.medium{color:#c2410c}
+.bad{color:#b91c1c}
+.row{display:flex;justify-content:space-between;gap:12px;margin:13px 0}
+.bar{height:11px;background:#e5e7eb;border-radius:20px;overflow:hidden}
+.fill{height:100%;width:0;background:#111827}
+.item{border:1px solid #e5e7eb;border-radius:13px;padding:15px;margin:10px 0}
+.item b{font-size:16px}
+.muted{color:#667085;font-size:13px;margin-top:5px}
+.insight{background:#111827;color:#fff;border-radius:15px;padding:18px;line-height:1.6}
+.insight p{color:#d1d5db}
+.warning{background:#fff7ed;color:#9a3412;padding:13px;border-radius:11px;margin:9px 0}
+.success{background:#ecfdf5;color:#047857;padding:13px;border-radius:11px;margin:9px 0}
+.danger{background:#fee2e2;color:#b91c1c;padding:13px;border-radius:11px;margin:9px 0}
+button{border:0;background:#111827;color:#fff;padding:12px 16px;border-radius:10px;font-weight:700;cursor:pointer}
+@media(max-width:800px){.grid{grid-template-columns:1fr 1fr}}
+@media(max-width:500px){.grid{grid-template-columns:1fr}h1{font-size:26px}}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="logo">🧠 Smart Money Coach</div>
+<a href="/" class="back">← Dashboard</a>
+</header>
+
+<div class="container">
+
+<h1>🔬 Expense Intelligence 3.0</h1>
+<p class="sub">
+Advanced analysis of your spending habits, trends and financial health.
+</p>
+
+<div class="grid">
+
+<div class="card">
+<span>This Month</span>
+<strong id="monthSpend">₹0</strong>
+</div>
+
+<div class="card">
+<span>Daily Average</span>
+<strong id="dailyAvg">₹0</strong>
+</div>
+
+<div class="card">
+<span>Forecast</span>
+<strong id="forecast">₹0</strong>
+</div>
+
+<div class="card">
+<span>Transactions</span>
+<strong id="transactions">0</strong>
+</div>
+
+</div>
+
+<section class="panel score">
+
+<h2>❤️ Financial Health Score</h2>
+
+<div id="score" class="scoreNum">--</div>
+
+<div id="scoreText" class="scoreText">
+Analyzing...
+</div>
+
+</section>
+
+<section class="panel">
+
+<h2>📊 Spending Analysis</h2>
+
+<div id="analysis">
+Analyzing your spending...
+</div>
+
+</section>
+
+<section class="panel">
+
+<h2>🔥 Top Spending Categories</h2>
+
+<div id="categories">
+Loading...
+</div>
+
+</section>
+
+<section class="panel">
+
+<h2>⚠️ Spending Alerts</h2>
+
+<div id="alerts">
+Analyzing unusual spending...
+</div>
+
+</section>
+
+<section class="panel">
+
+<h2>🔮 End-of-Month Forecast</h2>
+
+<div id="forecastBox">
+Calculating...
+</div>
+
+</section>
+
+<section class="panel">
+
+<h2>🤖 AI Intelligence</h2>
+
+<div id="ai" class="insight">
+Analyzing your financial behavior...
+</div>
+
+<br>
+
+<button onclick="analyzeAI()">
+🤖 Get AI Analysis
+</button>
+
+</section>
+
+</div>
+
+<script>
+
+const $=id=>document.getElementById(id);
+
+let expenses=[];
+let income=0;
+
+function money(n){
+ return "₹"+Number(n||0).toLocaleString(
+  "en-IN",
+  {maximumFractionDigits:2}
+ );
+}
+
+function monthKey(){
+ const d=new Date();
+ return d.getFullYear()+"-"+
+ String(d.getMonth()+1).padStart(2,"0");
+}
+
+function daysPassed(){
+ return new Date().getDate();
+}
+
+function daysInMonth(){
+ const d=new Date();
+ return new Date(
+  d.getFullYear(),
+  d.getMonth()+1,
+  0
+ ).getDate();
+}
+
+function monthExpenses(){
+
+ const key=monthKey();
+
+ return expenses.filter(e=>
+  String(e.date||"").slice(0,7)===key
+ );
+
+}
+
+function total(list){
+ return list.reduce(
+  (s,e)=>s+Number(e.amount||0),0
+ );
+}
+
+function moneyPercent(a,b){
+ return b?((a/b)*100).toFixed(1):"0";
+}
+
+function escapeHTML(x){
+ return String(x??"")
+ .replaceAll("&","&amp;")
+ .replaceAll("<","&lt;")
+ .replaceAll(">","&gt;")
+ .replaceAll('"',"&quot;")
+ .replaceAll("'","&#039;");
+}
+
+async function load(){
+
+ try{
+
+  const r=await fetch("/api/expenses");
+
+  const data=await r.json();
+
+  expenses=Array.isArray(data)
+   ?data
+   :(data.expenses||[]);
+
+  try{
+
+   const fr=await fetch("/api/financial-summary");
+   const fd=await fr.json();
+
+   income=Number(
+    fd.total_income||fd.income||0
+   );
+
+  }catch(e){}
+
+  analyze();
+
+ }catch(e){
+
+  $("analysis").textContent=
+   "❌ Could not load expenses.";
+
+ }
+
+}
+
+function analyze(){
+
+ const list=monthExpenses();
+ const spent=total(list);
+ const days=daysPassed();
+ const avg=spent/days;
+
+ const forecast=avg*daysInMonth();
+
+ $("monthSpend").textContent=money(spent);
+ $("dailyAvg").textContent=money(avg);
+ $("forecast").textContent=money(forecast);
+ $("transactions").textContent=list.length;
+
+ categories(list,spent);
+ health(spent,forecast);
+ alerts(list);
+ forecastView(spent,forecast,avg);
+ basicAnalysis(list,spent,avg,forecast);
+
+}
+
+function categories(list,spent){
+
+ const map={};
+
+ list.forEach(e=>{
+
+  const c=e.category||"Other";
+
+  map[c]=(map[c]||0)+
+   Number(e.amount||0);
+
+ });
+
+ const names=Object.keys(map)
+ .sort((a,b)=>map[b]-map[a]);
+
+ if(!names.length){
+
+  $("categories").innerHTML=
+   "<p>No spending recorded this month.</p>";
+
+  return;
+
+ }
+
+ $("categories").innerHTML=
+ names.slice(0,8).map((c,i)=>{
+
+  const amount=map[c];
+  const percent=spent?
+   amount/spent*100:0;
+
+  return `
+  <div class="item">
+
+   <div class="row">
+    <b>${i+1}. ${escapeHTML(c)}</b>
+    <b>${money(amount)}</b>
+   </div>
+
+   <div class="bar">
+    <div class="fill"
+     style="width:${percent}%"></div>
+   </div>
+
+   <div class="muted">
+    ${percent.toFixed(1)}% of monthly spending
+   </div>
+
+  </div>
+  `;
+
+ }).join("");
+
+}
+
+function health(spent,forecast){
+
+ let score=100;
+
+ if(income>0){
+
+  const ratio=forecast/income;
+
+  if(ratio>1)score-=45;
+  else if(ratio>.8)score-=30;
+  else if(ratio>.6)score-=15;
+  else if(ratio>.5)score-=5;
+
+ }else{
+
+  score-=10;
+
+ }
+
+ const list=monthExpenses();
+
+ if(list.length>0){
+
+  const avg=spent/list.length;
+
+  const largest=Math.max(
+   ...list.map(e=>Number(e.amount||0))
+  );
+
+  if(largest>avg*5)score-=10;
+  if(largest>avg*10)score-=5;
+
+ }
+
+ score=Math.max(0,Math.min(100,Math.round(score)));
+
+ $("score").textContent=score;
+
+ const box=$("scoreText");
+
+ box.className="scoreText";
+
+ if(score>=75){
+
+  box.classList.add("good");
+  box.textContent=
+   "🟢 Healthy spending pattern";
+
+ }else if(score>=50){
+
+  box.classList.add("medium");
+  box.textContent=
+   "🟠 Needs some improvement";
+
+ }else{
+
+  box.classList.add("bad");
+  box.textContent=
+   "🔴 High financial risk";
+
+ }
+
+}
+
+function basicAnalysis(list,spent,avg,forecast){
+
+ let html="";
+
+ if(!list.length){
+
+  html=
+   "<div class='success'>"+
+   "✨ No expenses recorded this month yet."+
+   "</div>";
+
+ }else{
+
+  html+=
+   "<div class='success'>"+
+   "📊 You have spent "+money(spent)+
+   " across "+list.length+
+   " transactions this month."+
+   "</div>";
+
+  html+=
+   "<div class='item'>"+
+   "<b>Daily average</b>"+
+   "<div class='muted'>"+
+   money(avg)+" per day"+
+   "</div></div>";
+
+  html+=
+   "<div class='item'>"+
+   "<b>Projected monthly spending</b>"+
+   "<div class='muted'>"+
+   money(forecast)+
+   "</div></div>";
+
+ }
+
+ $("analysis").innerHTML=html;
+
+}
+
+function alerts(list){
+
+ if(!list.length){
+
+  $("alerts").innerHTML=
+   "<div class='success'>No alerts yet.</div>";
+
+  return;
+
+ }
+
+ const avg=total(list)/list.length;
+
+ const unusual=list
+ .filter(e=>Number(e.amount||0)>avg*3)
+ .sort((a,b)=>
+  Number(b.amount||0)-Number(a.amount||0)
+ );
+
+ if(!unusual.length){
+
+  $("alerts").innerHTML=
+   "<div class='success'>"+
+   "🟢 No unusually large transactions detected."+
+   "</div>";
+
+  return;
+
+ }
+
+ $("alerts").innerHTML=
+  unusual.slice(0,5).map(e=>
+   `<div class="warning">
+    ⚠️ <b>${money(e.amount)}</b>
+    in ${escapeHTML(e.category||"Other")}
+    is much higher than your average transaction.
+    <div class="muted">
+    ${escapeHTML(e.note||"No description")} •
+    ${escapeHTML(e.date||"")}
+    </div>
+   </div>`
+  ).join("");
+
+}
+
+function forecastView(spent,forecast,avg){
+
+ const days=daysInMonth();
+ const passed=daysPassed();
+ const remaining=Math.max(0,days-passed);
+
+ $("forecastBox").innerHTML=
+ `
+ <div class="item">
+  <b>Current spending</b>
+  <div class="muted">${money(spent)}</div>
+ </div>
+
+ <div class="item">
+  <b>Current daily average</b>
+  <div class="muted">${money(avg)}</div>
+ </div>
+
+ <div class="item">
+  <b>Estimated month-end spending</b>
+  <div class="muted">${money(forecast)}</div>
+ </div>
+
+ <div class="item">
+  <b>Days remaining</b>
+  <div class="muted">${remaining} days</div>
+ </div>
+ `;
+
+}
+
+async function analyzeAI(){
+
+ $("ai").innerHTML=
+  "<b>🤖 Thinking...</b><p>"+
+  "Analyzing your spending patterns.</p>";
+
+ try{
+
+  const response=await fetch("/api/ai",{
+   method:"POST",
+   headers:{
+    "Content-Type":"application/json"
+   },
+   body:JSON.stringify({
+    message:
+    "Analyze my finances as an expert financial coach. "+
+    "Focus on spending patterns, unusual expenses, "+
+    "largest categories, savings opportunities, "+
+    "monthly spending forecast and practical actions. "+
+    "Give concise actionable advice."
+   })
+  });
+
+  const data=await response.json();
+
+  if(!response.ok||data.success===false)
+   throw new Error(
+    data.error||"AI analysis failed."
+   );
+
+  const answer=
+   data.answer||
+   data.response||
+   data.message||
+   "No analysis available.";
+
+  $("ai").innerHTML=
+   "<b>🤖 AI Financial Intelligence</b>"+
+   "<p>"+escapeHTML(answer)+"</p>";
+
+ }catch(e){
+
+  $("ai").innerHTML=
+   "<b>❌ AI unavailable</b>"+
+   "<p>"+escapeHTML(e.message)+"</p>";
+
+ }
+
+}
+
+load();
+
+</script>
+
+</body>
+</html>
