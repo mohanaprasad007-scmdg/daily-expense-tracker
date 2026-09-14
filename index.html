@@ -5,21 +5,67 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Smart Money Coach</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#f4f6fa;color:#172033;font:15px Arial,sans-serif}
-header{background:#fff;padding:15px 5%;border-bottom:1px solid #ddd;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5}.logo{font-size:20px;font-weight:800}
-nav{display:flex;gap:7px;flex-wrap:wrap}nav a,button{background:#111827;color:#fff;border:0;border-radius:10px;padding:10px 13px;text-decoration:none;cursor:pointer;font-weight:600}
-main{width:90%;max-width:1200px;margin:25px auto}h1{margin-bottom:5px}p{color:#667085}.health{background:#111827;color:#fff;border-radius:20px;padding:22px;display:flex;gap:25px;align-items:center;margin:20px 0}
-.circle{width:135px;height:135px;border:9px solid #555;border-radius:50%;display:grid;place-items:center;text-align:center;flex:none}.circle b{font-size:38px}.circle small{display:block;color:#bbb}
-.bar{height:10px;background:#ddd;border-radius:20px;overflow:hidden;margin-top:12px}.bar i{display:block;height:100%;width:0;background:#111827}.health .bar{background:#444}.health .bar i{background:#fff}
-.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:15px 0}.card,.panel{background:#fff;border:1px solid #e5e7eb;border-radius:17px;padding:17px;box-shadow:0 4px 18px #00000008}.card span{font-size:12px;color:#667085}.card b{display:block;font-size:20px;margin-top:7px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.form{display:grid;gap:9px}input,select{padding:12px;border:1px solid #ccd2da;border-radius:9px;width:100%;background:#fff}
-button{border:0;border-radius:10px;padding:12px;background:#111827;color:#fff;cursor:pointer;font-weight:600}.del{background:#fee2e2;color:#b91c1c;padding:6px 9px}
-.item{display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid #eee}.item small{display:block;color:#667085;margin-top:4px}
-.action{background:#f8fafc;border-left:4px solid #111827;border-radius:10px;padding:13px;margin:8px 0}.good{border-left-color:#087f5b}.warn{border-left-color:#b7791f}.bad{border-left-color:#c92a2a}
-.challenge{background:#f8fafc;border-radius:12px;padding:15px}.challenge-top{display:flex;justify-content:space-between}.progress{height:10px;background:#ddd;border-radius:20px;overflow:hidden;margin-top:10px}.progress i{display:block;height:100%;width:0;background:#111827}.streak{margin-top:12px}
-.filters{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px}.ai{background:#111827;color:#fff}.ai p{color:#cbd5e1}.airow{display:flex;gap:8px}.airow input{flex:1}.airow button{background:#fff;color:#111827}.answer{background:#1f2937;padding:14px;border-radius:10px;margin-top:10px;white-space:pre-wrap;line-height:1.5}.empty{text-align:center;padding:18px;color:#667085}
-@media(max-width:900px){.cards{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:1fr}}
-@media(max-width:600px){header{align-items:flex-start;gap:10px;flex-direction:column}main{width:92%}.cards{grid-template-columns:1fr 1fr}.health{flex-direction:column;text-align:center}.filters{grid-template-columns:1fr}.airow{flex-direction:column}}
+*{box-sizing:border-box}
+body{margin:0;background:#f4f6fa;color:#172033;font:15px Arial,sans-serif}
+header{background:#fff;padding:15px 5%;border-bottom:1px solid #ddd;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5}
+.logo{font-size:20px;font-weight:800}
+nav{display:flex;gap:7px;flex-wrap:wrap}
+nav a,button{background:#111827;color:#fff;border:0;border-radius:10px;padding:10px 13px;text-decoration:none;cursor:pointer;font-weight:600}
+main{width:90%;max-width:1200px;margin:25px auto}
+h1{margin-bottom:5px}
+p{color:#667085}
+.health{background:#111827;color:#fff;border-radius:20px;padding:22px;display:flex;gap:25px;align-items:center;margin:20px 0}
+.circle{width:135px;height:135px;border:9px solid #555;border-radius:50%;display:grid;place-items:center;text-align:center;flex:none}
+.circle b{font-size:38px}
+.circle small{display:block;color:#bbb}
+.bar{height:10px;background:#ddd;border-radius:20px;overflow:hidden;margin-top:12px}
+.bar i{display:block;height:100%;width:0;background:#111827}
+.health .bar{background:#444}
+.health .bar i{background:#fff}
+.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:15px 0}
+.card,.panel{background:#fff;border:1px solid #e5e7eb;border-radius:17px;padding:17px;box-shadow:0 4px 18px #00000008}
+.card span{font-size:12px;color:#667085}
+.card b{display:block;font-size:20px;margin-top:7px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.form{display:grid;gap:9px}
+input,select{padding:12px;border:1px solid #ccd2da;border-radius:9px;width:100%;background:#fff}
+button{padding:12px}
+.del{background:#fee2e2;color:#b91c1c;padding:6px 9px}
+.item{display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid #eee}
+.item small{display:block;color:#667085;margin-top:4px}
+.action{background:#f8fafc;border-left:4px solid #111827;border-radius:10px;padding:13px;margin:8px 0}
+.good{border-left-color:#087f5b}
+.warn{border-left-color:#b7791f}
+.bad{border-left-color:#c92a2a}
+.challenge{background:#f8fafc;border-radius:12px;padding:15px}
+.challenge-top{display:flex;justify-content:space-between}
+.progress{height:10px;background:#ddd;border-radius:20px;overflow:hidden;margin-top:10px}
+.progress i{display:block;height:100%;width:0;background:#111827}
+.streak{margin-top:12px}
+.filters{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px}
+.ai{background:#111827;color:#fff}
+.ai p{color:#cbd5e1}
+.airow{display:flex;gap:8px}
+.airow input{flex:1}
+.airow button{background:#fff;color:#111827}
+.answer{background:#1f2937;padding:14px;border-radius:10px;margin-top:10px;white-space:pre-wrap;line-height:1.5}
+.empty{text-align:center;padding:18px;color:#667085}
+.receipt{background:#f8fafc;border:2px dashed #cbd5e1;text-align:center;padding:20px;border-radius:14px}
+.receipt input{margin:10px 0}
+.scanbtn{display:inline-block;background:#111827;color:#fff;padding:12px 18px;border-radius:10px;cursor:pointer;font-weight:700}
+.scanstatus{margin-top:10px;font-weight:600}
+@media(max-width:900px){
+.cards{grid-template-columns:repeat(3,1fr)}
+.grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+header{align-items:flex-start;gap:10px;flex-direction:column}
+main{width:92%}
+.cards{grid-template-columns:1fr 1fr}
+.health{flex-direction:column;text-align:center}
+.filters{grid-template-columns:1fr}
+.airow{flex-direction:column}
+}
 </style>
 </head>
 <body>
@@ -61,8 +107,12 @@ button{border:0;border-radius:10px;padding:12px;background:#111827;color:#fff;cu
 
 <section class="panel">
 <h2>➕ Add Expense</h2>
+
 <form id="expenseForm" class="form">
-<input id="amount" type="number" step=".01" placeholder="Amount ₹" required>
+
+<input id="amount" type="number" step=".01"
+placeholder="Amount ₹" required>
+
 <select id="category" required>
 <option value="">Category</option>
 <option>Food</option>
@@ -74,39 +124,83 @@ button{border:0;border-radius:10px;padding:12px;background:#111827;color:#fff;cu
 <option>Health</option>
 <option>Other</option>
 </select>
+
 <input id="date" type="date" required>
 <input id="note" placeholder="Description">
+
 <button>Add Expense</button>
+
 </form>
 </section>
 
 <section class="panel">
-<h2>💵 Add Income</h2>
-<form id="incomeForm" class="form">
-<input id="incomeAmount" type="number" step=".01" placeholder="Income ₹" required>
-<input id="incomeSource" placeholder="Source" required>
-<input id="incomeDate" type="date" required>
-<button>Add Income</button>
-</form>
-<div id="incomeList"></div>
+<h2>📸 AI Receipt Scanner</h2>
+
+<p>Take a photo or upload a receipt. AI will read the details and fill your expense form.</p>
+
+<div class="receipt">
+
+<label class="scanbtn">
+📷 Scan Receipt
+<input id="receiptFile" type="file"
+accept="image/*" capture="environment"
+style="display:none">
+</label>
+
+<div id="scanStatus" class="scanstatus">
+Ready to scan.
+</div>
+
+</div>
+
 </section>
 
 </div>
 
 <section class="panel">
+<h2>💵 Add Income</h2>
+
+<form id="incomeForm" class="form">
+
+<input id="incomeAmount" type="number" step=".01"
+placeholder="Income ₹" required>
+
+<input id="incomeSource" placeholder="Source" required>
+
+<input id="incomeDate" type="date" required>
+
+<button>Add Income</button>
+
+</form>
+
+<div id="incomeList"></div>
+</section>
+
+<section class="panel">
 <h2>🧠 Smart Action Plan</h2>
-<div id="actions"><div class="empty">Analyzing...</div></div>
+<div id="actions">
+<div class="empty">Analyzing...</div>
+</div>
 </section>
 
 <section class="panel">
 <h2>🎯 Weekly Savings Challenge</h2>
+
 <div class="challenge">
+
 <div class="challenge-top">
 <b>Save ₹500 this week</b>
 <b id="challengeAmount">₹0 / ₹500</b>
 </div>
-<div class="progress"><i id="challengeProgress"></i></div>
-<div class="streak" id="streak">🔥 Savings streak: 0 days</div>
+
+<div class="progress">
+<i id="challengeProgress"></i>
+</div>
+
+<div class="streak" id="streak">
+🔥 Savings streak: 0 days
+</div>
+
 </div>
 </section>
 
@@ -114,6 +208,7 @@ button{border:0;border-radius:10px;padding:12px;background:#111827;color:#fff;cu
 <h2>🔄 Recurring Payments</h2>
 
 <div class="cards">
+
 <div class="card">
 <span>Monthly Commitment</span>
 <b id="recurringMonthly">₹0</b>
@@ -128,6 +223,7 @@ button{border:0;border-radius:10px;padding:12px;background:#111827;color:#fff;cu
 <span>Next Payment</span>
 <b id="nextPayment">None</b>
 </div>
+
 </div>
 
 <div id="recurringList"></div>
@@ -137,11 +233,16 @@ button{border:0;border-radius:10px;padding:12px;background:#111827;color:#fff;cu
 
 <section class="panel">
 <h2>💳 Monthly Budget</h2>
-<input id="budget" type="number" placeholder="Monthly budget ₹">
+
+<input id="budget" type="number"
+placeholder="Monthly budget ₹">
+
 <p><b id="budgetText">₹0 / ₹0</b></p>
+
 <div class="progress">
 <i id="budgetProgress"></i>
 </div>
+
 </section>
 
 <section class="panel">
@@ -184,8 +285,12 @@ Ask about your spending, saving, budget or whether you can afford something.
 </p>
 
 <div class="airow">
-<input id="aiQuestion" placeholder="Can I afford ₹5,000?">
+
+<input id="aiQuestion"
+placeholder="Can I afford ₹5,000?">
+
 <button onclick="askAI()">Ask Coach</button>
+
 </div>
 
 <div id="aiAnswer" class="answer">
@@ -205,8 +310,7 @@ let recurring=[];
 const $=x=>document.getElementById(x);
 
 const money=n=>"₹"+Number(n).toLocaleString(
-"en-IN",
-{maximumFractionDigits:2}
+"en-IN",{maximumFractionDigits:2}
 );
 
 function today(){
@@ -232,7 +336,6 @@ return String(x)
 
 $("date").value=today();
 $("incomeDate").value=today();
-
 
 async function load(){
 
@@ -262,7 +365,6 @@ console.log(e);
 
 }
 
-
 function recurringMonthly(){
 
 return recurring.reduce((s,p)=>{
@@ -281,7 +383,6 @@ p.frequency=="weekly"
 },0);
 
 }
-
 
 function dashboard(){
 
@@ -315,7 +416,6 @@ health(inc,out,mt);
 actions(inc,out,mt);
 
 }
-
 
 function health(inc,out,mt){
 
@@ -380,7 +480,6 @@ s>=80
 
 }
 
-
 function actions(inc,out,mt){
 
 let h="";
@@ -393,8 +492,7 @@ h+=`
 <div class="action bad">
 <b>⚠️ Spending exceeds income</b>
 <p>${money(out-inc)} more spent than recorded income.</p>
-</div>
-`;
+</div>`;
 
 }else if(inc){
 
@@ -402,8 +500,7 @@ h+=`
 <div class="action good">
 <b>💰 Money retained</b>
 <p>You have kept ${money(inc-out)} from recorded income.</p>
-</div>
-`;
+</div>`;
 
 }
 
@@ -413,8 +510,7 @@ h+=`
 <div class="action bad">
 <b>🚨 Budget exceeded</b>
 <p>You are ${money(mt-b)} over budget.</p>
-</div>
-`;
+</div>`;
 
 }else if(b){
 
@@ -422,8 +518,7 @@ h+=`
 <div class="action good">
 <b>✅ Budget under control</b>
 <p>${money(b-mt)} remains.</p>
-</div>
-`;
+</div>`;
 
 }
 
@@ -433,8 +528,7 @@ h+=`
 <div class="action warn">
 <b>🔄 Recurring commitments</b>
 <p>About ${money(r)} per month. Review unused subscriptions.</p>
-</div>
-`;
+</div>`;
 
 }
 
@@ -443,7 +537,6 @@ h||
 '<div class="empty">Add income, expenses and a budget for personalized advice.</div>';
 
 }
-
 
 function budget(spent){
 
@@ -459,7 +552,6 @@ $("budgetProgress").style.width=
 
 }
 
-
 $("budget").onchange=()=>{
 
 localStorage.budget=
@@ -469,7 +561,6 @@ dashboard();
 
 };
 
-
 $("expenseForm").onsubmit=async e=>{
 
 e.preventDefault();
@@ -478,24 +569,20 @@ let r=await fetch(
 "/api/expenses",
 {
 method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
+headers:{"Content-Type":"application/json"},
 body:JSON.stringify({
 amount:$("amount").value,
 category:$("category").value,
 date:$("date").value,
 note:$("note").value
 })
-}
-);
+});
 
 let d=await r.json();
 
 if(!d.success){
 
 alert(d.error);
-
 return;
 
 }
@@ -507,7 +594,6 @@ load();
 
 };
 
-
 $("incomeForm").onsubmit=async e=>{
 
 e.preventDefault();
@@ -516,23 +602,19 @@ let r=await fetch(
 "/api/income",
 {
 method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
+headers:{"Content-Type":"application/json"},
 body:JSON.stringify({
 amount:$("incomeAmount").value,
 source:$("incomeSource").value,
 date:$("incomeDate").value
 })
-}
-);
+});
 
 let d=await r.json();
 
 if(!d.success){
 
 alert(d.error);
-
 return;
 
 }
@@ -544,54 +626,38 @@ load();
 
 };
 
-
 async function delExpense(id){
 
 if(confirm("Delete this expense?")){
 
-await fetch(
-"/api/expenses/"+id,
-{method:"DELETE"}
-);
-
+await fetch("/api/expenses/"+id,{method:"DELETE"});
 load();
 
 }
 
 }
-
 
 async function delIncome(id){
 
 if(confirm("Delete this income?")){
 
-await fetch(
-"/api/income/"+id,
-{method:"DELETE"}
-);
-
+await fetch("/api/income/"+id,{method:"DELETE"});
 load();
 
 }
 
 }
-
 
 async function delRecurring(id){
 
 if(confirm("Delete this recurring payment?")){
 
-await fetch(
-"/api/recurring/"+id,
-{method:"DELETE"}
-);
-
+await fetch("/api/recurring/"+id,{method:"DELETE"});
 load();
 
 }
 
 }
-
 
 function incomeList(){
 
@@ -602,26 +668,20 @@ incomes.length
 ?incomes.slice(0,6).map(i=>`
 
 <div class="item">
-
 <div>
 <b>${esc(i.source)}</b>
 <small>${i.date}</small>
 </div>
-
 <div>
 ${money(i.amount)}
 <button class="del"
 onclick="delIncome(${i.id})">×</button>
 </div>
-
-</div>
-
-`).join("")
+</div>`).join("")
 
 :'<div class="empty">No income yet.</div>';
 
 }
-
 
 function recurringList(){
 
@@ -632,7 +692,6 @@ recurring.length
 ?recurring.slice(0,6).map(p=>`
 
 <div class="item">
-
 <div>
 <b>${esc(p.name)}</b>
 <small>
@@ -645,9 +704,7 @@ ${p.next_date}
 <button class="del"
 onclick="delRecurring(${p.id})">×</button>
 
-</div>
-
-`).join("")
+</div>`).join("")
 
 :'<div class="empty">No recurring payments yet.</div>';
 
@@ -667,7 +724,6 @@ recurring.length
 
 }
 
-
 function history(){
 
 let d=[...expenses];
@@ -677,13 +733,10 @@ let c=$("filterCategory").value;
 let o=$("sort").value;
 
 d=d.filter(x=>
-(x.note||"")
-.toLowerCase()
-.includes(q)
+(x.note||"").toLowerCase().includes(q)
 );
 
-if(c)
-d=d.filter(x=>x.category==c);
+if(c)d=d.filter(x=>x.category==c);
 
 if(o=="new")
 d.sort((a,b)=>
@@ -726,14 +779,11 @@ Delete
 
 </div>
 
-</div>
-
-`).join("")
+</div>`).join("")
 
 :'<div class="empty">No expenses found.</div>';
 
 }
-
 
 ["search","filterCategory","sort"].forEach(x=>
 
@@ -743,7 +793,6 @@ history
 )
 
 );
-
 
 function challenge(){
 
@@ -759,10 +808,7 @@ $("challengeAmount").textContent=
 money(saved)+" / ₹500";
 
 $("challengeProgress").style.width=
-Math.min(
-100,
-(500-saved)/500*100
-)+"%";
+Math.min(100,(500-saved)/500*100)+"%";
 
 $("streak").textContent=
 "🔥 Savings streak: "+
@@ -771,16 +817,13 @@ $("streak").textContent=
 
 }
 
-
 async function askAI(){
 
 let q=$("aiQuestion").value.trim();
 
-if(!q)
-return;
+if(!q)return;
 
-$("aiAnswer").textContent=
-"🤖 Thinking...";
+$("aiAnswer").textContent="🤖 Thinking...";
 
 try{
 
@@ -788,14 +831,9 @@ let r=await fetch(
 "/api/ai",
 {
 method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-question:q
-})
-}
-);
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({question:q})
+});
 
 let d=await r.json();
 
@@ -811,18 +849,85 @@ $("aiAnswer").textContent=
 
 }
 
-
 $("aiQuestion").onkeydown=e=>{
 
-if(e.key=="Enter")
-askAI();
+if(e.key=="Enter")askAI();
 
 };
 
+/* ---------- RECEIPT SCANNER ---------- */
+
+$("receiptFile").onchange=async e=>{
+
+let file=e.target.files[0];
+
+if(!file)return;
+
+if(!file.type.startsWith("image/")){
+
+$("scanStatus").textContent=
+"❌ Please choose an image.";
+
+return;
+
+}
+
+$("scanStatus").textContent=
+"🤖 AI is reading your receipt...";
+
+try{
+
+let reader=new FileReader();
+
+reader.onload=async()=>{
+
+let r=await fetch(
+"/api/scan-receipt",
+{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({image:reader.result})
+});
+
+let d=await r.json();
+
+if(!d.success){
+
+$("scanStatus").textContent=
+"❌ "+(d.error||"Could not read receipt.");
+
+return;
+
+}
+
+$("amount").value=d.amount||"";
+$("category").value=d.category||"Other";
+$("note").value=d.note||"Receipt";
+$("date").value=d.date||today();
+
+$("scanStatus").textContent=
+"✅ Receipt scanned! Check the details and tap Add Expense.";
+
+};
+
+reader.readAsDataURL(file);
+
+}catch(err){
+
+console.log(err);
+
+$("scanStatus").textContent=
+"❌ Something went wrong. Try again.";
+
+}
+
+e.target.value="";
+
+};
 
 load();
 
 </script>
 
 </body>
-</html>
+  </html>
