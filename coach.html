@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Financial Coach</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f6fa;color:#172033}
+header{background:#fff;padding:16px 6%;border-bottom:1px solid #e5e7eb;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5}
+.logo{font-size:21px;font-weight:800}
+.back{background:#111827;color:#fff;text-decoration:none;padding:10px 15px;border-radius:10px}
+.container{width:92%;max-width:1050px;margin:28px auto}
+h1{font-size:30px;margin:0 0 6px}
+.sub{color:#667085;margin-bottom:22px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-bottom:18px}
+.card,.panel{background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:19px;box-shadow:0 5px 20px #00000008}
+.card span{color:#667085;font-size:13px}
+.card strong{display:block;font-size:22px;margin-top:7px}
+.panel{margin-bottom:18px}
+.chat{height:390px;overflow:auto;background:#f8fafc;border-radius:14px;padding:15px;margin-bottom:12px}
+.msg{padding:12px 14px;border-radius:13px;margin:9px 0;max-width:88%;line-height:1.55;white-space:pre-wrap}
+.ai{background:#fff;border:1px solid #e5e7eb}
+.user{background:#111827;color:#fff;margin-left:auto}
+.form{display:flex;gap:9px}
+input{flex:1;padding:14px;border:1px solid #ccd3dd;border-radius:11px;font-size:15px;outline:none}
+button{border:0;background:#111827;color:#fff;padding:13px 17px;border-radius:11px;font-weight:700;cursor:pointer}
+button:disabled{opacity:.6}
+.quick{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px}
+.quick button{background:#eef2f7;color:#172033}
+.insight{background:#111827;color:#fff;border-radius:15px;padding:18px;line-height:1.6}
+.insight p{color:#d1d5db}
+.loading{opacity:.65}
+@media(max-width:700px){
+ .grid{grid-template-columns:1fr}
+ .form{flex-direction:column}
+ h1{font-size:26px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="logo">🤖 Smart Money Coach</div>
+<a href="/" class="back">← Dashboard</a>
+</header>
+
+<div class="container">
+
+<h1>🧠 AI Financial Coach</h1>
+<p class="sub">
+Your personal AI assistant for understanding and improving your finances.
+</p>
+
+<div class="grid">
+<div class="card">
+<span>Total Income</span>
+<strong id="income">₹0</strong>
+</div>
+
+<div class="card">
+<span>Total Expenses</span>
+<strong id="expenses">₹0</strong>
+</div>
+
+<div class="card">
+<span>Current Balance</span>
+<strong id="balance">₹0</strong>
+</div>
+</div>
+
+<section class="panel">
+
+<h2>💡 Smart Financial Insight</h2>
+
+<div id="insight" class="insight">
+Analyzing your finances...
+</div>
+
+</section>
+
+<section class="panel">
+
+<h2>💬 Ask Your AI Coach</h2>
+
+<div class="quick">
+<button onclick="askQuick('Where am I spending too much?')">
+Where am I overspending?
+</button>
+<button onclick="askQuick('How can I save more money?')">
+How can I save?
+</button>
+<button onclick="askQuick('Give me a plan for this month')">
+Monthly plan
+</button>
+<button onclick="askQuick('Can I afford a ₹5000 purchase?')">
+Can I afford ₹5,000?
+</button>
+</div>
+
+<div id="chat" class="chat">
+<div class="msg ai">
+👋 Hi! I'm your AI Financial Coach.
+
+Ask me anything about your spending, income, budget or savings goals.
+</div>
+</div>
+
+<form id="chatForm" class="form">
+<input
+id="question"
+placeholder="Ask: How can I reduce my spending?"
+autocomplete="off"
+required
+>
+<button id="send">Ask AI</button>
+</form>
+
+</section>
+
+</div>
+
+<script>
+
+const $=id=>document.getElementById(id);
+
+let financialData={};
+
+function money(n){
+ return "₹"+Number(n||0).toLocaleString(
+  "en-IN",
+  {maximumFractionDigits:2}
+ );
+}
+
+function addMessage(text,type){
+
+ const div=document.createElement("div");
+
+ div.className="msg "+type;
+ div.textContent=text;
+
+ $("chat").appendChild(div);
+ $("chat").scrollTop=$("chat").scrollHeight;
+
+ return div;
+}
+
+async function loadFinance(){
+
+ try{
+
+  const response=await fetch("/api/financial-summary");
+
+  const data=await response.json();
+
+  financialData=data||{};
+
+  const income=Number(
+   data.total_income||data.income||0
+  );
+
+  const expense=Number(
+   data.total_expenses||data.expenses||0
+  );
+
+  const balance=Number(
+   data.balance??(income-expense)
+  );
+
+  $("income").textContent=money(income);
+  $("expenses").textContent=money(expense);
+  $("balance").textContent=money(balance);
+
+  createInsight(income,expense,balance);
+
+ }catch(error){
+
+  $("insight").textContent=
+   "Could not load your financial summary.";
+
+ }
+
+}
+
+function createInsight(income,expense,balance){
+
+ let text="";
+
+ if(!income&&!expense){
+
+  text=
+   "✨ Start adding your income and expenses. "+
+   "I'll analyze your financial habits as your data grows.";
+
+ }else if(balance<0){
+
+  text=
+   "⚠️ Your recorded expenses are higher than your income. "+
+   "Focus on essential spending first and review your largest categories.";
+
+ }else{
+
+  const rate=income?(balance/income)*100:0;
+
+  if(rate>=30){
+
+   text=
+    "🟢 Excellent! Your current recorded balance is "+
+    money(balance)+
+    ". Your estimated remaining income is "+
+    rate.toFixed(0)+
+    "% of income.";
+
+  }else if(rate>=10){
+
+   text=
+    "🟡 You're maintaining a positive balance of "+
+    money(balance)+
+    ". Try reducing unnecessary expenses to increase your savings.";
+
+  }else{
+
+   text=
+    "🟠 Your remaining balance is only "+
+    money(balance)+
+    ". Consider setting tighter spending limits.";
+
+  }
+
+ }
+
+ $("insight").innerHTML=
+  "<b>AI Financial Overview</b><p>"+
+  text+"</p>";
+
+}
+
+function askQuick(text){
+
+ $("question").value=text;
+ $("chatForm").requestSubmit();
+
+}
+
+async function askAI(question){
+
+ const send=$("send");
+
+ send.disabled=true;
+ send.textContent="Thinking...";
+
+ const loading=addMessage(
+  "🤖 Analyzing your finances...",
+  "ai"
+ );
+
+ loading.classList.add("loading");
+
+ try{
+
+  const response=await fetch("/api/ai",{
+   method:"POST",
+   headers:{
+    "Content-Type":"application/json"
+   },
+   body:JSON.stringify({
+    message:question
+   })
+  });
+
+  const data=await response.json();
+
+  loading.remove();
+
+  if(!response.ok||data.success===false){
+
+   throw new Error(
+    data.error||"AI request failed."
+   );
+
+  }
+
+  const answer=
+   data.answer||
+   data.response||
+   data.message||
+   "I couldn't generate an answer.";
+
+  addMessage(answer,"ai");
+
+ }catch(error){
+
+  loading.remove();
+
+  addMessage(
+   "❌ "+error.message,
+   "ai"
+  );
+
+ }finally{
+
+  send.disabled=false;
+  send.textContent="Ask AI";
+
+ }
+
+}
+
+$("chatForm").addEventListener(
+ "submit",
+ e=>{
+
+  e.preventDefault();
+
+  const q=$("question").value.trim();
+
+  if(!q)return;
+
+  addMessage(q,"user");
+
+  $("question").value="";
+
+  askAI(q);
+
+ }
+);
+
+loadFinance();
+
+</script>
+
+</body>
+</html>
