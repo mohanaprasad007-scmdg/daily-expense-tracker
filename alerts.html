@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Smart Alerts | Money Coach</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f6fa;color:#172033}
+header{background:#fff;padding:16px 6%;border-bottom:1px solid #e5e7eb;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5}
+.logo{font-size:21px;font-weight:800}
+.back{background:#111827;color:#fff;text-decoration:none;padding:10px 15px;border-radius:10px}
+.container{width:92%;max-width:1050px;margin:28px auto}
+h1{font-size:30px;margin:0 0 6px}
+.sub{color:#667085;margin-bottom:22px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-bottom:18px}
+.card,.panel{background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:19px;box-shadow:0 5px 20px #00000008}
+.card span{color:#667085;font-size:13px}
+.card strong{display:block;font-size:24px;margin-top:7px}
+.panel{margin-bottom:18px}
+.alert{border:1px solid #e5e7eb;border-radius:14px;padding:16px;margin:10px 0}
+.alertTop{display:flex;justify-content:space-between;gap:10px}
+.alertTitle{font-weight:800}
+.alertText{color:#667085;line-height:1.55;margin-top:7px}
+.high{border-left:5px solid #b91c1c}
+.medium{border-left:5px solid #c2410c}
+.good{border-left:5px solid #047857}
+.empty{text-align:center;color:#667085;padding:28px}
+.settings{display:grid;gap:10px}
+.setting{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid #eee}
+.setting:last-child{border-bottom:0}
+.switch{width:48px;height:27px;position:relative}
+.switch input{display:none}
+.slider{position:absolute;inset:0;background:#d1d5db;border-radius:30px;cursor:pointer}
+.slider:before{content:"";position:absolute;width:21px;height:21px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}
+input:checked+.slider{background:#111827}
+input:checked+.slider:before{transform:translateX(21px)}
+.ai{background:#111827;color:#fff}
+.ai p{color:#d1d5db;line-height:1.6}
+button{border:0;background:#111827;color:#fff;padding:12px 15px;border-radius:10px;font-weight:700;cursor:pointer}
+.clear{background:#fee2e2;color:#b91c1c}
+.links{display:flex;gap:8px;flex-wrap:wrap}
+.links a{background:#111827;color:#fff;text-decoration:none;padding:10px 13px;border-radius:9px;font-size:13px;font-weight:700}
+@media(max-width:700px){
+.grid{grid-template-columns:1fr}
+h1{font-size:26px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="logo">🔔 Smart Money Coach</div>
+<a href="/" class="back">← Dashboard</a>
+</header>
+
+<div class="container">
+
+<h1>🔔 Smart Notifications</h1>
+<p class="sub">
+Important financial alerts generated automatically from your data.
+</p>
+
+<div class="grid">
+
+<div class="card">
+<span>Active Alerts</span>
+<strong id="alertCount">0</strong>
+</div>
+
+<div class="card">
+<span>High Priority</span>
+<strong id="highCount">0</strong>
+</div>
+
+<div class="card">
+<span>Potential Issues</span>
+<strong id="issueCount">0</strong>
+</div>
+
+</div>
+
+<section class="panel">
+
+<h2>🔔 Notification Center</h2>
+
+<div id="alerts">
+<div class="empty">Analyzing your finances...</div>
+</div>
+
+<button class="clear" onclick="clearAlerts()">
+✓ Mark All Read
+</button>
+
+</section>
+
+<section class="panel">
+
+<h2>⚙️ Alert Settings</h2>
+
+<div class="settings">
+
+<div class="setting">
+<div>
+<b>Budget warnings</b>
+<div class="alertText">
+Alert when spending reaches 80% of budget.
+</div>
+</div>
+<label class="switch">
+<input id="budgetAlert" type="checkbox" checked>
+<span class="slider"></span>
+</label>
+</div>
+
+<div class="setting">
+<div>
+<b>Large expenses</b>
+<div class="alertText">
+Detect unusually large transactions.
+</div>
+</div>
+<label class="switch">
+<input id="largeAlert" type="checkbox" checked>
+<span class="slider"></span>
+</label>
+</div>
+
+<div class="setting">
+<div>
+<b>Spending trend</b>
+<div class="alertText">
+Detect when spending becomes unusually high.
+</div>
+</div>
+<label class="switch">
+<input id="trendAlert" type="checkbox" checked>
+<span class="slider"></span>
+</label>
+</div>
+
+<div class="setting">
+<div>
+<b>Recurring payments</b>
+<div class="alertText">
+Show upcoming recurring-payment warnings.
+</div>
+</div>
+<label class="switch">
+<input id="recurringAlert" type="checkbox" checked>
+<span class="slider"></span>
+</label>
+</div>
+
+</div>
+
+</section>
+
+<section class="panel ai">
+
+<h2>🤖 AI Alert Summary</h2>
+
+<div id="ai">
+Analyzing your financial risks...
+</div>
+
+<br>
+
+<button onclick="getAIAdvice()">
+🤖 Analyze My Alerts
+</button>
+
+</section>
+
+<section class="panel">
+
+<h2>🚀 Smart Money Tools</h2>
+
+<div class="links">
+<a href="/analytics.html">📊 Analytics</a>
+<a href="/budget.html">🎯 Budget</a>
+<a href="/goals.html">🏆 Goals</a>
+<a href="/recurring.html">🔄 Recurring</a>
+<a href="/coach.html">🤖 AI Coach</a>
+<a href="/intelligence.html">🧠 Intelligence</a>
+</div>
+
+</section>
+
+</div>
+
+<script>
+
+const $=id=>document.getElementById(id);
+
+let expenses=[];
+let recurring=[];
+let alerts=[];
+
+function money(n){
+return "₹"+Number(n||0).toLocaleString(
+"en-IN",
+{maximumFractionDigits:2}
+);
+}
+
+function today(){
+
+const d=new Date();
+
+return d.getFullYear()+"-"+
+String(d.getMonth()+1).padStart(2,"0")+"-"+
+String(d.getDate()).padStart(2,"0");
+
+}
+
+function daysUntil(date){
+
+const a=new Date();
+a.setHours(0,0,0,0);
+
+const b=new Date(date+"T00:00:00");
+
+return Math.ceil(
+(b-a)/(86400000)
+);
+
+}
+
+function escapeHTML(x){
+
+return String(x??"")
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
+
+}
+
+async function load(){
+
+try{
+
+const e=await fetch("/api/expenses");
+const ed=await e.json();
+
+expenses=Array.isArray(ed)
+?ed:(ed.expenses||[]);
+
+}catch(x){}
+
+try{
+
+const r=await fetch("/api/recurring");
+const rd=await r.json();
+
+recurring=Array.isArray(rd)
+?rd:(rd.recurring||[]);
+
+}catch(x){}
+
+buildAlerts();
+
+}
+
+function buildAlerts(){
+
+alerts=[];
+
+const budget=Number(
+localStorage.getItem("monthlyBudget")||0
+);
+
+const month=new Date()
+.toISOString()
+.slice(0,7);
+
+const current=expenses.filter(
+e=>String(e.date||"").slice(0,7)===month
+);
+
+const spent=current.reduce(
+(s,e)=>s+Number(e.amount||0),0
+);
+
+if(
+$("budgetAlert").checked &&
+budget>0
+){
+
+const percent=(spent/budget)*100;
+
+if(percent>=100){
+
+alerts.push({
+level:"high",
+icon:"🔴",
+title:"Budget exceeded",
+text:
+"You have spent "+money(spent)+
+" against your "+money(budget)+
+" monthly budget."
+});
+
+}else if(percent>=80){
+
+alerts.push({
+level:"medium",
+icon:"🟠",
+title:"80% of budget used",
+text:
+"You have already used "+
+percent.toFixed(0)+
+"% of your monthly budget."
+});
+
+}
+
+}
+
+if(
+$("largeAlert").checked &&
+current.length
+){
+
+const average=spent/current.length;
+
+const large=current
+.filter(e=>
+Number(e.amount||0)>average*3
+)
+.sort((a,b)=>
+Number(b.amount||0)-
+Number(a.amount||0)
+);
+
+large.slice(0,3).forEach(e=>{
+
+alerts.push({
+level:"medium",
+icon:"💸",
+title:"Unusually large expense",
+text:
+money(e.amount)+
+" spent on "+
+(e.note||e.category||"an expense")+
+". This is significantly above your average transaction."
+});
+
+});
+
+}
+
+if(
+$("trendAlert").checked &&
+current.length>=3
+){
+
+const recent=current.slice(0,3);
+
+const recentTotal=recent.reduce(
+(s,e)=>s+Number(e.amount||0),0
+);
+
+const recentAvg=recentTotal/3;
+
+if(recentAvg>spent/current.length*1.5){
+
+alerts.push({
+level:"medium",
+icon:"📈",
+title:"Spending is increasing",
+text:
+"Your recent transactions are higher than your normal transaction level. Review non-essential spending."
+});
+
+}
+
+}
+
+if($("recurringAlert").checked){
+
+recurring.forEach(r=>{
+
+const date=r.next_date;
+
+if(!date)return;
+
+const days=daysUntil(date);
+
+if(days>=0&&days<=7){
+
+alerts.push({
+level:"medium",
+icon:"🔄",
+title:
+"Payment due soon: "+
+r.name,
+text:
+money(r.amount)+
+" is scheduled for "+
+date+
+"."
+});
+
+}
+
+});
+
+}
+
+render();
+
+}
+
+function render(){
+
+$("alertCount").textContent=alerts.length;
+
+$("highCount").textContent=
+alerts.filter(x=>x.level==="high").length;
+
+$("issueCount").textContent=
+alerts.filter(x=>x.level!=="good").length;
+
+if(!alerts.length){
+
+$("alerts").innerHTML=
+`
+<div class="alert good">
+<div class="alertTitle">
+🟢 Everything looks good
+</div>
+<div class="alertText">
+No important financial warnings were detected.
+</div>
+</div>
+`;
+
+return;
+
+}
+
+$("alerts").innerHTML=
+alerts.map(a=>
+`
+<div class="alert ${a.level}">
+<div class="alertTop">
+<div class="alertTitle">
+${a.icon} ${escapeHTML(a.title)}
+</div>
+</div>
+<div class="alertText">
+${escapeHTML(a.text)}
+</div>
+</div>
+`
+).join("");
+
+}
+
+function clearAlerts(){
+
+$("alerts").innerHTML=
+`
+<div class="alert good">
+<div class="alertTitle">
+✓ Alerts marked as read
+</div>
+<div class="alertText">
+Your financial data is still being monitored.
+</div>
+</div>
+`;
+
+}
+
+async function getAIAdvice(){
+
+$("ai").innerHTML=
+"<p>🤖 AI is analyzing your financial alerts...</p>";
+
+try{
+
+const response=await fetch("/api/ai",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+message:
+"Analyze my current financial risks. "+
+"Focus on budget warnings, unusual spending, "+
+"recurring payments and spending trends. "+
+"Give me the three most important actions I should take."
+})
+});
+
+const data=await response.json();
+
+if(!response.ok)
+throw new Error(
+data.error||"AI request failed."
+);
+
+$("ai").innerHTML=
+"<p>"+escapeHTML(
+data.answer||"No advice available."
+)+"</p>";
+
+}catch(e){
+
+$("ai").innerHTML=
+"<p>❌ "+escapeHTML(e.message)+"</p>";
+
+}
+
+}
+
+[
+"budgetAlert",
+"largeAlert",
+"trendAlert",
+"recurringAlert"
+].forEach(id=>{
+
+$(id).addEventListener(
+"change",
+()=>{
+
+localStorage.setItem(
+"alert_"+id,
+$(id).checked?"1":"0"
+);
+
+buildAlerts();
+
+});
+
+});
+
+[
+"budgetAlert",
+"largeAlert",
+"trendAlert",
+"recurringAlert"
+].forEach(id=>{
+
+const saved=localStorage.getItem(
+"alert_"+id
+);
+
+if(saved!==null)
+$(id).checked=saved==="1";
+
+});
+
+load();
+
+</script>
+
+</body>
+</html>
