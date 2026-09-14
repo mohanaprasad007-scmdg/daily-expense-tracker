@@ -6,300 +6,162 @@
 <title>Smart Expense Tracker</title>
 
 <style>
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-    font-family:Arial,sans-serif
-}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
 
-body{
-    background:#f4f6fa;
-    color:#172033;
-    min-height:100vh
-}
+body{background:#f4f6fa;color:#172033;min-height:100vh}
 
 header{
-    background:white;
-    padding:18px 6%;
+    background:white;padding:18px 6%;
     border-bottom:1px solid #e5e7eb;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    position:sticky;
-    top:0;
-    z-index:5
+    display:flex;justify-content:space-between;align-items:center;
+    position:sticky;top:0;z-index:10
 }
 
-.logo{
-    font-size:22px;
-    font-weight:800
-}
+.logo{font-size:22px;font-weight:800}
 
-.nav{
-    display:flex;
-    gap:10px
-}
+.nav{display:flex;gap:8px;flex-wrap:wrap}
 
 .nav a{
-    text-decoration:none;
-    background:#111827;
-    color:white;
-    padding:10px 15px;
-    border-radius:10px;
-    font-size:14px
+    text-decoration:none;background:#111827;color:white;
+    padding:10px 14px;border-radius:10px;font-size:13px
 }
 
-.container{
-    width:88%;
-    max-width:1200px;
-    margin:30px auto
-}
+.container{width:88%;max-width:1200px;margin:30px auto}
 
-.hero{
-    margin-bottom:25px
-}
-
-.hero h1{
-    font-size:32px;
-    margin-bottom:7px
-}
-
-.hero p{
-    color:#6b7280
-}
+.hero{margin-bottom:25px}
+.hero h1{font-size:32px;margin-bottom:7px}
+.hero p{color:#6b7280}
 
 .cards{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:16px;
-    margin-bottom:22px
+    display:grid;grid-template-columns:repeat(5,1fr);
+    gap:15px;margin-bottom:22px
 }
 
 .card,.panel{
-    background:white;
-    border:1px solid #e5e7eb;
-    border-radius:18px;
-    box-shadow:0 5px 20px rgba(0,0,0,.04)
+    background:white;border:1px solid #e5e7eb;
+    border-radius:18px;box-shadow:0 5px 20px rgba(0,0,0,.04)
 }
 
-.card{
-    padding:20px
-}
-
-.card span{
-    color:#6b7280;
-    font-size:14px
-}
-
-.card h2{
-    margin-top:8px;
-    font-size:24px
-}
+.card{padding:18px}
+.card span{color:#6b7280;font-size:13px}
+.card h2{margin-top:8px;font-size:22px}
+.balance{font-size:24px!important}
 
 .grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:20px
+    display:grid;grid-template-columns:1fr 1fr;gap:20px
 }
 
-.panel{
-    padding:22px;
-    margin-bottom:20px
-}
+.panel{padding:22px;margin-bottom:20px}
+.panel h2{font-size:20px;margin-bottom:17px}
 
-.panel h2{
-    font-size:20px;
-    margin-bottom:18px
-}
-
-.form{
-    display:grid;
-    gap:13px
-}
+.form{display:grid;gap:12px}
 
 input,select{
-    width:100%;
-    padding:13px;
-    border:1px solid #d7dce5;
-    border-radius:10px;
-    outline:none;
-    background:white
+    width:100%;padding:13px;
+    border:1px solid #d7dce5;border-radius:10px;
+    outline:none;background:white
 }
 
-input:focus,select:focus{
-    border-color:#111827
-}
+input:focus,select:focus{border-color:#111827}
 
 button{
-    border:0;
-    border-radius:10px;
-    padding:13px;
-    background:#111827;
-    color:white;
-    cursor:pointer;
+    border:0;border-radius:10px;padding:13px;
+    background:#111827;color:white;cursor:pointer;
     font-weight:600
 }
 
-button:hover{
-    opacity:.9
+button:hover{opacity:.9}
+
+.income-list{
+    margin-top:15px;
+    max-height:190px;
+    overflow:auto
 }
 
-.budget{
-    margin-top:15px
+.income-item{
+    display:flex;justify-content:space-between;
+    align-items:center;padding:11px 0;
+    border-bottom:1px solid #edf0f4
 }
+
+.income-item small{color:#6b7280}
+
+.delete{
+    background:#fee2e2;color:#b91c1c;
+    padding:7px 9px;margin-left:8px
+}
+
+.budget{margin-top:14px}
 
 .progress{
-    height:12px;
-    background:#e5e7eb;
-    border-radius:20px;
-    overflow:hidden;
-    margin-top:10px
+    height:12px;background:#e5e7eb;
+    border-radius:20px;overflow:hidden;margin-top:9px
 }
 
 .progress div{
-    height:100%;
-    width:0;
-    background:#111827;
-    transition:.3s
-}
-
-.history{
-    margin-top:5px
+    height:100%;width:0;
+    background:#111827;transition:.3s
 }
 
 .filters{
     display:grid;
     grid-template-columns:2fr 1fr 1fr;
-    gap:10px;
-    margin-bottom:15px
+    gap:10px;margin-bottom:15px
 }
 
 .expense{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:15px 0;
+    display:flex;justify-content:space-between;
+    align-items:center;padding:14px 0;
     border-bottom:1px solid #edf0f4
 }
 
-.expense:last-child{
-    border-bottom:0
-}
+.expense strong{display:block;margin-bottom:5px}
+.expense small{color:#6b7280}
 
-.expense-left strong{
-    display:block;
-    margin-bottom:5px
-}
-
-.expense-left small{
-    color:#6b7280
-}
-
-.amount{
-    font-weight:700
-}
-
-.delete{
-    margin-left:12px;
-    padding:7px 10px;
-    background:#fee2e2;
-    color:#b91c1c
-}
+.amount{font-weight:700}
 
 .ai{
-    background:#111827;
-    color:white
+    background:#111827;color:white
 }
 
-.ai p{
-    color:#cbd5e1;
-    margin-bottom:15px
-}
+.ai p{color:#cbd5e1;margin-bottom:15px}
 
-.ai-row{
-    display:flex;
-    gap:10px
-}
+.ai-row{display:flex;gap:10px}
 
-.ai input{
-    background:white;
-    color:#111827
-}
+.ai input{background:white;color:#111827}
 
-.ai button{
-    background:white;
-    color:#111827;
-    white-space:nowrap
-}
+.ai button{background:white;color:#111827;white-space:nowrap}
 
 .ai-answer{
-    background:#1f2937;
-    border-radius:12px;
-    padding:15px;
-    margin-top:15px;
-    line-height:1.6;
-    min-height:50px
+    background:#1f2937;border-radius:12px;
+    padding:15px;margin-top:15px;
+    line-height:1.6;min-height:50px
 }
 
-.empty{
-    text-align:center;
-    color:#6b7280;
-    padding:25px
+.empty{text-align:center;color:#6b7280;padding:25px}
+
+.warning{color:#b45309}
+
+.positive{color:#047857}
+
+@media(max-width:1000px){
+    .cards{grid-template-columns:repeat(3,1fr)}
 }
 
-.warning{
-    color:#b45309
-}
-
-@media(max-width:850px){
-    .cards{
-        grid-template-columns:repeat(2,1fr)
-    }
-
-    .grid{
-        grid-template-columns:1fr
-    }
+@media(max-width:800px){
+    .grid{grid-template-columns:1fr}
+    .cards{grid-template-columns:repeat(2,1fr)}
 }
 
 @media(max-width:550px){
-    header{
-        padding:15px 4%
-    }
-
-    .logo{
-        font-size:18px
-    }
-
-    .container{
-        width:92%;
-        margin:22px auto
-    }
-
-    .cards{
-        grid-template-columns:1fr 1fr
-    }
-
-    .card{
-        padding:15px
-    }
-
-    .card h2{
-        font-size:20px
-    }
-
-    .filters{
-        grid-template-columns:1fr
-    }
-
-    .ai-row{
-        flex-direction:column
-    }
-
-    .expense{
-        align-items:flex-start;
-        gap:10px
-    }
+    header{padding:14px 4%}
+    .logo{font-size:18px}
+    .container{width:92%;margin:22px auto}
+    .cards{grid-template-columns:1fr 1fr}
+    .card{padding:14px}
+    .card h2{font-size:19px}
+    .filters{grid-template-columns:1fr}
+    .ai-row{flex-direction:column}
 }
 </style>
 </head>
@@ -307,475 +169,765 @@ button:hover{
 <body>
 
 <header>
-    <div class="logo">💰 Smart Expense Tracker</div>
 
-    <div class="nav">
-        <a href="/analytics.html">📊 Analytics</a>
-    </div>
+<div class="logo">💰 Smart Expense Tracker</div>
+
+<div class="nav">
+<a href="/analytics.html">📊 Analytics</a>
+<a href="/goals.html">🎯 Goals</a>
+</div>
+
 </header>
 
 <div class="container">
 
 <div class="hero">
-    <h1>Expense Dashboard</h1>
-    <p>Track, understand and improve your spending.</p>
+<h1>Financial Dashboard</h1>
+<p>Track your money, understand your spending and reach your goals.</p>
 </div>
+
+
+<!-- SUMMARY -->
 
 <div class="cards">
 
-    <div class="card">
-        <span>Today</span>
-        <h2 id="today">₹0</h2>
-    </div>
+<div class="card">
+<span>Today's Spending</span>
+<h2 id="today">₹0</h2>
+</div>
 
-    <div class="card">
-        <span>This Month</span>
-        <h2 id="month">₹0</h2>
-    </div>
+<div class="card">
+<span>Monthly Spending</span>
+<h2 id="month">₹0</h2>
+</div>
 
-    <div class="card">
-        <span>Total Spent</span>
-        <h2 id="total">₹0</h2>
-    </div>
+<div class="card">
+<span>Total Income</span>
+<h2 id="income">₹0</h2>
+</div>
 
-    <div class="card">
-        <span>Transactions</span>
-        <h2 id="count">0</h2>
-    </div>
+<div class="card">
+<span>Total Expenses</span>
+<h2 id="total">₹0</h2>
+</div>
+
+<div class="card">
+<span>Current Balance</span>
+<h2 id="balance" class="balance">₹0</h2>
+</div>
 
 </div>
+
 
 <div class="grid">
 
-<div class="panel">
 
-    <h2>➕ Add Expense</h2>
-
-    <form class="form" id="expenseForm">
-
-        <input
-            id="amount"
-            type="number"
-            step="0.01"
-            placeholder="Amount ₹"
-            required
-        >
-
-        <select id="category" required>
-            <option value="">Select category</option>
-            <option>Food</option>
-            <option>Travel</option>
-            <option>Shopping</option>
-            <option>Bills</option>
-            <option>Education</option>
-            <option>Entertainment</option>
-            <option>Health</option>
-            <option>Other</option>
-        </select>
-
-        <input id="date" type="date" required>
-
-        <input
-            id="note"
-            type="text"
-            placeholder="Description"
-        >
-
-        <button type="submit">Add Expense</button>
-
-    </form>
-
-</div>
+<!-- ADD EXPENSE -->
 
 <div class="panel">
 
-    <h2>🎯 Monthly Budget</h2>
+<h2>➕ Add Expense</h2>
 
-    <input
-        id="budget"
-        type="number"
-        placeholder="Enter monthly budget ₹"
-    >
+<form id="expenseForm" class="form">
 
-    <div class="budget">
-        <div>
-            <strong id="budgetText">₹0 / ₹0</strong>
-        </div>
+<input
+id="amount"
+type="number"
+step="0.01"
+placeholder="Amount ₹"
+required>
 
-        <div class="progress">
-            <div id="progress"></div>
-        </div>
-    </div>
+<select id="category" required>
+
+<option value="">Select category</option>
+<option>Food</option>
+<option>Travel</option>
+<option>Shopping</option>
+<option>Bills</option>
+<option>Education</option>
+<option>Entertainment</option>
+<option>Health</option>
+<option>Other</option>
+
+</select>
+
+<input id="date" type="date" required>
+
+<input id="note" type="text" placeholder="Description">
+
+<button>Add Expense</button>
+
+</form>
 
 </div>
 
-</div>
+
+<!-- ADD INCOME -->
 
 <div class="panel">
 
-    <h2>🔍 Expense History</h2>
+<h2>💵 Add Income</h2>
 
-    <div class="filters">
+<form id="incomeForm" class="form">
 
-        <input
-            id="search"
-            type="text"
-            placeholder="Search description..."
-        >
+<input
+id="incomeAmount"
+type="number"
+step="0.01"
+placeholder="Income amount ₹"
+required>
 
-        <select id="filterCategory">
-            <option value="">All categories</option>
-            <option>Food</option>
-            <option>Travel</option>
-            <option>Shopping</option>
-            <option>Bills</option>
-            <option>Education</option>
-            <option>Entertainment</option>
-            <option>Health</option>
-            <option>Other</option>
-        </select>
+<input
+id="incomeSource"
+type="text"
+placeholder="Source (Salary, Freelance...)"
+required>
 
-        <select id="sort">
-            <option value="new">Newest</option>
-            <option value="old">Oldest</option>
-            <option value="high">Highest amount</option>
-            <option value="low">Lowest amount</option>
-        </select>
+<input id="incomeDate" type="date" required>
 
-    </div>
+<button>Add Income</button>
 
-    <div id="history" class="history"></div>
+</form>
+
+<div id="incomeList" class="income-list"></div>
 
 </div>
+
+</div>
+
+
+<!-- BUDGET -->
+
+<div class="panel">
+
+<h2>🎯 Monthly Budget</h2>
+
+<input
+id="budget"
+type="number"
+placeholder="Enter monthly budget ₹">
+
+<div class="budget">
+
+<strong id="budgetText">₹0 / ₹0</strong>
+
+<div class="progress">
+<div id="progress"></div>
+</div>
+
+</div>
+
+</div>
+
+
+<!-- EXPENSE HISTORY -->
+
+<div class="panel">
+
+<h2>🔍 Expense History</h2>
+
+<div class="filters">
+
+<input
+id="search"
+placeholder="Search description...">
+
+<select id="filterCategory">
+
+<option value="">All categories</option>
+<option>Food</option>
+<option>Travel</option>
+<option>Shopping</option>
+<option>Bills</option>
+<option>Education</option>
+<option>Entertainment</option>
+<option>Health</option>
+<option>Other</option>
+
+</select>
+
+<select id="sort">
+
+<option value="new">Newest</option>
+<option value="old">Oldest</option>
+<option value="high">Highest amount</option>
+<option value="low">Lowest amount</option>
+
+</select>
+
+</div>
+
+<div id="history"></div>
+
+</div>
+
+
+<!-- AI -->
 
 <div class="panel ai">
 
-    <h2>🤖 AI Financial Assistant</h2>
+<h2>🤖 AI Financial Assistant</h2>
 
-    <p>
-        Ask questions about your spending and get personalized insights.
-    </p>
+<p>
+Ask questions about your income, expenses and financial decisions.
+</p>
 
-    <div class="ai-row">
+<div class="ai-row">
 
-        <input
-            id="aiQuestion"
-            type="text"
-            placeholder="Where did I spend the most?"
-        >
+<input
+id="aiQuestion"
+placeholder="Example: Can I afford ₹5,000?">
 
-        <button onclick="askAI()">Ask AI</button>
-
-    </div>
-
-    <div id="aiAnswer" class="ai-answer">
-        👋 Ask me anything about your expenses.
-    </div>
+<button onclick="askAI()">Ask AI</button>
 
 </div>
 
+<div id="aiAnswer" class="ai-answer">
+👋 Ask me anything about your finances.
 </div>
+
+</div>
+
+</div>
+
 
 <script>
 
 let expenses=[];
+let incomes=[];
 
-const $=id=>document.getElementById(id);
+
+function $(id){
+return document.getElementById(id);
+}
+
 
 function todayDate(){
 
-    const d=new Date();
+const d=new Date();
 
-    return d.getFullYear()+"-"+
-        String(d.getMonth()+1).padStart(2,"0")+"-"+
-        String(d.getDate()).padStart(2,"0");
+return d.getFullYear()+"-"+
+String(d.getMonth()+1).padStart(2,"0")+"-"+
+String(d.getDate()).padStart(2,"0");
+
 }
+
 
 function money(n){
 
-    return "₹"+Number(n).toLocaleString("en-IN",{
-        maximumFractionDigits:2
-    });
+return "₹"+Number(n).toLocaleString("en-IN",{
+maximumFractionDigits:2
+});
+
 }
 
-if(!$("date").value){
-    $("date").value=todayDate();
+
+if(!$("date").value)
+$("date").value=todayDate();
+
+if(!$("incomeDate").value)
+$("incomeDate").value=todayDate();
+
+
+async function loadData(){
+
+try{
+
+const [expenseResponse,incomeResponse]=await Promise.all([
+
+fetch("/api/expenses"),
+fetch("/api/income")
+
+]);
+
+expenses=await expenseResponse.json();
+incomes=await incomeResponse.json();
+
+updateDashboard();
+showHistory();
+showIncome();
+
+}catch(error){
+
+$("history").innerHTML=
+'<div class="empty">Unable to load financial data.</div>';
+
 }
 
-async function loadExpenses(){
-
-    try{
-
-        const r=await fetch("/api/expenses");
-
-        expenses=await r.json();
-
-        updateDashboard();
-        showHistory();
-
-    }catch(e){
-
-        $("history").innerHTML=
-            '<div class="empty">Unable to load expenses.</div>';
-    }
 }
+
 
 function updateDashboard(){
 
-    const today=todayDate();
+const today=todayDate();
+const month=today.substring(0,7);
 
-    const month=today.substring(0,7);
 
-    const todayTotal=expenses
-        .filter(e=>e.date===today)
-        .reduce((s,e)=>s+Number(e.amount),0);
+const todayTotal=expenses
+.filter(e=>e.date===today)
+.reduce((s,e)=>s+Number(e.amount),0);
 
-    const monthTotal=expenses
-        .filter(e=>e.date.startsWith(month))
-        .reduce((s,e)=>s+Number(e.amount),0);
 
-    const total=expenses
-        .reduce((s,e)=>s+Number(e.amount),0);
+const monthTotal=expenses
+.filter(e=>e.date.startsWith(month))
+.reduce((s,e)=>s+Number(e.amount),0);
 
-    $("today").textContent=money(todayTotal);
-    $("month").textContent=money(monthTotal);
-    $("total").textContent=money(total);
-    $("count").textContent=expenses.length;
 
-    updateBudget(monthTotal);
+const totalExpenses=expenses
+.reduce((s,e)=>s+Number(e.amount),0);
+
+
+const totalIncome=incomes
+.reduce((s,e)=>s+Number(e.amount),0);
+
+
+const balance=totalIncome-totalExpenses;
+
+
+$("today").textContent=money(todayTotal);
+$("month").textContent=money(monthTotal);
+$("income").textContent=money(totalIncome);
+$("total").textContent=money(totalExpenses);
+$("balance").textContent=money(balance);
+
+
+$("balance").className=
+balance>=0
+?"balance positive"
+:"balance warning";
+
+
+updateBudget(monthTotal);
+
 }
+
 
 function updateBudget(spent){
 
-    const budget=Number(localStorage.getItem("budget")||0);
+const budget=
+Number(localStorage.getItem("budget")||0);
 
-    $("budget").value=budget||"";
+$("budget").value=
+budget||"";
 
-    $("budgetText").textContent=
-        money(spent)+" / "+money(budget);
+$("budgetText").textContent=
+money(spent)+" / "+money(budget);
 
-    const percent=budget
-        ? Math.min((spent/budget)*100,100)
-        : 0;
 
-    $("progress").style.width=percent+"%";
+const percent=budget
+?Math.min((spent/budget)*100,100)
+:0;
 
-    if(budget && spent>budget){
+$("progress").style.width=
+percent+"%";
 
-        $("budgetText").className="warning";
 
-    }else{
+if(budget && spent>budget){
 
-        $("budgetText").className="";
-    }
+$("budgetText").className="warning";
+
+}else{
+
+$("budgetText").className="";
+
 }
+
+}
+
 
 $("budget").addEventListener("change",()=>{
 
-    const value=Number($("budget").value)||0;
+localStorage.setItem(
+"budget",
+Number($("budget").value)||0
+);
 
-    localStorage.setItem("budget",value);
+updateDashboard();
 
-    updateDashboard();
 });
 
-$("expenseForm").addEventListener("submit",async e=>{
 
-    e.preventDefault();
+/* EXPENSE */
 
-    const data={
-        amount:$("amount").value,
-        category:$("category").value,
-        date:$("date").value,
-        note:$("note").value
-    };
+$("expenseForm").addEventListener(
+"submit",
+async e=>{
 
-    try{
+e.preventDefault();
 
-        const r=await fetch("/api/expenses",{
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body:JSON.stringify(data)
-        });
+const data={
 
-        const result=await r.json();
+amount:$("amount").value,
+category:$("category").value,
+date:$("date").value,
+note:$("note").value
 
-        if(!result.success){
+};
 
-            alert(result.error||"Unable to add expense");
-            return;
-        }
 
-        $("amount").value="";
-        $("note").value="";
-
-        await loadExpenses();
-
-    }catch(e){
-
-        alert("Something went wrong.");
-    }
+const response=await fetch(
+"/api/expenses",
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify(data)
 });
+
+
+const result=await response.json();
+
+
+if(!result.success){
+
+alert(result.error||"Unable to add expense");
+
+return;
+
+}
+
+
+$("amount").value="";
+$("note").value="";
+
+loadData();
+
+});
+
+
+/* INCOME */
+
+$("incomeForm").addEventListener(
+"submit",
+async e=>{
+
+e.preventDefault();
+
+const data={
+
+amount:$("incomeAmount").value,
+source:$("incomeSource").value,
+date:$("incomeDate").value
+
+};
+
+
+const response=await fetch(
+"/api/income",
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify(data)
+});
+
+
+const result=await response.json();
+
+
+if(!result.success){
+
+alert(result.error||"Unable to add income");
+
+return;
+
+}
+
+
+$("incomeAmount").value="";
+$("incomeSource").value="";
+
+loadData();
+
+});
+
+
+function showIncome(){
+
+const box=$("incomeList");
+
+if(!incomes.length){
+
+box.innerHTML=
+'<div class="empty">No income added yet.</div>';
+
+return;
+
+}
+
+
+box.innerHTML=incomes
+.slice(0,8)
+.map(i=>`
+
+<div class="income-item">
+
+<div>
+
+<strong>${escapeHTML(i.source)}</strong>
+
+<br>
+
+<small>${i.date}</small>
+
+</div>
+
+<div>
+
+<strong>${money(i.amount)}</strong>
+
+<button
+class="delete"
+onclick="deleteIncome(${i.id})">
+×
+</button>
+
+</div>
+
+</div>
+
+`).join("");
+
+}
+
+
+async function deleteIncome(id){
+
+if(!confirm("Delete this income?"))
+return;
+
+await fetch(
+"/api/income/"+id,
+{method:"DELETE"}
+);
+
+loadData();
+
+}
+
+
+/* HISTORY */
 
 function showHistory(){
 
-    let data=[...expenses];
+let data=[...expenses];
 
-    const search=$("search").value.toLowerCase();
-    const category=$("filterCategory").value;
-    const sort=$("sort").value;
+const search=
+$("search").value.toLowerCase();
 
-    data=data.filter(e=>
-        (e.note||"").toLowerCase().includes(search)
-    );
+const category=
+$("filterCategory").value;
 
-    if(category){
+const sort=
+$("sort").value;
 
-        data=data.filter(e=>e.category===category);
-    }
 
-    if(sort==="new"){
+data=data.filter(e=>
+(e.note||"")
+.toLowerCase()
+.includes(search)
+);
 
-        data.sort((a,b)=>
-            b.date.localeCompare(a.date)||b.id-a.id
-        );
 
-    }else if(sort==="old"){
+if(category)
+data=data.filter(e=>
+e.category===category
+);
 
-        data.sort((a,b)=>
-            a.date.localeCompare(b.date)||a.id-b.id
-        );
 
-    }else if(sort==="high"){
+if(sort==="new"){
 
-        data.sort((a,b)=>Number(b.amount)-Number(a.amount));
+data.sort((a,b)=>
+b.date.localeCompare(a.date)||b.id-a.id
+);
 
-    }else if(sort==="low"){
-
-        data.sort((a,b)=>Number(a.amount)-Number(b.amount));
-    }
-
-    if(!data.length){
-
-        $("history").innerHTML=
-            '<div class="empty">No expenses found.</div>';
-
-        return;
-    }
-
-    $("history").innerHTML=data.map(e=>`
-
-        <div class="expense">
-
-            <div class="expense-left">
-
-                <strong>${escapeHTML(e.category)}</strong>
-
-                <small>
-                    ${escapeHTML(e.note||"No description")}
-                    • ${e.date}
-                </small>
-
-            </div>
-
-            <div>
-
-                <span class="amount">
-                    ${money(e.amount)}
-                </span>
-
-                <button
-                    class="delete"
-                    onclick="deleteExpense(${e.id})"
-                >
-                    Delete
-                </button>
-
-            </div>
-
-        </div>
-
-    `).join("");
 }
 
-function escapeHTML(text){
+if(sort==="old"){
 
-    return String(text)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+data.sort((a,b)=>
+a.date.localeCompare(b.date)||a.id-b.id
+);
+
 }
+
+if(sort==="high"){
+
+data.sort((a,b)=>
+Number(b.amount)-Number(a.amount)
+);
+
+}
+
+if(sort==="low"){
+
+data.sort((a,b)=>
+Number(a.amount)-Number(b.amount)
+);
+
+
+}
+
+
+if(!data.length){
+
+$("history").innerHTML=
+'<div class="empty">No expenses found.</div>';
+
+return;
+
+}
+
+
+$("history").innerHTML=data
+.map(e=>`
+
+<div class="expense">
+
+<div>
+
+<strong>
+${escapeHTML(e.category)}
+</strong>
+
+<small>
+${escapeHTML(e.note||"No description")}
+ • ${e.date}
+</small>
+
+</div>
+
+<div>
+
+<span class="amount">
+${money(e.amount)}
+</span>
+
+<button
+class="delete"
+onclick="deleteExpense(${e.id})">
+Delete
+</button>
+
+</div>
+
+</div>
+
+`).join("");
+
+}
+
 
 async function deleteExpense(id){
 
-    if(!confirm("Delete this expense?")) return;
+if(!confirm("Delete this expense?"))
+return;
 
-    await fetch("/api/expenses/"+id,{
-        method:"DELETE"
-    });
+await fetch(
+"/api/expenses/"+id,
+{method:"DELETE"}
+);
 
-    loadExpenses();
+loadData();
+
 }
 
-$("search").addEventListener("input",showHistory);
 
-$("filterCategory").addEventListener("change",showHistory);
+$("search").addEventListener(
+"input",showHistory
+);
 
-$("sort").addEventListener("change",showHistory);
+$("filterCategory").addEventListener(
+"change",showHistory
+);
+
+$("sort").addEventListener(
+"change",showHistory
+);
+
+
+/* AI */
 
 async function askAI(){
 
-    const question=$("aiQuestion").value.trim();
+const question=
+$("aiQuestion").value.trim();
 
-    if(!question){
 
-        $("aiAnswer").textContent=
-            "Please enter a question.";
+if(!question){
 
-        return;
-    }
+$("aiAnswer").textContent=
+"Please enter a question.";
 
-    $("aiAnswer").textContent=
-        "🤖 Thinking...";
+return;
 
-    try{
-
-        const response=await fetch("/api/ai",{
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body:JSON.stringify({
-                question:question
-            })
-        });
-
-        const data=await response.json();
-
-        $("aiAnswer").textContent=
-            data.answer||"Unable to get an answer.";
-
-    }catch(error){
-
-        $("aiAnswer").textContent=
-            "Something went wrong. Please try again.";
-    }
 }
 
-$("aiQuestion").addEventListener("keydown",e=>{
 
-    if(e.key==="Enter"){
-        askAI();
-    }
+$("aiAnswer").textContent=
+"🤖 Thinking...";
+
+
+try{
+
+const response=await fetch(
+"/api/ai",
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+question:question
+})
 });
 
-loadExpenses();
+
+const data=await response.json();
+
+
+$("aiAnswer").textContent=
+data.answer||
+"Unable to get an answer.";
+
+
+}catch(error){
+
+$("aiAnswer").textContent=
+"Something went wrong. Please try again.";
+
+}
+
+}
+
+
+$("aiQuestion").addEventListener(
+"keydown",
+e=>{
+
+if(e.key==="Enter")
+askAI();
+
+});
+
+
+function escapeHTML(text){
+
+return String(text)
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
+
+}
+
+
+loadData();
 
 </script>
 
 </body>
-</html>
+    </html>
